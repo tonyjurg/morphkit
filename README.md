@@ -1,16 +1,16 @@
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)  [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%96-success.svg)](https://tonyjurg.github.io/morphkit/)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)  [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%96-success.svg)](https://tonyjurg.github.io/morphkit/) [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 <img src="docs/images/morphkit.png" width=250 height=250>
 
-Morphkit is a Python toolkit for Greek morphological analysis and tag similairity comparison. It uses [Betacode library](https://github.com/perseids-tools/beta-code-py), the API of Morpheus (e.g., running in a [Docker virtualisation environment](https://hub.docker.com/r/perseidsproject/morpheus-api)) and the [Sandborg-Petersen morphological decoder](https://github.com/tonyjurg/Sandborg-Petersen-decoder).
+Morphkit is a Python toolkit for Greek morphological analysis and tag similarity comparison. It uses [`betacode` library](https://github.com/perseids-tools/beta-code-py), the API of Morpheus (e.g., running in a [Docker virtualisation environment](https://hub.docker.com/r/perseidsproject/morpheus-api)) and the [Sandborg-Petersen morphological decoder](https://github.com/tonyjurg/Sandborg-Petersen-decoder).
 
 ## Documentation
 
-For documentation see [tonyjurg.github.io/morphkit](https://tonyjurg.github.io/morphkit/)
+For documentation see [tonyjurg.github.io/morphkit](https://tonyjurg.github.io/morphkit/).
 
 ## Package
 
-For the actual code see [/morphkit](https://github.com/tonyjurg/morphkit/tree/main/morphkit)
+For the actual code see [/morphkit](https://github.com/tonyjurg/morphkit/tree/main/morphkit).
 
 ## Loading
 
