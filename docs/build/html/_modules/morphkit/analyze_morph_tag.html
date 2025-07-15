@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.analyze_morph_tag &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">morphkit.analyze_morph_tag</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for morphkit.analyze_morph_tag</h1><div class="highlight"><pre>
+<span></span><span class="c1"># morphkit/analyze_morph_tag</span>
+<span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
+<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+
+<span class="c1"># import required packages</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<span class="c1"># Enable nicely formatted dumps of Python dicts</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">PrettyPrinter</span>
+<span class="n">pp</span> <span class="o">=</span> <span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="c1"># Helper: get uppercase code for morphological features</span>
+<span class="k">def</span> <span class="nf">code</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn a scalar or list of strings into the concatenated</span>
+<span class="sd">    uppercase initials (or default if missing).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="c1"># e.g. [&#39;masc&#39;,&#39;fem&#39;] -&gt; &#39;MF&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">val</span> <span class="k">if</span> <span class="n">v</span><span class="p">)</span>
+    <span class="c1"># scalar case: &#39;nom&#39; -&gt; &#39;N&#39;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">append_dialect_suffix</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parse</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Append a dialect suffix to a morphological tag, if recognized dialects are present.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+<span class="sd">        tag (str)   : The morphological tag to augment.</span>
+
+<span class="sd">        parse (dict): The analysis dictionary, potentially containing &#39;dialects&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        str: The tag with an optional mapped dialect suffix appended.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dialects</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dialects&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dialects</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tag</span>
+
+    <span class="c1"># Only explicitly recognized dialects are allowed</span>
+    <span class="c1"># since the data is often a combined list like `attic/epic/doric/ionic`, it may be better to limit the number of &#39;recognized&#39;</span>
+    <span class="c1"># dialects to only Attic and Aeolic in order to have a closer match to the tags used in N1904-TF dataset</span>
+    <span class="n">DIALECT_MAP</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;attic&#39;</span><span class="p">:</span>      <span class="s1">&#39;ATT&#39;</span><span class="p">,</span>  <span class="c1"># explicit in https://github.com/biblicalhumanities/Nestle1904/blob/master/morph/parsing.txt</span>
+        <span class="c1">#&#39;ionic&#39;:      &#39;ION&#39;,  # added</span>
+        <span class="c1">#&#39;doric&#39;:      &#39;DOR&#39;,  # added</span>
+        <span class="s1">&#39;aeolic&#39;</span><span class="p">:</span>     <span class="s1">&#39;A&#39;</span><span class="p">,</span>    <span class="c1"># explicit</span>
+        <span class="c1">#&#39;epic&#39;:       &#39;EPC&#39;,  # added</span>
+        <span class="c1">#&#39;homeric&#39;:    &#39;HOM&#39;,  # added</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Normalize input and filter only those present in DIALECT_MAP</span>
+    <span class="n">mapped</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">DIALECT_MAP</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dialects</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">DIALECT_MAP</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mapped</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tag</span>  <span class="c1"># no recognized dialects</span>
+
+    <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mapped</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">tag</span> <span class="o">+</span> <span class="n">suffix</span>
+
+
+
+<div class="viewcode-block" id="analyze_morph_tag">
+<a class="viewcode-back" href="../../api/morphkit.analyze_morph_tag.html#morphkit.analyze_morph_tag">[docs]</a>
+<span class="k">def</span> <span class="nf">analyze_morph_tag</span><span class="p">(</span><span class="n">parse</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="p">,</span><span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Compute the Sandborg–Petersen morphological tag for a single Morpheus analyses block.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+
+<span class="sd">        :parse (dict): Morphological parse with keys like &#39;pos&#39;, &#39;tense&#39;,</span>
+<span class="sd">                            &#39;voice&#39;, &#39;mood&#39;, &#39;case&#39;, &#39;number&#39;, &#39;gender&#39;, etc.</span>
+
+<span class="sd">        :debug (bool): Optional argument. Defaults to `False`. If set to `True` the function print some debug information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        :str: The SP morphological tag or &#39;UNK&#39; if unrecognized.</span>
+
+<span class="sd">    Steps:</span>
+<span class="sd">    ------</span>
+<span class="sd">    </span>
+<span class="sd">      1.  Determine the POS prefix (e.g. &#39;N-&#39;, &#39;V-&#39;, &#39;A-&#39;, &#39;ADV&#39;, etc.).</span>
+
+<span class="sd">      2.  Return immediately for indeclinable POS (adverbs, particles, etc.).</span>
+
+<span class="sd">      3.  For verbs, build the tag as &#39;V-&lt;Tense&gt;&lt;Voice&gt;&lt;Mood&gt;&#39; plus a suffix</span>
+<span class="sd">          for person &amp; number (finite), infinitive (no suffix), or participle</span>
+<span class="sd">          (case–number–gender).</span>
+
+<span class="sd">      4.  For nouns, adjectives, and articles, append uppercase initials of</span>
+<span class="sd">          case, number, and gender; adjectives may get &#39;-C&#39;/&#39;-S&#39; for degree.</span>
+
+<span class="sd">      5.  For pronouns, combine person, case, number, and gender.</span>
+
+<span class="sd">      6.  If nothing matches, return &#39;UNK&#39;.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            api_endpoint = &quot;10.10.0.10:1315&quot; </span>
+<span class="sd">            blocs=morphkit.get_word_blocks(&#39;sune/rxomai&#39;,api_endpoint)</span>
+<span class="sd">            for block in blocks: </span>
+<span class="sd">                parse=morphkit.parse_word_block(block)</span>
+<span class="sd">                analysis=morphkit.analyze_morph_tag(parse)</span>
+
+<span class="sd">            # dictionairy has now entry &#39;morph&#39; added:</span>
+<span class="sd">            {&#39;analyses&#39;: [{&#39;end_bc&#39;: &#39;omai&#39;,</span>
+<span class="sd">                           &#39;end_codes&#39;: [&#39;w_stem&#39;],</span>
+<span class="sd">                           ...</span>
+<span class="sd">                           &#39;mood&#39;: &#39;indicative&#39;,</span>
+<span class="sd">                           &#39;morph&#39;: &#39;V-PEI-1S&#39;,</span>
+<span class="sd">                           &#39;number&#39;: &#39;singular&#39;,</span>
+<span class="sd">                           ...</span>
+
+<span class="sd">    General notes:</span>
+<span class="sd">    --------------</span>
+<span class="sd">    </span>
+<span class="sd">        The documentation for the SP morphology is available via:</span>
+<span class="sd">        https://github.com/biblicalhumanities/Nestle1904/blob/master/morph/parsing.txt</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First check if the input is indeed a valid dictionairy</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parse</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> 
+            <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[analyze_morph_tag] Input should be a dictionairy 🠢  ERROR</span><span class="se">\n</span><span class="s1">Input:&#39;</span><span class="p">)</span>
+            <span class="c1"># pretty-print `parse`</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;ERROR&#39;</span>
+    
+    <span class="c1"># If debug is True, print this function name (the return value will be printed later)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[analyze_morph_tag] Called with betacode </span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;raw_bc&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">: &#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># 1. Map part-of-speech to SP prefix</span>
+    <span class="n">_raw</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_raw</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">_raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># This should not happen!  Exit with returning &#39;ERROR&#39; </span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> 
+            <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39; Empty input string for POS 🠢 ERROR&#39;</span><span class="p">)</span>
+            <span class="c1"># pretty-print `parse`</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;ERROR&#39;</span>
+        
+    <span class="n">prefix_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;noun&#39;</span><span class="p">:</span>                                 <span class="s1">&#39;N-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;adjective&#39;</span><span class="p">:</span>                            <span class="s1">&#39;A-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;article&#39;</span><span class="p">:</span>                              <span class="s1">&#39;T-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;definite article&#39;</span><span class="p">:</span>                     <span class="s1">&#39;T-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;indefinite article&#39;</span><span class="p">:</span>                   <span class="s1">&#39;T-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;verb&#39;</span><span class="p">:</span>                                 <span class="s1">&#39;V-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;personal pronoun&#39;</span><span class="p">:</span>                     <span class="s1">&#39;P-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;relative pronoun&#39;</span><span class="p">:</span>                     <span class="s1">&#39;R-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;reciprocal pronoun&#39;</span><span class="p">:</span>                   <span class="s1">&#39;C-&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;demonstrative pronoun&#39;</span><span class="p">:</span>                <span class="s1">&#39;D-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;correlative pronoun&#39;</span><span class="p">:</span>                  <span class="s1">&#39;K-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;interrogative pronoun&#39;</span><span class="p">:</span>                <span class="s1">&#39;I-&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indefinite pronoun&#39;</span><span class="p">:</span>                   <span class="s1">&#39;X-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;correlative or interrogative pronoun&#39;</span><span class="p">:</span> <span class="s1">&#39;Q-&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;reflexive pronoun&#39;</span><span class="p">:</span>                    <span class="s1">&#39;F-&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;possessive pronoun&#39;</span><span class="p">:</span>                   <span class="s1">&#39;S-&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;adverb&#39;</span><span class="p">:</span>                               <span class="s1">&#39;ADV&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;conjunction&#39;</span><span class="p">:</span>                          <span class="s1">&#39;CONJ&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;conditional&#39;</span><span class="p">:</span>                          <span class="s1">&#39;COND&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;particle&#39;</span><span class="p">:</span>                             <span class="s1">&#39;PRT&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;preposition&#39;</span><span class="p">:</span>                          <span class="s1">&#39;PREP&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;interjection&#39;</span><span class="p">:</span>                         <span class="s1">&#39;INJ&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;aramaic&#39;</span><span class="p">:</span>                              <span class="s1">&#39;ARAM&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;hebrew&#39;</span><span class="p">:</span>                               <span class="s1">&#39;HEB&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;proper noun indeclinable&#39;</span><span class="p">:</span>             <span class="s1">&#39;N-PRI&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;numeral indeclinable&#39;</span><span class="p">:</span>                 <span class="s1">&#39;A-NUI&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;exclam&#39;</span><span class="p">:</span>                               <span class="s1">&#39;INJ&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;numeral&#39;</span><span class="p">:</span>                              <span class="s1">&#39;A-NUI&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;letter indeclinable&#39;</span><span class="p">:</span>                  <span class="s1">&#39;N-LI&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;noun other indeclinable&#39;</span><span class="p">:</span>              <span class="s1">&#39;N-OI&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;punctuation&#39;</span><span class="p">:</span>                          <span class="s1">&#39;PUNCT&#39;</span>
+    <span class="p">}</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [WARNING] no prefix for </span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work_unicode&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, pos=</span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">)</span><span class="si">!r}</span><span class="s2"> (normalized </span><span class="si">{</span><span class="n">pos</span><span class="si">!r}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 2. Return directly for indeclinable POS types</span>
+    <span class="c1"># {Note: this may be jumping out a litle bit too early...}</span>
+    <span class="n">indecl</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ADV&#39;</span><span class="p">,</span><span class="s1">&#39;CONJ&#39;</span><span class="p">,</span><span class="s1">&#39;COND&#39;</span><span class="p">,</span><span class="s1">&#39;PRT&#39;</span><span class="p">,</span><span class="s1">&#39;PREP&#39;</span><span class="p">,</span><span class="s1">&#39;INJ&#39;</span><span class="p">,</span><span class="s1">&#39;ARAM&#39;</span><span class="p">,</span><span class="s1">&#39;HEB&#39;</span><span class="p">,</span><span class="s1">&#39;N-PRI&#39;</span><span class="p">,</span><span class="s1">&#39;A-NUI&#39;</span><span class="p">,</span><span class="s1">&#39;N-LI&#39;</span><span class="p">,</span><span class="s1">&#39;N-OI&#39;</span><span class="p">,</span><span class="s1">&#39;PUNCT&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">indecl</span><span class="p">:</span>
+        <span class="c1"># Handle interrogative adverb: morph_code &#39;interrog&#39; gives suffix &#39;-I&#39;</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;ADV&#39;</span> <span class="ow">and</span> <span class="s1">&#39;interrog&#39;</span> <span class="ow">in</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;morph_codes&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ADV + interrog 🠢 ADV-I&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;ADV-I&#39;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;prefix in indecl 🠢 </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># return prefix together with dialect suffix if pressent</span>
+        <span class="k">return</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+
+
+        
+
+    <span class="c1"># 3. Handle verbs: V-&lt;T&gt;&lt;V&gt;&lt;M&gt; + optional suffix</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;V-&#39;</span><span class="p">:</span>
+        <span class="c1"># Maps for tense, voice, mood</span>
+        <span class="n">tense_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;pres&#39;</span><span class="p">:</span>                    <span class="s1">&#39;P&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;imperf&#39;</span><span class="p">:</span>                  <span class="s1">&#39;I&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fut&#39;</span><span class="p">:</span>                     <span class="s1">&#39;F&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;second future&#39;</span><span class="p">:</span>              <span class="s1">&#39;2F&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;aor&#39;</span><span class="p">:</span>                     <span class="s1">&#39;A&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;second aorist&#39;</span><span class="p">:</span>              <span class="s1">&#39;2A&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;perf&#39;</span><span class="p">:</span>                    <span class="s1">&#39;R&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;second perfect&#39;</span><span class="p">:</span>             <span class="s1">&#39;2R&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;plup&#39;</span><span class="p">:</span>                 <span class="s1">&#39;L&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;second pluperfect&#39;</span><span class="p">:</span>          <span class="s1">&#39;2L&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;no tense stated&#39;</span><span class="p">:</span>            <span class="s1">&#39;X&#39;</span>
+        <span class="p">}</span>
+        
+        <span class="c1"># Flags that signal a “second” form for certain tenses</span>
+        <span class="n">second_flags</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;aor&#39;</span><span class="p">:</span>     <span class="p">[</span><span class="s1">&#39;aor2&#39;</span><span class="p">,</span> <span class="s1">&#39;aor2_pass&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;fut&#39;</span><span class="p">:</span>     <span class="p">[</span><span class="s1">&#39;fut2&#39;</span><span class="p">,</span> <span class="s1">&#39;future2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;perf&#39;</span><span class="p">:</span>    <span class="p">[</span><span class="s1">&#39;perf2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;plup&#39;</span><span class="p">:</span>    <span class="p">[</span><span class="s1">&#39;lpl2&#39;</span><span class="p">,</span> <span class="s1">&#39;plup2&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        
+        <span class="c1"># Voice lookup map</span>
+        <span class="n">voice_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;act&#39;</span><span class="p">:</span>                     <span class="s1">&#39;A&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;mid&#39;</span><span class="p">:</span>                     <span class="s1">&#39;M&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pass&#39;</span><span class="p">:</span>                    <span class="s1">&#39;P&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;mp&#39;</span><span class="p">:</span>             <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;middle deponent&#39;</span><span class="p">:</span>            <span class="s1">&#39;D&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;passive deponent&#39;</span><span class="p">:</span>           <span class="s1">&#39;O&#39;</span><span class="p">,</span>            
+            <span class="s1">&#39;middle or passive deponent&#39;</span><span class="p">:</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;impersonal active&#39;</span><span class="p">:</span>          <span class="s1">&#39;Q&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;no voice&#39;</span><span class="p">:</span>                   <span class="s1">&#39;X&#39;</span>           
+        <span class="p">}</span>
+        
+        <span class="c1"># Mood lookup map</span>
+        <span class="n">mood_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;ind&#39;</span><span class="p">:</span>                 <span class="s1">&#39;I&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;subj&#39;</span><span class="p">:</span>                <span class="s1">&#39;S&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;opt&#39;</span><span class="p">:</span>                   <span class="s1">&#39;O&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;imperat&#39;</span><span class="p">:</span>                 <span class="s1">&#39;M&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inf&#39;</span><span class="p">:</span>                 <span class="s1">&#39;N&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;part&#39;</span><span class="p">:</span>                 <span class="s1">&#39;P&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;imperative participle&#39;</span><span class="p">:</span>      <span class="s1">&#39;R&#39;</span>
+        <span class="p">}</span>
+
+        <span class="c1"># TENSE</span>
+
+        <span class="c1"># Normalize morph codes and parsed tense</span>
+        <span class="n">morph_codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;morph_codes&#39;</span><span class="p">,</span> <span class="p">[])]</span>
+        <span class="n">base_tense</span>  <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tense&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        
+        <span class="c1"># Decide which key to use in tense_map</span>
+        <span class="k">if</span> <span class="n">base_tense</span> <span class="ow">in</span> <span class="n">second_flags</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">flag</span> <span class="ow">in</span> <span class="n">morph_codes</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">second_flags</span><span class="p">[</span><span class="n">base_tense</span><span class="p">]):</span>
+           <span class="n">lookup_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;second </span><span class="si">{</span><span class="n">base_tense</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+           <span class="n">lookup_key</span> <span class="o">=</span> <span class="n">base_tense</span> <span class="ow">or</span> <span class="s1">&#39;no tense stated&#39;</span>
+
+        <span class="c1"># Final code (defaulting to &#39;X&#39; if nothing matches)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">tense_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lookup_key</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+
+
+        <span class="c1"># VOICE/MOOD</span>
+
+        <span class="c1"># Always set voice &amp; mood codes</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">voice_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;voice&#39;</span><span class="p">),</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">mood_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mood&#39;</span><span class="p">),</span>  <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">V</span><span class="o">==</span><span class="s1">&#39;X&#39;</span> <span class="ow">or</span> <span class="n">M</span><span class="o">==</span><span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="nb">print</span> <span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+
+        <span class="c1"># Grab person (fallback to other_end_tokens if needed)</span>
+        <span class="k">if</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">):</span>
+            <span class="n">person</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;other_end_tokens&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([123])&#39;</span><span class="p">,</span> <span class="n">tok</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="n">person</span><span class="o">=</span><span class="kc">None</span>  <span class="c1"># no alternative data found -&gt; initialize None Person</span>
+
+        <span class="c1"># Number code</span>
+        <span class="n">num_code</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">))</span> <span class="c1"># code return the first letter of the property in capitals (safe for gender, number, case, degree)</span>
+
+        <span class="c1"># Base tag</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;V-</span><span class="si">{</span><span class="n">T</span><span class="si">}{</span><span class="n">V</span><span class="si">}{</span><span class="n">M</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Finite verbs: append “-&lt;person&gt;&lt;number&gt;”</span>
+        <span class="k">if</span> <span class="n">M</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;S&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">person</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">person</span><span class="si">}{</span><span class="n">num_code</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;finite verb 🠢 </span><span class="si">{</span><span class="n">base</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># return base + tag together with dialect suffix if pressent</span>
+            <span class="k">return</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+            
+        <span class="c1"># Infinitives: just use the base (e.g. V-2AMN for 2nd aorist middle/passive infinitive)</span>
+        <span class="k">elif</span> <span class="n">M</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;infinitive verb 🠢 </span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># return base together with dialect suffix if pressent</span>
+            <span class="k">return</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+            
+        <span class="c1"># Participles: suffix is case+number+gender</span>
+        <span class="k">elif</span> <span class="n">M</span> <span class="o">==</span> <span class="s1">&#39;P&#39;</span><span class="p">:</span>
+            <span class="n">raw_cases</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;case&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">cases</span> <span class="o">=</span> <span class="n">raw_cases</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_cases</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> \
+                  <span class="k">else</span> <span class="p">([</span><span class="n">raw_cases</span><span class="p">]</span> <span class="k">if</span> <span class="n">raw_cases</span> <span class="k">else</span> <span class="p">[])</span>
+            <span class="n">raw_nums</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">nums</span>  <span class="o">=</span> <span class="n">raw_nums</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_nums</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> \
+                  <span class="k">else</span> <span class="p">([</span><span class="n">raw_nums</span><span class="p">]</span>  <span class="k">if</span> <span class="n">raw_nums</span>  <span class="k">else</span> <span class="p">[])</span>
+            <span class="n">raw_gens</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gender&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">gens</span>  <span class="o">=</span> <span class="n">raw_gens</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_gens</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> \
+                 <span class="k">else</span> <span class="p">([</span><span class="n">raw_gens</span><span class="p">]</span>  <span class="k">if</span> <span class="n">raw_gens</span>  <span class="k">else</span> <span class="p">[])</span>
+            <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">code</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}{</span><span class="n">code</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="si">}{</span><span class="n">code</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cases</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gens</span><span class="p">]</span>
+            <span class="n">compound_return</span><span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="n">base</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;participle 🠢 </span><span class="si">{</span><span class="n">compound_return</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># return compound together with dialect suffix if pressent</span>
+            <span class="k">return</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">compound_return</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+
+    <span class="c1"># 5. Noun/Adjective/Article pattern: prefix case number gender</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;N-&#39;</span><span class="p">,</span><span class="s1">&#39;A-&#39;</span><span class="p">,</span><span class="s1">&#39;T-&#39;</span><span class="p">}:</span>
+        <span class="c1"># Normalize case(s), number, and gender(s) to lists</span>
+        <span class="n">cases</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;case&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">cases</span> <span class="o">=</span> <span class="n">cases</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cases</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">cases</span><span class="p">]</span>
+        <span class="n">nums</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span>
+        <span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">nums</span><span class="p">]</span> <span class="k">if</span> <span class="n">nums</span> <span class="k">else</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+        <span class="n">gens</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gender&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">gens</span> <span class="o">=</span> <span class="n">gens</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gens</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">gens</span><span class="p">]</span>
+
+        <span class="c1"># Build one tag per case×number×gender combination</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gens</span><span class="p">:</span>
+                    <span class="n">cas_code</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="n">num_code</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="n">gen_code</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+                    <span class="n">base_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">cas_code</span><span class="si">}{</span><span class="n">num_code</span><span class="si">}{</span><span class="n">gen_code</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                    <span class="c1"># Adjective degree extension</span>
+                    <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;A-&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;degree&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;comparative&#39;</span><span class="p">:</span>
+                            <span class="n">base_tag</span> <span class="o">+=</span> <span class="s1">&#39;-C&#39;</span>
+                        <span class="k">elif</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;degree&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;superlative&#39;</span><span class="p">:</span>
+                            <span class="n">base_tag</span> <span class="o">+=</span> <span class="s1">&#39;-S&#39;</span>
+
+                    <span class="c1"># add dialect suffix if pressent</span>
+                    <span class="n">full_tag</span> <span class="o">=</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">base_tag</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+                    <span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_tag</span><span class="p">)</span>
+
+        <span class="c1"># Join all generated tags</span>
+        <span class="n">compound_return</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;noun/adjective/article 🠢 </span><span class="si">{</span><span class="n">compound_return</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">compound_return</span>
+
+    <span class="c1"># 6. Pronouns: P-/R-/C-/D-/K-/I-/X-/Q-/F-/S- + [person] case number [gender]</span>
+    <span class="n">pronoun_prefixes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;P-&#39;</span><span class="p">,</span><span class="s1">&#39;R-&#39;</span><span class="p">,</span><span class="s1">&#39;C-&#39;</span><span class="p">,</span><span class="s1">&#39;D-&#39;</span><span class="p">,</span><span class="s1">&#39;K-&#39;</span><span class="p">,</span><span class="s1">&#39;I-&#39;</span><span class="p">,</span><span class="s1">&#39;X-&#39;</span><span class="p">,</span><span class="s1">&#39;Q-&#39;</span><span class="p">,</span><span class="s1">&#39;F-&#39;</span><span class="p">,</span><span class="s1">&#39;S-&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">pronoun_prefixes</span><span class="p">:</span>
+        <span class="c1"># grab person/number</span>
+        <span class="n">person_code</span> <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">))</span>  <span class="c1"># e.g. &#39;1&#39;,&#39;2&#39;,&#39;3&#39;</span>
+        <span class="n">num_code</span>    <span class="o">=</span> <span class="n">code</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">))</span>  <span class="c1"># e.g. &#39;S&#39;,&#39;P&#39;,&#39;D&#39;</span>
+
+        <span class="c1"># normalize cases to a list (even if missing)</span>
+        <span class="n">raw_cases</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;case&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_cases</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">cases</span> <span class="o">=</span> <span class="n">raw_cases</span>
+        <span class="k">elif</span> <span class="n">raw_cases</span><span class="p">:</span>
+            <span class="n">cases</span> <span class="o">=</span> <span class="p">[</span><span class="n">raw_cases</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cases</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>           <span class="c1"># no case? still get one iteration</span>
+
+        <span class="c1"># normalize genders to a list (even if missing)</span>
+        <span class="n">raw_gens</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gender&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_gens</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">gens</span> <span class="o">=</span> <span class="n">raw_gens</span>
+        <span class="k">elif</span> <span class="n">raw_gens</span><span class="p">:</span>
+            <span class="n">gens</span> <span class="o">=</span> <span class="p">[</span><span class="n">raw_gens</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gens</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>            <span class="c1"># no gender? still get one iteration</span>
+
+
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gens</span><span class="p">:</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">person_code</span><span class="p">:</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person_code</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">code</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>     <span class="c1"># case (N,G,D,A,V)</span>
+                <span class="k">if</span> <span class="n">num_code</span><span class="p">:</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_code</span><span class="p">)</span>   <span class="c1"># number</span>
+
+                <span class="k">if</span> <span class="n">g</span><span class="p">:</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">code</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>    <span class="c1"># gender (M,F,N) - optional</span>
+
+                <span class="c1"># add dialect suffix if pressent</span>
+                <span class="n">base_tag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+                <span class="n">full_tag</span> <span class="o">=</span> <span class="n">append_dialect_suffix</span><span class="p">(</span><span class="n">base_tag</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+                <span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_tag</span><span class="p">)</span>
+
+        <span class="c1"># Join all generated tags</span>
+        <span class="n">compound_return</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">compound_return</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Analysis of pronoun (with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">) is empty 🠢 </span><span class="si">{</span><span class="n">compound_return</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># pretty-print `parse`</span>
+                <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; pronoun (with prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">) 🠢 </span><span class="si">{</span><span class="n">compound_return</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">compound_return</span>
+
+    <span class="c1"># 7. Fallback for unhandled cases</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> 
+        <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[analyze_morph_tag] Fallback encountered 🠢 UNK&#39;</span><span class="p">)</span>
+        <span class="c1"># pretty-print `parse`</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;UNK&#39;</span></div>
+
+
+    <span class="c1"># End of function analyze_morph_tag()</span>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

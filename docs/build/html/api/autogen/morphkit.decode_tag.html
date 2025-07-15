@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.decode_tag &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="morphkit.get_word_blocks" href="morphkit.get_word_blocks.html" />
+    <link rel="prev" title="morphkit.compare_tags" href="morphkit.compare_tags.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">morphkit.decode_tag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#morphkit.decode_tag"><code class="docutils literal notranslate"><span class="pre">decode_tag()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">morphkit.decode_tag</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/autogen/morphkit.decode_tag.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="morphkit-decode-tag">
+<h1>morphkit.decode_tag<a class="headerlink" href="#morphkit-decode-tag" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.decode_tag">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">decode_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/morphkit/decode_tag.html#decode_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.decode_tag" title="Link to this definition"></a></dt>
+<dd><p>Decode a morphological tag into a set of human-readable features.</p>
+<p>This function takes a morphological tag (e.g. “V-PAI-3S”) and returns
+a dictionary of interpreted grammatical properties, such as <cite>Part of Speech</cite>,
+<cite>case</cite>, <cite>number</cite>, <cite>gender</cite>, <cite>tense</cite>, <cite>voice</cite>, <cite>mood</cite>, <cite>person</cite>, and any <cite>suffix</cite> details.</p>
+<section id="args">
+<h2>Args:<a class="headerlink" href="#args" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">tag_input (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The raw morphological tag string. Usually includes prefixes
+like “N-”, “V-”, “A-”, etc., followed by coded letters/numbers.</p>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">Dict[str, Any]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A mapping from feature names to their full descriptions.</p>
+<dl class="simple">
+<dt>Possible keys include:</dt><dd><ul class="simple">
+<li><p>“Part of Speech”</p></li>
+<li><p>“Case”, “Number”, “Gender”</p></li>
+<li><p>“Tense”, “Voice”, “Mood”</p></li>
+<li><p>“Verb Extra” or “Suffix”</p></li>
+<li><p>“Warning”, warning related to feature elements</p></li>
+<li><p>“Error” (e.g., if input is empty)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>If the part of speech can not be determined, it returns <cite>{“Part of Speech”: “Unknown or Unsupported”}</cite>.</p>
+<p>If <cite>tag_input</cite> is empty or whitespace, it returns <cite>{“Error”: “Please enter a parsing tag.”}</cite>.</p>
+</div></blockquote>
+</section>
+<section id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">morphkit</span><span class="o">.</span><span class="n">decode_tag</span><span class="p">(</span><span class="s2">&quot;N-NSM&quot;</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="s2">&quot;Part of Speech&quot;</span><span class="p">:</span> <span class="s2">&quot;Noun&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Case&quot;</span><span class="p">:</span> <span class="s2">&quot;Nominative&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Number&quot;</span><span class="p">:</span> <span class="s2">&quot;Singular&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Gender&quot;</span><span class="p">:</span> <span class="s2">&quot;Masculine&quot;</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="note">
+<h2>Note:<a class="headerlink" href="#note" title="Link to this heading"></a></h2>
+<blockquote>
+<div><p>This function is an addapted version of the tool available at <a class="reference external" href="https://github.com/tonyjurg/Sandborg-Petersen-decoder">https://github.com/tonyjurg/Sandborg-Petersen-decoder</a>.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="morphkit.compare_tags.html" class="btn btn-neutral float-left" title="morphkit.compare_tags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="morphkit.get_word_blocks.html" class="btn btn-neutral float-right" title="morphkit.get_word_blocks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

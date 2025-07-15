@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.analyze_pos &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">morphkit.analyze_pos</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for morphkit.analyze_pos</h1><div class="highlight"><pre>
+<span></span><span class="c1"># morphkit/analyze_pos.py</span>
+<span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
+<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="c1"># import required packages</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">beta_code</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The grammar used for this analysis is taken from these books:</span>
+<span class="sd"> - Daniel B. Wallace. The Basics of New Testament Syntax (Grand Rapids, MI: Zondervan, 2009),</span>
+<span class="sd">   shortened in this file to BNT.</span>
+<span class="sd"> - Daniel B. Wallace. Greek Grammar beyon the Basics (Grand Rapids, MI: Zondervan, 2009),</span>
+<span class="sd">   shortened in this file to GGBB.</span>
+<span class="sd">&quot;&quot;&quot;</span> 
+
+                                                                              
+<div class="viewcode-block" id="analyze_pos">
+<a class="viewcode-back" href="../../api/morphkit.analyze_pos.html#morphkit.analyze_pos">[docs]</a>
+<span class="k">def</span> <span class="nf">analyze_pos</span><span class="p">(</span><span class="n">parse</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="p">,</span><span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Analyze a single Morpheus parse record and determine its part of speech.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+
+<span class="sd">        :parse (dict): A parse dictionary with the following structure:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                {</span>
+<span class="sd">                    &#39;raw_uc&#39;: &#39;...&#39;, </span>
+<span class="sd">                    &#39;stam_codes&#39;: [...],</span>
+<span class="sd">                    ...</span>
+<span class="sd">                    &#39;morph_flags&#39;: [...], </span>
+<span class="sd">                    &#39;tense&#39;: &#39;present&#39;,</span>
+<span class="sd">                    ...</span>
+<span class="sd">               }</span>
+
+<span class="sd">        :debug (bool): Optional argument. Defaults to `False`. If set to `True` the function print some debug information.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        :str: The determined `Part of Speech` label (e.g. `&#39;noun&#39;`, `&#39;verb&#39;`, `&#39;adverb&#39;`, ...),</span>
+<span class="sd">             or `&#39;unknown&#39;` if no rule applies.</span>
+
+<span class="sd">    Steps:</span>
+<span class="sd">    ------</span>
+
+<span class="sd">         The analysis consist of the following major steps:</span>
+<span class="sd"> </span>
+<span class="sd">            1. Verbs (presence of &#39;tense&#39; or &#39;mood&#39; keys).</span>
+
+<span class="sd">                **Note:** one could argue for two dedicated POS classes, for participle and infinitive, </span>
+<span class="sd">                c.f Wallace GGBB p.613 &amp; p.588. This was NOT done in order to stay in line with the</span>
+<span class="sd">                current N1904-TF classification used by feature `sp`. The differentation between </span>
+<span class="sd">                participle, infinitive and &#39;other&#39; verb types is done in module &#39;init_compare_tags&#39;.</span>
+
+<span class="sd">            2. Specific morph codes and flags → mapped POS (e.g. &#39;conj&#39; → conjunction).</span>
+
+<span class="sd">            3. Indeclinable forms (&#39;indeclform&#39; flag):</span>
+
+<span class="sd">                - Neuter-singular nom/acc → adverb.</span>
+
+<span class="sd">                - Numeral indecl → numeral.</span>
+
+<span class="sd">                - Proper noun indecl if gender/number present → proper noun.</span>
+
+<span class="sd">                - Otherwise → other indeclinable noun.</span>
+
+<span class="sd">            4. Proclitic or enclitic forms → particle.</span>
+
+<span class="sd">            5. Anything with case or gender → noun.</span>
+
+<span class="sd">            7. If other_end_token == adverbial → adverb.</span>
+
+<span class="sd">            8. Fallback → unknown.</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            parse = {&#39;raw_uc&#39;:&#39;λέγω&#39;,&#39;tense&#39;:&#39;present&#39;,&#39;mood&#39;:&#39;indicative&#39;, ...}</span>
+<span class="sd">            morphkit.analyze_pos(parse)</span>
+<span class="sd">            &#39;verb&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># If debug is set, print this function name (the return value will be printed later)</span>
+    <span class="c1">#if debug: print (f&#39;[analyze_pos] betacode {parse.get(&quot;raw_bc&quot;)}:  &#39;,end=&#39;&#39;)</span>
+
+    <span class="c1"># 1. Verbs: presence of any tense/mood is a very good indication to directly annotate as verb</span>
+    <span class="k">if</span> <span class="s2">&quot;tense&quot;</span> <span class="ow">in</span> <span class="n">parse</span> <span class="ow">or</span> <span class="s2">&quot;mood&quot;</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">:</span>
+        <span class="c1"># see docblock regarding the participium and the infinitive (GGBB, p.588&amp;613)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;tense or mood 🠢 verb ~ V-&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;verb&quot;</span>
+
+    <span class="c1"># 2. Specific codes and flags mappings (combined in ordered_items)</span>
+    <span class="c1">#</span>
+    <span class="c1"># Merge morphological codes and flags into a single sequence for downstream analysis.</span>
+    <span class="c1"># Order is significant: codes define broad categories first, and flags provide</span>
+    <span class="c1"># finer annotations (e.g., “indeclform”) when the codes alone aren’t conclusive.</span>
+    <span class="c1"># Conclusive codes and flags are in the code_map below with its proper pos.</span>
+    <span class="c1"># We allow duplicates, since it has no logical impact while deduplicating </span>
+    <span class="c1"># delivers minimal benefit relative to its cost and additional complexity.</span>
+    <span class="n">ordered_items</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_codes&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stem_codes&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_flags&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stem_flags&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;word=</span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;work_bc&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">ordered_items</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">code_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;conj&quot;</span>        <span class="p">:</span> <span class="s2">&quot;conjunction&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aor1&quot;</span>        <span class="p">:</span> <span class="s2">&quot;verb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aor2&quot;</span>        <span class="p">:</span> <span class="s2">&quot;verb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aor2_pass&quot;</span>   <span class="p">:</span> <span class="s2">&quot;verb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;irreg_adj3&quot;</span>  <span class="p">:</span> <span class="s2">&quot;adjective&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;verb_adj2&quot;</span>   <span class="p">:</span> <span class="s2">&quot;adjective&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;demonstr&quot;</span>    <span class="p">:</span> <span class="s2">&quot;demonstrative pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;prep&quot;</span>        <span class="p">:</span> <span class="s2">&quot;preposition&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;particle&quot;</span>    <span class="p">:</span> <span class="s2">&quot;particle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;numeral&quot;</span>     <span class="p">:</span> <span class="s2">&quot;numeral&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;relative&quot;</span>    <span class="p">:</span> <span class="s2">&quot;relative pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pron1&quot;</span>       <span class="p">:</span> <span class="s2">&quot;personal pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pron2&quot;</span>       <span class="p">:</span> <span class="s2">&quot;personal pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pron3&quot;</span>       <span class="p">:</span> <span class="s2">&quot;personal pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;indef&quot;</span>       <span class="p">:</span> <span class="s2">&quot;indefinite pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;interrog&quot;</span>    <span class="p">:</span> <span class="s2">&quot;interrogative pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;article&quot;</span>     <span class="p">:</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;adverb&quot;</span>      <span class="p">:</span> <span class="s2">&quot;adverb&quot;</span><span class="p">,</span>        <span class="c1"># adverbs that aren’t neut-sg indecl</span>
+        <span class="s2">&quot;adverbial&quot;</span>   <span class="p">:</span> <span class="s2">&quot;adverb&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;irreg_mi&quot;</span>    <span class="p">:</span> <span class="s2">&quot;verb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;art_adj&quot;</span>     <span class="p">:</span> <span class="s2">&quot;personal pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pron_adj1&quot;</span>   <span class="p">:</span> <span class="s2">&quot;demonstrative pronoun&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;wn_on_comp&quot;</span>  <span class="p">:</span> <span class="s2">&quot;adjective&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;exclam&quot;</span>      <span class="p">:</span> <span class="s2">&quot;interjection&quot;</span> 
+    <span class="p">}</span>
+    
+    <span class="k">for</span> <span class="n">mcode</span> <span class="ow">in</span> <span class="n">ordered_items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mcode</span> <span class="ow">in</span> <span class="n">code_map</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ordered_items 🠢 </span><span class="si">{</span><span class="n">code_map</span><span class="p">[</span><span class="n">mcode</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">code_map</span><span class="p">[</span><span class="n">mcode</span><span class="p">]</span>
+
+    <span class="c1"># 3. Indeclinable forms</span>
+    <span class="k">if</span> <span class="s2">&quot;indeclform&quot;</span> <span class="ow">in</span> <span class="n">ordered_items</span><span class="p">:</span>
+
+        <span class="c1"># 3a. Neuter-singular nom/acc indeclinable → adverb</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gender&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;neut&quot;</span>
+            <span class="ow">and</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;sg&quot;</span>
+            <span class="ow">and</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="s2">&quot;acc&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;indeclform+neut/sg/nom-acc → adverb ~ ADV&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;adverb&quot;</span>
+        
+        <span class="c1"># 3b. Numeral indeclinable ? {This needs to be checked further!}</span>
+        <span class="k">if</span> <span class="s2">&quot;numeral&quot;</span> <span class="ow">in</span> <span class="n">ordered_items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;indeclform+numeral → numeral indeclinable ~ A-NUI&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;numeral indeclinable&quot;</span>
+
+        <span class="c1"># 3c. Proper noun indeclinable if still has gender or number</span>
+        <span class="c1">#    we assume presence of gender/number on an indeclinable means a name ([TBC] - is this actualy the case?)</span>
+        <span class="k">if</span> <span class="s2">&quot;gender&quot;</span> <span class="ow">in</span> <span class="n">parse</span> <span class="ow">or</span> <span class="s2">&quot;number&quot;</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;indeclform+gender/number → proper noun indeclinable ~ N-PRI&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;proper noun indeclinable&quot;</span>
+
+        <span class="c1"># 3d. All other indeclinables → other noun indeclinable</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;indeclform → other noun indeclinable ~ N-OI&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;noun other indeclinable&quot;</span> 
+    
+    <span class="c1"># 4. Proclitic/enclitic → particle</span>
+    <span class="k">if</span> <span class="s2">&quot;enclitic&quot;</span> <span class="ow">in</span> <span class="n">ordered_items</span> <span class="ow">or</span> <span class="s2">&quot;proclitic&quot;</span> <span class="ow">in</span> <span class="n">ordered_items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;enclitic or proclitic 🠢 particle ~ PART&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;particle&quot;</span>
+
+    <span class="c1"># 5. Anything with a case or gender → noun</span>
+    <span class="k">if</span> <span class="s2">&quot;case&quot;</span> <span class="ow">in</span> <span class="n">parse</span> <span class="ow">or</span> <span class="s2">&quot;gender&quot;</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;case or gender 🠢 noun ~ N-&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;noun&quot;</span>
+
+    <span class="c1"># 6. Tag adverbials (in other_end_tokens) just in case missed somewhere</span>
+    <span class="k">if</span> <span class="s2">&quot;adverbial&quot;</span> <span class="ow">in</span> <span class="n">parse</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;other_end_tokens&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Other_end_token 🠢 adverb&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;adverb&quot;</span>
+
+    <span class="c1"># 7. Fallback → unknown</span>
+    <span class="k">if</span> <span class="kc">True</span><span class="p">:</span> <span class="c1"># debug: </span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;fallback 🠢 unknown&#39;</span><span class="p">)</span>
+        <span class="c1"># Pretty-print the parse dict for readability</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span></div>
+
+
+    <span class="c1"># End of function analyze_pos()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

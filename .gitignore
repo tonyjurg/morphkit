@@ -1,0 +1,10 @@
+/morphkit/__pycache__
+/private
+/docs/staging
+/.ipynb_checkpoints
+/docs/.ipynb_checkpoints
+/docs/build/docx/.ipynb_checkpoints
+/validation/.ipynb_checkpoints
+*.ipynb_checkpoints
+/validation/.ipynb_checkpoints
+/notebooks/.ipynb_checkpoints

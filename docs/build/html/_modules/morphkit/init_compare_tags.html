@@ -1,0 +1,892 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.init_compare_tags &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">morphkit.init_compare_tags</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for morphkit.init_compare_tags</h1><div class="highlight"><pre>
+<span></span><span class="c1"># morphkit/init_compare_tags.py</span>
+<span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
+<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="sd">&quot;&quot;&quot;                                                                                                         </span>
+<span class="sd">Function:</span>
+
+<span class="sd">    This module initalizes the various functions used to perform a comparison between two morphological tags.</span>
+<span class="sd">    The calculated figures for similairity are intended to express *similairity in syntactic function*.</span>
+<span class="sd">    For example a verb with mood=indicative function in a sentence is completly different than when the verb has</span>
+<span class="sd">    mood=participle or infinitive. The latter may perform functionaly noun-like. Hence the compare_tags function </span>
+<span class="sd">    will assign a higher value for similairity for them when comparing them with a noun.</span>
+
+<span class="sd">References:</span>
+
+<span class="sd">    The grammar used for the analysis in this file is mostly taken from these two books:</span>
+<span class="sd">        - Daniel B. Wallace. The Basics of New Testament Syntax (Grand Rapids, MI: Zondervan, 2009),</span>
+<span class="sd">          shortened in this file to BNT.</span>
+<span class="sd">        - Daniel B. Wallace. Greek Grammar beyon the Basics (Grand Rapids, MI: Zondervan, 2009),</span>
+<span class="sd">          shortened in this file to GGBB.</span>
+
+<span class="sd">Implementation:</span>
+
+<span class="sd">    Factory that initializes and returns a fully-configured `compare_tags` function.</span>
+
+<span class="sd">    This function sets up:</span>
+<span class="sd">    </span>
+<span class="sd">      - Feature weights for each grammatical category.</span>
+<span class="sd">      - Similarity functions for Part of Speech, Number, Tense, Voice, Mood,</span>
+<span class="sd">        Gender, Case, Person, and Suffix, using predefined matrices and</span>
+<span class="sd">        an optional substring fallback for suffixes.</span>
+<span class="sd">      - The compare function should be symmetric, so sim(X,Y)=sim(Y,X))</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">        None</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    </span>
+<span class="sd">        Callable[[str, str, bool], dict]: A `compare_tags` function with the signature:</span>
+<span class="sd">            compare_tags(</span>
+<span class="sd">                tag1 (str),</span>
+<span class="sd">                tag2 (str),</span>
+<span class="sd">                debug (bool=True)</span>
+<span class="sd">            ) -&gt; {</span>
+<span class="sd">                &#39;tag&#39;: str,</span>
+<span class="sd">                &#39;overall_similarity&#39;: float,</span>
+<span class="sd">                &#39;details&#39;: Dict[str, Dict[str, Union[str,float]]]</span>
+<span class="sd">            }</span>
+
+<span class="sd">    Example (end-user perspective):</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; morphkit.compare_tags(&quot;N-NSN-ATT&quot;, &quot;N-ASM-ATT&quot;)</span>
+<span class="sd">        {&#39;tag&#39;: &#39;N-ASM-ATT&#39;,</span>
+<span class="sd">         &#39;overall_similarity&#39;: 0.8883720930232557,</span>
+<span class="sd">         &#39;details&#39;: {&#39;Part of Speech&#39;: {&#39;known&#39;: &#39;Noun&#39;,</span>
+<span class="sd">         ... }</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span> 
+
+
+<span class="c1"># Bring in the decoder from the sibling module</span>
+<span class="kn">from</span> <span class="nn">.decode_tag</span> <span class="kn">import</span> <span class="n">decode_tag</span>
+
+
+<div class="viewcode-block" id="init_compare_tags">
+<a class="viewcode-back" href="../../api/morphkit.init_compare_tags.html#morphkit.init_compare_tags">[docs]</a>
+<span class="k">def</span> <span class="nf">init_compare_tags</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Factory that initializes and returns a fully-configured :py:func:`~morphkit.compare_tags` function.</span>
+
+<span class="sd">    This function sets up:</span>
+<span class="sd">    </span>
+<span class="sd">      -  Feature weights for each grammatical category.</span>
+
+<span class="sd">      -  Similarity functions for `Part of Speech`, `number`, `tense`, `voice`, `mood`,</span>
+<span class="sd">         `gender`, `case`, `person`, and `suffix` using predefined matrices and an optional substring fallback for suffixes.</span>
+
+<span class="sd">      -  The compare function should be symmetric, so sim(X,Y)=sim(Y,X))</span>
+
+<span class="sd">    The returned function will:</span>
+
+<span class="sd">          1. Decode each tag with :py:func:`~morphkit.decode_tag`.</span>
+<span class="sd">          2. Compute per-feature similarities.</span>
+<span class="sd">          3. Weight and sum them (as defined in this function).</span>
+<span class="sd">          4. Normalize to the range [0.0, 1.0], inclusive.</span>
+
+<span class="sd">        The calculated figures for similairity are intended to express *similairity in syntactic function*.</span>
+
+<span class="sd">    For example the function of a verb with `mood=indicative` in a sentence is completly different than when the verb has `mood=participle` or `infinitive`. The latter may perform functionaly noun-like. Hence the `compare_tags` function   will assign a higher value for similairity for them when calculating the similairity with a noun.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+
+<span class="sd">        :None:</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        :Callable[[str, str, bool], dict]: the function :py:func:`.morphkit.compare_tags`:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            compare_tags(</span>
+<span class="sd">                tag1 (str),     # the gold standard</span>
+<span class="sd">                tag2 (str),     # the tag to compare with the gold standard</span>
+<span class="sd">                debug (bool=True)</span>
+<span class="sd">            ) -&gt; {</span>
+<span class="sd">                &#39;tag&#39;: str,</span>
+<span class="sd">                &#39;overall_similarity&#39;: float,</span>
+<span class="sd">                &#39;details&#39;: Dict[str, Dict[str, Union[str,float]]]</span>
+<span class="sd">            }</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    In this example we use the *generated* :py:func:`~morphkit.compare_tags` function:</span>
+<span class="sd">    </span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           morphkit.compare_tags(&quot;N-NSN-ATT&quot;, &quot;N-ASM-ATT&quot;)</span>
+<span class="sd">           {&#39;tag&#39;: &#39;N-ASM-ATT&#39;,</span>
+<span class="sd">            &#39;overall_similarity&#39;: 0.8883720930232557,</span>
+<span class="sd">            &#39;details&#39;: {&#39;Part of Speech&#39;: {&#39;tag1&#39;: &#39;Noun&#39;,</span>
+<span class="sd">            ... }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="c1"># 1) Feature weights (adjustable)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Part of Speech&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;Number&quot;</span><span class="p">:</span>          <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;Tense&quot;</span><span class="p">:</span>           <span class="mi">8</span><span class="p">,</span>
+        <span class="s2">&quot;Voice&quot;</span><span class="p">:</span>           <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;Mood&quot;</span><span class="p">:</span>            <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;Gender&quot;</span><span class="p">:</span>          <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;Case&quot;</span><span class="p">:</span>            <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;Person&quot;</span><span class="p">:</span>          <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;Suffix&quot;</span><span class="p">:</span>          <span class="mi">1</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+    <span class="c1"># 2) Generic matrix-sim builder </span>
+    <span class="k">def</span> <span class="nf">make_matrix_similarity</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fallback_score</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          </span>
+<span class="sd">          Build a similarity function from a labeled similarity matrix.</span>
+<span class="sd">        </span>
+<span class="sd">            Returns a function that compares two feature values by:</span>
+<span class="sd">              1. Returning 1.0 if they match exactly.</span>
+<span class="sd">              2. Looking up their score in the provided matrix.</span>
+<span class="sd">              3. Applying an optional fallback predicate before returning 0.0.</span>
+<span class="sd">        </span>
+<span class="sd">            Args:</span>
+<span class="sd">            </span>
+<span class="sd">                labels (List[str]): Ordered list of N feature labels.</span>
+<span class="sd">                matrix (List[List[float]]): N×N matrix where matrix[i][j] is the similarity</span>
+<span class="sd">                    score between labels[i] and labels[j].</span>
+<span class="sd">                fallback (Optional[Callable[[str, str], bool]]): A predicate that, if true</span>
+<span class="sd">                    for a pair (known, generated), forces the fallback_score.</span>
+<span class="sd">                fallback_score (float): Score to return when fallback(...) is True.</span>
+<span class="sd">        </span>
+<span class="sd">            Returns:</span>
+<span class="sd">            </span>
+<span class="sd">                Callable[[str, str], float]: A function `sim_fn(known, generated)` that returns</span>
+<span class="sd">                a float in the range [0.0, 1.0].</span>
+<span class="sd">        </span>
+<span class="sd">            Example:</span>
+<span class="sd">            </span>
+<span class="sd">                sim = make_matrix_similarity([&#39;A&#39;,&#39;B&#39;], [[1.0,0.5],[0.5,1.0]])</span>
+<span class="sd">                assert sim(&#39;A&#39;,&#39;B&#39;) == 0.5</span>
+<span class="sd">                </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">lab</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">)}</span>
+    
+        <span class="k">def</span> <span class="nf">sim_fn</span><span class="p">(</span><span class="n">known</span><span class="p">,</span> <span class="n">generated</span><span class="p">):</span>
+            <span class="c1"># exact match</span>
+            <span class="k">if</span> <span class="n">known</span> <span class="o">==</span> <span class="n">generated</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">1.0</span>
+            <span class="c1"># lookup in matrix</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">known</span><span class="p">)</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">generated</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">j</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># custom fallback (e.g. suffix‐substring)</span>
+            <span class="k">if</span> <span class="n">fallback</span> <span class="ow">and</span> <span class="n">fallback</span><span class="p">(</span><span class="n">known</span><span class="p">,</span> <span class="n">generated</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">fallback_score</span>
+            <span class="c1"># otherwise no similarity</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+    
+        <span class="k">return</span> <span class="n">sim_fn</span>
+
+    <span class="c1"># 3) Build each similarity function *after* the builder is defined</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; a) PART OF SPEECH</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+
+<span class="sd">        For the core POS &#39;open-class&#39; categories:</span>
+<span class="sd">        </span>
+<span class="sd">              Noun vs Verb  = 0.2: usualy not similair, except for infinitive and participle (see last block!)</span>
+<span class="sd">              Noun vs Adj   = 0.5: adjectives agree with nouns in case/number/gender vs moderate closeness.</span>
+<span class="sd">              Verb vs Adv   = 0.2: usualy not similair, except for infinitive and participle (see last block!)</span>
+<span class="sd">              Verb vs Conj  = 0.7: conjunctions join predicates/clauses—slightly closer to verbs than nouns.</span>
+<span class="sd">              Adv  vs Adj   = 0.5: overlap in function (manner, degree), but different inflection.</span>
+<span class="sd">        </span>
+<span class="sd">        The pronoun subtypes all cluster around personal pronoun:</span>
+<span class="sd">        </span>
+<span class="sd">              Personal vs Relative/Reciprocal/… = 0.8: they share “pronominal” morphology.</span>
+<span class="sd">              Correlative vs Interrogative      = 0.9: these two are historically variants of each other.</span>
+<span class="sd">              Most pronouns vs Noun             = 0.2: pronouns stand in for nouns, but morphologically distinct.</span>
+<span class="sd">        </span>
+<span class="sd">        For items with Indeclinable flags:</span>
+<span class="sd">        </span>
+<span class="sd">             Particle vs Preposition vs Interjection each get 1.0 on the diagonal (self‐match).</span>
+<span class="sd">             Particle vs Interjection       = 0.3: both uninflected function words.</span>
+<span class="sd">             Interjection vs Aramaic/Hebrew = 0.9: in Biblical context these loan‐words behave often like interjections (very close).</span>
+<span class="sd">             particle vs conjunctions       = 0.8 : where conjuctions link, particles modify.</span>
+<span class="sd">        </span>
+<span class="sd">        Proper Noun Indeclinable” and “Noun Other Type Indeclinable”:</span>
+<span class="sd">        </span>
+<span class="sd">             Noun vs N-PNI  = 0.9 : (treated distinct). ([TBC] not sure  ....)</span>
+<span class="sd">             Noun vs N-LI   = 0.9 : family of nouns</span>
+<span class="sd">             Noun vs N-NOI  = 0.9 : “other noun indeclinable” is just a noun with irregular morphology—very similar.</span>
+<span class="sd">        </span>
+<span class="sd">        Language-origin flags (“Aramaic”, “Hebrew”):</span>
+<span class="sd">        </span>
+<span class="sd">            Aramaic vs Hebrew   = 1.0: both are foreign language tokens, used in similar ways.</span>
+<span class="sd">            Aramaic vs Noun     = 0.6: many Aramaic elements in the Greek text function like nouns.</span>
+<span class="sd">            Hebrew vs Noun      = 0.6: likewise </span>
+<span class="sd">            Hebr/Aram vs Interj = 0.6: also some are interjections like Amen).</span>
+<span class="sd">            </span>
+<span class="sd">        On top of the POS catagories returned by our intial analysis, we need to add (for this matrix) two classes.</span>
+<span class="sd">        These are added at the end of the matrix. Their values are based upon:</span>
+
+<span class="sd">          - Participle: a declinable verbal adjective; GGBB p.613</span>
+<span class="sd">               Noun sim.: substantival use; GGBB p.613 = 0.7</span>
+<span class="sd">               Verb sim.: shares tense/voice; GGBB p.613 = 0.8</span>
+<span class="sd">               Adj sim.: verbal adjective GGBB p.613 = 0.9</span>
+<span class="sd">               Adv sim.: participle as adverbial (circumstantial) = 0.4</span>
+<span class="sd">               against infin = 0.5</span>
+
+<span class="sd">          - Infinitive: an indeclinable verbal noun; GGBB p.588</span>
+<span class="sd">               Noun sim.: verbal noun; GGBB p.588 = 0.8</span>
+<span class="sd">               Verb sim.: verbal form = 0.9</span>
+<span class="sd">               Adj sim.: rare adjectival use = 0.3</span>
+<span class="sd">               Adv sim.: infinitive as adverbial (purpose/result) = 0.5</span>
+<span class="sd">               against particpl = 0.5</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">pos_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Noun&quot;</span><span class="p">,</span> <span class="s2">&quot;Verb&quot;</span><span class="p">,</span> <span class="s2">&quot;Adjective&quot;</span><span class="p">,</span> <span class="s2">&quot;Adverb&quot;</span><span class="p">,</span> <span class="s2">&quot;Conjunction&quot;</span><span class="p">,</span> 
+                  <span class="s2">&quot;Personal Pronoun&quot;</span><span class="p">,</span> <span class="s2">&quot;Relative Pronoun&quot;</span><span class="p">,</span> <span class="s2">&quot;Reciprocal Pronoun&quot;</span><span class="p">,</span> 
+                  <span class="s1">&#39;Demonstrative Pronoun&#39;</span><span class="p">,</span> <span class="s1">&#39;Correlative Pronoun&#39;</span><span class="p">,</span> <span class="s1">&#39;Interrogative Pronoun&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;Indefinite Pronoun&#39;</span><span class="p">,</span> <span class="s1">&#39;Correlative or Interrogative Pronoun&#39;</span><span class="p">,</span> <span class="s1">&#39;Reflexive Pronoun&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;Possessive Pronoun&#39;</span><span class="p">,</span><span class="s1">&#39;Particle&#39;</span><span class="p">,</span> <span class="s1">&#39;Preposition&#39;</span><span class="p">,</span> <span class="s1">&#39;Interjection&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;Proper Noun Indeclinable&#39;</span><span class="p">,</span><span class="s1">&#39;Numeral Indeclinable&#39;</span><span class="p">,</span> <span class="s1">&#39;Letter Indeclinable&#39;</span><span class="p">,</span> 
+                  <span class="s1">&#39;Noun Other Type Indeclinable&#39;</span><span class="p">,</span> <span class="s1">&#39;Aramaic&#39;</span><span class="p">,</span> <span class="s1">&#39;Hebrew&#39;</span><span class="p">,</span> <span class="s1">&#39;Participle&#39;</span><span class="p">,</span> <span class="s1">&#39;Infinitive&#39;</span><span class="p">]</span>
+                  <span class="c1"># Last two pos_labels were added (see function docblock).</span>
+    
+    <span class="n">pos_matrix</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1">#                               |--------------------------pronouns -----------------------------|</span>
+        <span class="c1"># noun verb  adj   adv   conj  prsn.  rela.  recu   demns. corr.  Intr.  Indf.  Cr/Int Refl.  Poss.  Prtl   Prep.  Intj.  N-PRI  A-NUI  N-LI   N-OI   ARR    HEB   Ptc.  Inf.  </span>
+    
+        <span class="c1"># Noun row:       </span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">],</span>
+        <span class="c1"># Verb row:</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">],</span>
+        <span class="c1"># Adjective row:</span>
+        <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">],</span>
+        <span class="c1"># Adverb row:</span>
+        <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">],</span>
+        <span class="c1"># Conjunction row:</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+    
+        <span class="c1"># ——— Pronoun block ———</span>
+        <span class="c1"># Personal Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Relative Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Reciprocal Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Demonstrative Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Correlative Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Interrogative Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Indefinite Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Correlative/Interrogative Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Reflexive Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Possessive Pronoun:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+    
+        <span class="c1"># ——— Other indeclinables &amp; language flags ———</span>
+        <span class="c1"># Particle:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.3</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Preposition:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Interjection:</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.3</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Proper Noun Indeclinable (N-PRI):</span>
+        <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Numeral Indeclinable (A-NUI):</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Letter Indeclinable  (N-LI):</span>
+        <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Noun Other Type Indeclinable (N-OI):</span>
+        <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Aramaic:</span>
+        <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+        <span class="c1"># Hebrew:</span>
+        <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.6</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">],</span>
+
+        <span class="c1"># ——— Additional classes for special verb types ———</span>
+        <span class="c1"># Participle:</span>
+        <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">],</span>
+        <span class="c1"># Infinitive:</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">]</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Perform basic sanity check on this matrix</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_labels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_matrix</span><span class="p">),</span> <span class="s2">&quot;Row count mismatch&quot;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">pos_matrix</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_labels</span><span class="p">),</span> <span class="s2">&quot;Column count mismatch&quot;</span>
+
+    <span class="c1"># Symmetry check for Part-of-Speech, so sim(X,Y)=sim(Y,X)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos_matrix</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos_matrix</span><span class="p">)):</span>
+            <span class="k">assert</span> <span class="n">pos_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">pos_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
+                <span class="sa">f</span><span class="s2">&quot;POS symmetry mismatch at </span><span class="si">{</span><span class="n">pos_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">pos_labels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">pos_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">pos_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Build the POS similarity function</span>
+    <span class="n">get_pos_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">pos_labels</span><span class="p">,</span> <span class="n">pos_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; 2) NUMBER</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">       Diagonal                = 1.0: every &#39;number&#39; is a perfect match with itself.</span>
+<span class="sd">       Singular vs Dual        = 0.8: both are “small” numbers (one or two), also due to historical treatment of the dual form.</span>
+<span class="sd">       Singular/Dual vs Plural = 0.4: conceptually further away. ([TBC] maybe still too high??)</span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">number_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Singular&quot;</span><span class="p">,</span> <span class="s2">&quot;Dual&quot;</span><span class="p">,</span> <span class="s2">&quot;Plural&quot;</span><span class="p">]</span>
+    
+    <span class="n">number_matrix</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1">#Sing Dual Plur</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>  <span class="c1"># Sing vs …</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>  <span class="c1"># Dual vs …</span>
+        <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>  <span class="c1"># Plural vs …</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Build the NUMBER similarity function</span>
+    <span class="n">get_number_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">number_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; c) TENSE</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">        Diagonal                     = 1.0: every &#39;tense&#39; is a perfect match with itself.</span>
+<span class="sd">        Present vs Imperfect         = 0.8: both imperfective.</span>
+<span class="sd">        Present vs Future            = 0.6, Imperfect⇄Future = 0.8: Future is imperfective, closer to Imperfect.</span>
+<span class="sd">        Future vs 2nd-Future         = 0.9: variant forms of same future.</span>
+<span class="sd">        Aorist vs 2nd-Aorist         = 0.9: variant forms of same future.</span>
+<span class="sd">        Perfect vs 2nd-Perfect       = 0.9: variant forms of same future.</span>
+<span class="sd">        Perfect vs Pluperfect        = 0.8: resultative aspect shared.</span>
+<span class="sd">        Pluperfect vs 2nd-Pluperfect = 0.9: variant forms of same future.</span>
+<span class="sd">        perfective vs imperfective   = 0.0: Cross-aspect (no commonality).</span>
+<span class="sd">        No-tense (X; fallback)       = 0.2: for all cases ([TBC] not sure if this is the best fallback).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">tense_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Present&quot;</span><span class="p">,</span> <span class="s2">&quot;Imperfect&quot;</span><span class="p">,</span> <span class="s2">&quot;Future&quot;</span><span class="p">,</span> <span class="s2">&quot;Second Future&quot;</span><span class="p">,</span> <span class="s2">&quot;Aorist&quot;</span><span class="p">,</span> <span class="s2">&quot;Second Aorist&quot;</span><span class="p">,</span>  <span class="s2">&quot;Perfect&quot;</span><span class="p">,</span> <span class="s2">&quot;Second Perfect&quot;</span><span class="p">,</span> <span class="s2">&quot;Pluperfect&quot;</span><span class="p">,</span> <span class="s2">&quot;Second Pluperfect&quot;</span><span class="p">,</span> <span class="s2">&quot;No Tense Stated&quot;</span><span class="p">]</span>
+    
+    <span class="n">tense_matrix</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="c1"># pres impf  fut  2fut   aor   2aor  perf  2per  +per  2+pr  X</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Present vs …</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Imperfect vs …</span>
+        <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Future vs …</span>
+        <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Second Future vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Aorist vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Second Aorist vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Perfect vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Second Perfect vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Pluperfect vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Second Pluperfect vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">],</span>  <span class="c1"># No Tense Stated vs …</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Perform basic sanity check on this matrix</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tense_labels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tense_matrix</span><span class="p">),</span> <span class="s2">&quot;Row count mismatch&quot;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tense_matrix</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tense_labels</span><span class="p">),</span> <span class="s2">&quot;Column count mismatch&quot;</span>
+
+    <span class="c1"># Symmetry check for Tense, so sim(X,Y)=sim(Y,X)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tense_matrix</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tense_matrix</span><span class="p">)):</span>
+            <span class="k">assert</span> <span class="n">tense_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">tense_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
+                <span class="sa">f</span><span class="s2">&quot;Tense symmetry mismatch at </span><span class="si">{</span><span class="n">pos_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">pos_labels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tense_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">tense_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Build TENSE similarity function</span>
+    <span class="n">get_tense_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">tense_labels</span><span class="p">,</span> <span class="n">tense_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; d) VOICE</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">        Diagonal                              = 1.0: Every &#39;voice&#39; is a perfect match with itself.</span>
+<span class="sd">        Middle vs Middle Deponent             = 0.9: deponent forms differ only morphologically.</span>
+<span class="sd">        Passive vs Passive Deponent           = 0.9: deponent forms differ only morphologically.</span>
+<span class="sd">        Middle vs Passive                     = 0.8: “middle/passive” covers both, so pretty similar (same for variants M/P ⇄ M, M/P ⇄ P).</span>
+<span class="sd">        Middle vs Middle or Passive           = 0.8: voice is close to each other.</span>
+<span class="sd">        Passive vs Middle or Passive          = 0.8: voice is close to each other.</span>
+<span class="sd">        Middle vs Middle or Passive Deponent  = 0.9: very close.</span>
+<span class="sd">        Passive vs Middle or Passive Deponent = 0.9: very close.</span>
+<span class="sd">        Active vs Impersonal Active           = 0.8: behave syntactically like active in meaning.</span>
+<span class="sd">        Everything vs No Voice                = 0.2: “no voice stated” is a low‐certainty fallback situation.</span>
+<span class="sd">        All other pairs are set to 0.0 since they either contradict (eg., Active versus Passive) or there is no real overlap.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">voice_labels</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Active&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Passive&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle or Passive&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle Deponent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Passive Deponent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle or Passive Deponent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;impersonal Active&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;no voice&quot;</span>
+    <span class="p">]</span>
+    
+    <span class="n">voice_matrix</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="c1">#  Act   Mid   Pas   M/P   M-Dep  P-Dep  M/P-Dep ImpAct NoV</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>    <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Active vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Middle vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Passive vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Middle or Passive vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Middle Deponent vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Passive Deponent vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>    <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Middle or Passive Deponent vs …</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span>    <span class="mf">1.0</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">],</span>   <span class="c1"># Impersonal Active vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">,</span>   <span class="mf">0.2</span><span class="p">,</span>    <span class="mf">0.2</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">],</span>   <span class="c1"># No Voice vs …</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Perform basic sanity check on this matrix</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">voice_labels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">voice_matrix</span><span class="p">),</span> <span class="s2">&quot;Row count mismatch&quot;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">voice_matrix</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">voice_labels</span><span class="p">),</span> <span class="s2">&quot;Column count mismatch&quot;</span>
+        
+    <span class="c1"># Build the VOICE similarity function</span>
+    <span class="n">get_voice_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">voice_labels</span><span class="p">,</span> <span class="n">voice_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; e) MOOD</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">        Diagonal                            = 1.0: Every &#39;mood&#39; is a perfect match with itself.</span>
+<span class="sd">        Indicative vs Subjunctive           = 0.8: Both express realis vs. potential truth-values in finite clauses so are quite similar syntactically.</span>
+<span class="sd">        Subjunctive vs Optative             = 0.8: The Optative is a more “remote” potential. Also grammatically and morphologically it groups with the Subjunctive.</span>
+<span class="sd">        Indicative vs Optative              = 0.0: Indicative is realis while the Optative is pure potential, so there is no overlap.</span>
+<span class="sd">        Imperative vs Imperative Participle = 0.8: The Imperative Participle adds adjectival force to a command (“being X, do Y…”), so quite close to the pure Imperative.</span>
+<span class="sd">        Infinitive vs Participle            = 0.6: Both are non-finite forms without person/number.</span>
+<span class="sd">        Infinitive vs Imperative Participle = 0.5: Both non-finite, but the Imperative Participle has a directive flavor (slightly less close than just “Participle”).</span>
+<span class="sd">        Participle vs Imperative Participle = 0.9: Both are participles where the latter one just adds an imperative nuance.</span>
+<span class="sd">        Everything else not listed above    = 0.0: There seems to be no meaningful overlap.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">mood_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Indicative&quot;</span><span class="p">,</span> <span class="s2">&quot;Subjunctive&quot;</span><span class="p">,</span> <span class="s2">&quot;Optative&quot;</span><span class="p">,</span> <span class="s2">&quot;Imperative&quot;</span><span class="p">,</span> <span class="s2">&quot;Infinitive&quot;</span><span class="p">,</span> <span class="s2">&quot;Participle&quot;</span><span class="p">,</span> <span class="s2">&quot;Imperative Participle&quot;</span><span class="p">]</span>
+    
+    <span class="n">mood_matrix</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="c1"># Ind   Sub   Opt   Imp   Inf   Part  ImpPart</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span>   <span class="p">],</span>  <span class="c1"># Indicative vs …</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span>   <span class="p">],</span>  <span class="c1"># Subjunctive vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span>   <span class="p">],</span>  <span class="c1"># Optative vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span>   <span class="p">],</span>  <span class="c1"># Imperative vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.5</span>   <span class="p">],</span>  <span class="c1"># Infinitive vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.9</span>   <span class="p">],</span>  <span class="c1"># Participle vs …</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">1.0</span>   <span class="p">],</span>  <span class="c1"># Imperative Participle vs …</span>
+    <span class="p">]</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mood_labels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mood_matrix</span><span class="p">),</span> <span class="s2">&quot;Row count mismatch in Mood&quot;</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">mood_matrix</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mood_labels</span><span class="p">),</span> <span class="s2">&quot;Column count mismatch in Mood&quot;</span>
+    <span class="c1"># Build the MOOD similarity function</span>
+    <span class="n">get_mood_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">mood_labels</span><span class="p">,</span> <span class="n">mood_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; f) GENDER </span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">        Diagonal         = 1.0: Every gender is a perfect match with itself.</span>
+<span class="sd">        Everything else  = 0.2: I want to put some weight to the fact the word is gendered, even with the &#39;wrong&#39; one.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gender_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Masculine&quot;</span><span class="p">,</span> <span class="s2">&quot;Feminine&quot;</span><span class="p">,</span> <span class="s2">&quot;Neuter&quot;</span><span class="p">]</span>
+    
+    <span class="n">gender_matrix</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Masculine vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Feminine vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>  <span class="c1"># Neuter vs …</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Build the GENDER similarity function</span>
+    <span class="n">get_gender_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">gender_labels</span><span class="p">,</span> <span class="n">gender_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; g) CASE</span>
+<span class="sd">    </span>
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">       Diagonal                = 1.0: Every &#39;case&#39; is a perfect match with itself.</span>
+<span class="sd">       Nominative vs Vocative  = 0.8: Here is form similairity and vocative is a direct “address” form of the subject.</span>
+<span class="sd">       Accusative vs Dative    = 0.4: Although the endings differ, they’re both “objective” cases.</span>
+<span class="sd">       Other off-diagonals     = 0.2: Litle commonality, but give some credit to the word having a case.</span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">case_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Nominative&quot;</span><span class="p">,</span> <span class="s2">&quot;Accusative&quot;</span><span class="p">,</span> <span class="s2">&quot;Genitive&quot;</span><span class="p">,</span> <span class="s2">&quot;Dative&quot;</span><span class="p">,</span> <span class="s2">&quot;Vocative&quot;</span><span class="p">]</span>
+    
+    <span class="n">case_matrix</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="c1"># Nom  Acc  Gen  Dat  Voc</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>  <span class="c1"># Nominative vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Accusative vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Genitive vs …</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Dative vs …</span>
+        <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>  <span class="c1"># Vocative vs …</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Build the CASE similarity function </span>
+    <span class="n">get_case_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">case_labels</span><span class="p">,</span> <span class="n">case_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; h) PERSON</span>
+
+<span class="sd">    Reasoning for the values in this matrix:</span>
+<span class="sd">    </span>
+<span class="sd">        Diagonal         = 1.0: Every &#39;person&#39; is a perfect match with itself.</span>
+<span class="sd">        Everything else  = 0.2: I want to put some weight to the fact the word is &#39;personed&#39;, even with the &#39;wrong&#39; one.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">person_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;First&quot;</span><span class="p">,</span> <span class="s2">&quot;Second&quot;</span><span class="p">,</span> <span class="s2">&quot;Third&quot;</span><span class="p">]</span>
+    
+    <span class="n">person_matrix</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># 1st</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># 2nd</span>
+        <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>  <span class="c1"># 3rd</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Build the PERSON similarity function</span>
+    <span class="n">get_person_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span><span class="n">person_labels</span><span class="p">,</span> <span class="n">person_matrix</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; i) SUFFIX </span>
+<span class="sd">    </span>
+<span class="sd">    For suffixes, there is currently no precomputed matrix defined, so we:</span>
+<span class="sd">      - pass empty labels &amp; matrix</span>
+<span class="sd">      - use a fallback that checks if one suffix string is contained in the other</span>
+<span class="sd">      - assign a “medium” similarity of 0.5 for any substring match</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">suffix_labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">suffix_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">suffix_fallback</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">k</span> <span class="ow">and</span> <span class="n">g</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">g</span> <span class="ow">or</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">k</span><span class="p">))</span>
+
+    <span class="c1"># Build the SUFFIX similarity function</span>
+    <span class="n">get_suffix_similarity</span> <span class="o">=</span> <span class="n">make_matrix_similarity</span><span class="p">(</span>
+        <span class="n">suffix_labels</span><span class="p">,</span>
+        <span class="n">suffix_matrix</span><span class="p">,</span>
+        <span class="n">fallback</span><span class="o">=</span><span class="n">suffix_fallback</span><span class="p">,</span>
+        <span class="n">fallback_score</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="p">)</span>
+
+
+    <span class="c1"># Gather all the feature‐specific sim functions into one lookup.</span>
+    <span class="c1"># These functions will be called when comparing the corresponding feature.</span>
+    <span class="n">sim_funcs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Part of Speech&quot;</span><span class="p">:</span>  <span class="n">get_pos_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Number&quot;</span><span class="p">:</span>          <span class="n">get_number_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Tense&quot;</span><span class="p">:</span>           <span class="n">get_tense_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Voice&quot;</span><span class="p">:</span>           <span class="n">get_voice_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Mood&quot;</span><span class="p">:</span>            <span class="n">get_mood_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Gender&quot;</span><span class="p">:</span>          <span class="n">get_gender_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Case&quot;</span><span class="p">:</span>            <span class="n">get_case_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Person&quot;</span><span class="p">:</span>          <span class="n">get_person_similarity</span><span class="p">,</span>
+        <span class="s2">&quot;Suffix&quot;</span><span class="p">:</span>          <span class="n">get_suffix_similarity</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># 4) The actual compare_tags, closing over weights &amp; sim_funcs</span>
+    
+    <span class="k">def</span> <span class="nf">compare_tags</span><span class="p">(</span><span class="n">tag1</span><span class="p">,</span> <span class="n">tag2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compare two morphological parsing tags by decoding them into features</span>
+<span class="sd">        and computing a weighted similarity score.</span>
+<span class="sd">    </span>
+<span class="sd">        This function is generated by :py:func:`~morphkit.init_compare_tags` and performs the following actions:</span>
+<span class="sd">            </span>
+<span class="sd">              1. Uses `decodeTag` to turn each tag (e.g. &quot;V-PAI-3S&quot;) into a dict of</span>
+<span class="sd">                 grammatical features.</span>
+<span class="sd">                 </span>
+<span class="sd">              2. For each feature (Part of Speech, Tense, Case, etc.), looks up the</span>
+<span class="sd">                 similarity via prebuilt similarity functions.</span>
+<span class="sd">                 </span>
+<span class="sd">              3. Multiplies each similarity by its weight, sums and normalizes to</span>
+<span class="sd">                 the range [0.0,1.0].</span>
+<span class="sd">                 </span>
+<span class="sd">              4. Returns both the overall score and a breakdown per feature.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">        -----</span>
+<span class="sd">            </span>
+<span class="sd">            :tag1 (str):  The “gold standard” tag you expect (e.g. from a reference corpus).</span>
+<span class="sd">            </span>
+<span class="sd">            :tag2 (str): The tag you want to evaluate against the &quot;gold standard&quot;.</span>
+<span class="sd">            </span>
+<span class="sd">            :debug (bool): Optional argument. Defaults to `False`. If `True`, print each feature’s known vs. generated value,</span>
+<span class="sd">                    the raw similarity score, and the feature’s weight. </span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">            </span>
+<span class="sd">            :dict: A dictionairy with the following structure:</span>
+
+<span class="sd">                .. code-block:: python</span>
+
+<span class="sd">                    &quot;tag&quot; (str),                   # echo of `generated_tag`.</span>
+<span class="sd">                    &quot;overall_similarity&quot; (float)   # weighted, normalized [0.0–1.0].</span>
+<span class="sd">                    &quot;details&quot; (dict)               # for each feature name, a sub-dict with:</span>
+<span class="sd">                        &quot;tag1&quot; (str)               # the decoded known feature.</span>
+<span class="sd">                        &quot;tag2&quot; (str)               # the decoded generated feature.</span>
+<span class="sd">                        &quot;similarity&quot; (float)       # the raw sim score (0.0–1.0).</span>
+<span class="sd">        </span>
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+
+<span class="sd">            .. code-block:: python</span>
+<span class="sd">                </span>
+<span class="sd">                result = morphkit.compare_tags(&quot;N-NSM&quot;, &quot;N-DSM&quot;)</span>
+<span class="sd">                print(result[&quot;overall_similarity&quot;])</span>
+<span class="sd">                0.875</span>
+<span class="sd">                print(result[&quot;details&quot;][&quot;Case&quot;])</span>
+<span class="sd">                {&quot;tag1&quot;: &quot;Nominative&quot;, &quot;tag2&quot;: &quot;Dative&quot;, &quot;similarity&quot;: 0.2}</span>
+
+
+<span class="sd">        Flow diagram:</span>
+<span class="sd">        -------------</span>
+
+<span class="sd">            .. code-block:: none</span>
+
+<span class="sd">                       +----------------------------+</span>
+<span class="sd">                       | decode_tag(tag1)           |</span>
+<span class="sd">                       | decode_tag(tag2)           | </span>
+<span class="sd">                       +-------------+--------------+</span>
+<span class="sd">                                     |</span>
+<span class="sd">                                     v</span>
+<span class="sd">                +------------------------------------------+</span>
+<span class="sd">                |   Adjust POS if Mood = Participle/Inf    |</span>
+<span class="sd">                +--------------------+---------------------+</span>
+<span class="sd">                                     |</span>
+<span class="sd">                                     v</span>
+<span class="sd">                +------------------------------------------+</span>
+<span class="sd">                | for each feature in weights:             |</span>
+<span class="sd">                |   - get tag1/2 values                    |</span>
+<span class="sd">                |   - sim = sim_funcs[feature](tag1, tag2) |</span>
+<span class="sd">                |   - accumulate score × weight            |</span>
+<span class="sd">                |   - store details                        |</span>
+<span class="sd">                +--------------------+---------------------+</span>
+<span class="sd">                                     |</span>
+<span class="sd">                                     v</span>
+<span class="sd">                +------------------------------------------+</span>
+<span class="sd">                |     Normalize: total_score / weight      |</span>
+<span class="sd">                +--------------------+---------------------+</span>
+<span class="sd">                                     |</span>
+<span class="sd">                                     v</span>
+<span class="sd">                +------------------------------------------+</span>
+<span class="sd">                | Return: dict with tag1, tag2, similarity |</span>
+<span class="sd">                |          and per-feature details         |</span>
+<span class="sd">                +------------------------------------------+</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If debugging is enabled, print the raw input values for the tags to compare</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[compare_tags] First tag: </span><span class="si">{</span><span class="n">tag1</span><span class="si">}</span><span class="s2">;  second tag: </span><span class="si">{</span><span class="n">tag2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Decode each tag string into a dictionary of grammatical features</span>
+        <span class="n">tag1_dict</span> <span class="o">=</span> <span class="n">decode_tag</span><span class="p">(</span><span class="n">tag1</span><span class="p">)</span>
+        <span class="n">tag2_dict</span> <span class="o">=</span> <span class="n">decode_tag</span><span class="p">(</span><span class="n">tag2</span><span class="p">)</span>
+
+        <span class="c1"># Override POS if currently &#39;Verb&#39; but actual form is non-finite</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">tag1_dict</span><span class="p">,</span> <span class="n">tag2_dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Part of Speech&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Verb&quot;</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Mood&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s2">&quot;Participle&quot;</span><span class="p">:</span>   <span class="c1"># mood==P in tag</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;Part of Speech&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Participle&quot;</span>
+                <span class="k">elif</span> <span class="n">m</span> <span class="o">==</span> <span class="s2">&quot;Infinitive&quot;</span><span class="p">:</span>  <span class="c1"># mood==N in tag</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;Part of Speech&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Infinitive&quot;</span>
+
+        <span class="c1"># Initialize accumulators for the weighted score and total weight</span>
+        <span class="n">total_score</span><span class="p">,</span> <span class="n">total_weight</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="c1"># Prepare a dict to hold per-feature details</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Loop over each feature and its weight</span>
+        <span class="k">for</span> <span class="n">feat</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Look up the feature value in each decoded dict (defaulting to empty string)</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">tag1_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">tag2_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="c1"># Compute similarity for this feature using the corresponding sim function</span>
+            <span class="n">sim</span> <span class="o">=</span> <span class="n">sim_funcs</span><span class="p">[</span><span class="n">feat</span><span class="p">](</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+            <span class="c1"># In case &#39;Part of Speech&#39; is &#39;Unknown or Unsupported&#39;, comparing does not make sense. Return 0</span>
+            <span class="k">if</span> <span class="n">t1</span><span class="o">==</span><span class="s1">&#39;Unknown or Unsupported&#39;</span> <span class="ow">or</span> <span class="n">t2</span><span class="o">==</span><span class="s1">&#39;Unknown or Unsupported&#39;</span><span class="p">:</span> 
+                <span class="n">sim</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">w</span><span class="o">=</span><span class="mi">0</span>
+                <span class="c1"># we do not break out of the loop on purpose to allow for a uniform details block to be returned</span>
+            <span class="k">if</span> <span class="n">t1</span><span class="o">==</span><span class="s1">&#39;&#39;</span> <span class="ow">or</span> <span class="n">t2</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># If there is nothing to compare for a feature, leave it out the calculation, but still report it</span>
+                <span class="n">sim</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">w</span><span class="o">=</span><span class="mi">0</span>
+            <span class="c1"># Record the feature values for tag1 and tag2 and their raw similarity</span>
+            <span class="n">details</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;tag1&quot;</span><span class="p">:</span> <span class="n">t1</span><span class="p">,</span> 
+                <span class="s2">&quot;tag2&quot;</span><span class="p">:</span> <span class="n">t2</span><span class="p">,</span> 
+                <span class="s2">&quot;similarity&quot;</span><span class="p">:</span> <span class="n">sim</span><span class="p">,</span>
+                <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="n">w</span>
+            <span class="p">}</span>
+            <span class="n">total_score</span>  <span class="o">+=</span> <span class="n">sim</span> <span class="o">*</span> <span class="n">w</span>
+            <span class="n">total_weight</span> <span class="o">+=</span> <span class="n">w</span>
+
+            <span class="c1"># Accumulate weighted similarity and total weight</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[compare_tags] </span><span class="si">{</span><span class="n">feat</span><span class="si">:</span><span class="s2">17s</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">t1</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">t2</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> → sim=</span><span class="si">{</span><span class="n">sim</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, weight=</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Compute the overall similarity (normalized to [0.0, 1.0])</span>
+        <span class="n">overall</span> <span class="o">=</span> <span class="n">total_score</span> <span class="o">/</span> <span class="n">total_weight</span> <span class="k">if</span> <span class="n">total_weight</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+        <span class="c1"># If debugging, print the final overall similarity</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[compare_tags]  Overall similarity: </span><span class="si">{</span><span class="n">overall</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return a structured report including the generated tag, overall score, and per-feature breakdown</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;tag1&quot;</span>               <span class="p">:</span> <span class="n">tag1</span><span class="p">,</span> 
+            <span class="s2">&quot;tag2&quot;</span>               <span class="p">:</span> <span class="n">tag2</span><span class="p">,</span>
+            <span class="s2">&quot;overall_similarity&quot;</span> <span class="p">:</span> <span class="n">overall</span><span class="p">,</span> 
+            <span class="s2">&quot;details&quot;</span>            <span class="p">:</span> <span class="n">details</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">compare_tags</span></div>
+
+
+    <span class="c1"># End of function init_compare_tags()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

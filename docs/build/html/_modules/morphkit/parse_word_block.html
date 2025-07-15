@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.parse_word_block &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">morphkit.parse_word_block</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for morphkit.parse_word_block</h1><div class="highlight"><pre>
+<span></span><span class="c1"># morphkit/parse_word_block</span>
+<span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
+<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="c1"># import required packages</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">beta_code</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+
+<span class="c1"># bring in other sibling modules</span>
+<span class="kn">from</span> <span class="nn">.analyse_pos</span>        <span class="kn">import</span> <span class="n">analyse_pos</span>
+<span class="kn">from</span> <span class="nn">.analyse_morph_tag</span>  <span class="kn">import</span> <span class="n">analyse_morph_tag</span>
+
+<span class="c1"># Note: The first part of this file deals with the conversion from betacode to unicode.</span>
+<span class="c1"># Function parse_word_block() is in the second part.</span>
+
+<span class="c1"># NORMALIZING UNICODE FOR USE WITH N1904-TF</span>
+<span class="c1"># See also https://centerblc.github.io/N1904/characterencoding.html.</span>
+<span class="c1"># Check unicode at https://unicode-explorer.com/search/</span>
+
+<span class="c1"># The nine monotonic tonos chars (acute accent) to polytonic oxia chars</span>
+<span class="c1"># See https://github.com/EzerIT/BibleOL/blob/master/techdoc/techdoc.pdf page 34</span>
+<span class="n">OXIA_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;</span><span class="se">\u03AC</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F71</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ά (alpha with oxia) </span>
+    <span class="s2">&quot;</span><span class="se">\u03AD</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F73</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># έ (epsilon with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03AE</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F75</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ή (eta with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03AF</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F77</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ί (iota with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03CC</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F79</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ό (omicron with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03CD</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F7B</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ύ (upsilon with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03CE</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1F7D</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ώ (omega with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u0390</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1FD3</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ΐ (iota dial. with oxia)</span>
+    <span class="s2">&quot;</span><span class="se">\u03B0</span><span class="s2">&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\u1FE3</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># ΰ (UPSILON with oxia)</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">_apply_oxia_map</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Swap out any of the nine tonos chars for their oxia counterparts.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OXIA_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">text</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">betacode_to_polytonic</span><span class="p">(</span><span class="n">betacode_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a Betacode string into Greek Unicode using precomposed polytonic characters.</span>
+
+<span class="sd">    The function will:</span>
+<span class="sd">      1. turn Betacode into monotonic Greek</span>
+<span class="sd">      2. NFC-normalize</span>
+<span class="sd">      3. remap the nine tonos chars into oxia chars from the predefined table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># perform the betacode to unicode conversion and deal with the caret (^), see comment below.</span>
+    <span class="n">greek</span> <span class="o">=</span> <span class="n">beta_code</span><span class="o">.</span><span class="n">beta_code_to_greek</span><span class="p">(</span><span class="n">betacode_str</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="nb">chr</span><span class="p">(</span><span class="mh">0x302</span><span class="p">))</span>
+    <span class="c1"># normalize so that any decomposed sequences get composed</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFC&quot;</span><span class="p">,</span> <span class="n">greek</span><span class="p">)</span>
+    <span class="c1"># apply the custom table to map tonos into oxia.</span>
+    <span class="n">oxia</span> <span class="o">=</span> <span class="n">_apply_oxia_map</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[parse_word_block:betacode_to_polytonic] </span><span class="si">{</span><span class="n">betacode_str</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">greek</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">oxia</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">oxia</span>
+
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Note: some issue still to be fully sorted out: </span>
+
+<span class="sd">When converting certain betacode words containing a caret (^), it is not converted into unicode Greek.</span>
+<span class="sd">Betacode manual: https://stephanus.tlg.uci.edu/encoding/BCM.pdf  (pag 31) suggests that ^ should be</span>
+<span class="sd">tranlated into &#39;Circumflex Accent Caret&#39;. This can be done after the betacode conversions by adding</span>
+<span class="sd">method .replace(&#39;^&#39;, chr(0x302)) which places the caret above the previous letter. </span>
+<span class="sd">If precomposed unicode is required, we also need to convert the resulting Unicode to precomposed.</span>
+<span class="sd">The caret originates from the stem files used by Morpheus, for instance:</span>
+<span class="sd">https://github.com/perseids-tools/morpheus-perseids/blob/01db3bb72ff405e94917884f5cc89f1052c49ff4/stemlib/Greek/stemsrc/nom.irreg#L1307</span>
+
+<span class="sd">Another option might be to remove the caret before turning it into Unicode.</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+
+
+<div class="viewcode-block" id="parse_word_block">
+<a class="viewcode-back" href="../../api/morphkit.parse_word_block.html#morphkit.parse_word_block">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_word_block</span><span class="p">(</span><span class="n">block</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;greek&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a single Morpheus output block of Beta-code lines into structured morphological data.</span>
+
+<span class="sd">    Each block corresponds to all analyses for one Greek form. Lines are labeled with prefixes</span>
+<span class="sd">    like `:raw`, `:lem`, `:stem`, `:end`, etc. This function walks through those labels,</span>
+<span class="sd">    extracts fields, and assembles a dictionary with morphological features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+<span class="sd">   </span>
+<span class="sd">        :block (List[str]):  A list of lines (strings) from Morpheus output, each starting with a label</span>
+<span class="sd">            like `:raw`, `:lem`, `:stem`, or `:end`, followed by tab-separated fields.</span>
+<span class="sd">            Usualy this is the output generated by function :py:func:`~morphkit.get_word_blocks()`.</span>
+
+<span class="sd">        :language (str): Optional argument. Defaults to `greek`. The other option is `latin`.</span>
+
+<span class="sd">        :debug (bool):   Optional argument. Defaults to `False`. If set to `True` the function print some debug information. </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">  </span>
+<span class="sd">        :Tuple[str, List[Dict[str, Any]]]: A pair (raw_beta, parses)</span>
+
+<span class="sd">        Each pair consist of:</span>
+<span class="sd">            </span>
+<span class="sd">            :raw_beta (str):  raw Beta-code form as returned by Morpheus (from the last `:raw` line).</span>
+<span class="sd">            :parses (List[Dict]): a list of parse dictionaries, one per analysis block. Each parse dictionary may contain keys such as:</span>
+
+<span class="sd">                - `&quot;raw_bc&quot;`: the original betacode word.</span>
+<span class="sd">                - `&quot;workw_bc&quot;`: the segment Morpheus analysed in betacode.</span>
+<span class="sd">                - `&quot;lem_full_bc&quot;`: the full lemma form (incl homonym or pl suffix) in betacode.</span>
+<span class="sd">                - grammatical features: `&quot;case&quot;`, `&quot;number&quot;`, `&quot;gender&quot;`, `&quot;tense&quot;`, `&quot;mood&quot;`, `&quot;voice&quot;`, `&quot;person&quot;`, `&quot;degree&quot;`.</span>
+<span class="sd">                - lists: `&quot;morph_codes&quot;`, `&quot;morph_flags&quot;`, `&quot;dialects&quot;`.</span>
+<span class="sd">                - computed fields added to it such as `&quot;pos&quot;` (Part of Speech) and `&quot;morph&quot;` (SP tag).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        :ValueError: If the language parameter is invalid (only &#39;greek&#39; and &#39;latin&#39; are allowed).</span>
+
+<span class="sd">    General notes:</span>
+<span class="sd">    --------------</span>
+
+<span class="sd">    .. _bol:https://learner.bible/.</span>
+
+<span class="sd">        - The entries with unicode representation of the betacode are using precomposed character (with oxia) in order to match its presentation in the N1904-TF dataset which is using the same scheme as the `Bible Online Learner`_bol. </span>
+
+<span class="sd">        - Details on decoding the Morpheus output can be found at           https://github.com/tonyjurg/Create_morpheus_TF_dataset/blob/main/Decoding_Morpheus_output/decode_output.md</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+      
+    <span class="n">raw_beta</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>    <span class="c1"># default raw beta code if not set</span>
+    <span class="n">parses</span> <span class="o">=</span> <span class="p">[]</span>             <span class="c1"># list to collect parse dictionaries</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="kc">None</span>          <span class="c1"># placeholder for the current parse entry</span>
+
+    <span class="c1"># a single map from normalized token → (key, value)    </span>
+    <span class="c1"># This mapping ensures conformance to the Morpheus values</span>
+    <span class="n">TOK_MAP</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># tenses</span>
+        <span class="s2">&quot;pres&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;pres&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;present&quot;</span><span class="p">:</span>     <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;pres&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;imperf&quot;</span><span class="p">:</span>      <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;imperf&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;imperfect&quot;</span><span class="p">:</span>   <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;imperf&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;fut&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;fut&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;future&quot;</span><span class="p">:</span>      <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;fut&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;aor&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;aor&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;aorist&quot;</span><span class="p">:</span>      <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;aor&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;perf&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;perf&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;perfect&quot;</span><span class="p">:</span>     <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;perf&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;plup&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;plup&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;pluperfect&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;tense&quot;</span><span class="p">,</span><span class="s2">&quot;plup&quot;</span><span class="p">),</span>
+       
+        <span class="c1"># moods</span>
+        <span class="s2">&quot;ind&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;ind&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;indicative&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;ind&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;subj&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;subj&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;subjunctive&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;subj&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;opt&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;opt&quot;</span><span class="p">),</span>   
+        <span class="s2">&quot;optative&quot;</span><span class="p">:</span>    <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;opt&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;imperat&quot;</span><span class="p">:</span>     <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;imperat&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;imperative&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;imperat&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;inf&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;infinitive&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;part&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;part&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;participle&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;mood&quot;</span><span class="p">,</span><span class="s2">&quot;part&quot;</span><span class="p">),</span>
+        
+        <span class="c1"># voices</span>
+        <span class="s2">&quot;act&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;act&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;active&quot;</span><span class="p">:</span>      <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;act&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;mid&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;mid&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;middle&quot;</span><span class="p">:</span>      <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;mid&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pass&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;pass&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;passive&quot;</span><span class="p">:</span>     <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;pass&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;mp&quot;</span><span class="p">:</span>          <span class="p">(</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span><span class="s2">&quot;mp&quot;</span><span class="p">),</span> <span class="c1"># midlePassive</span>
+        
+        <span class="c1"># numbers</span>
+        <span class="s2">&quot;sg&quot;</span><span class="p">:</span>          <span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">,</span><span class="s2">&quot;sg&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pl&quot;</span><span class="p">:</span>          <span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">,</span><span class="s2">&quot;pl&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;dual&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">,</span><span class="s2">&quot;dual&quot;</span><span class="p">),</span>
+        <span class="c1"># degrees</span>
+        <span class="s2">&quot;comp&quot;</span><span class="p">:</span>        <span class="p">(</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="s2">&quot;comp&quot;</span><span class="p">),</span> 
+        <span class="s2">&quot;sup&quot;</span><span class="p">:</span>         <span class="p">(</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="s2">&quot;sup&quot;</span><span class="p">),</span>  
+        
+        <span class="c1"># morphological particularities</span>
+        <span class="s2">&quot;contr&quot;</span><span class="p">:</span>       <span class="p">(</span><span class="s2">&quot;morphpart&quot;</span><span class="p">,</span><span class="s2">&quot;contr&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;nu_movable&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;morphpart&quot;</span><span class="p">,</span><span class="s2">&quot;nu_movable&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;short_subj&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;morphpart&quot;</span><span class="p">,</span><span class="s2">&quot;short_subj&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;indeclform&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;morphpart&quot;</span><span class="p">,</span><span class="s2">&quot;indeclform&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;impersonal&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;morphpart&quot;</span><span class="p">,</span><span class="s2">&quot;impersonal&quot;</span><span class="p">),</span>
+        
+        <span class="c1"># genders</span>
+        <span class="s2">&quot;masc&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;masc&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;fem&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;fem&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;neut&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;neut&quot;</span><span class="p">),</span>
+        
+        <span class="c1"># cases</span>
+        <span class="s2">&quot;nom&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;acc&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;acc&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;gen&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;gen&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;dat&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;dat&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;abl&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;abl&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;voc&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;voc&quot;</span><span class="p">),</span>
+
+        <span class="c1"># person</span>
+        <span class="s2">&quot;1st&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;1st&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;2nd&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;2nd&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;3rd&quot;</span><span class="p">:</span>  <span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;3rd&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="n">PRON_MAP</span> <span class="o">=</span> <span class="p">{</span>    <span class="c1"># pronoun type</span>
+        <span class="s2">&quot;art_adj&quot;</span>     <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;personal&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pron_adj1&quot;</span>   <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;demonstrative&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;demonstr&quot;</span>    <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;demonstrative&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;relative&quot;</span>    <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;relative&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pron1&quot;</span>       <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;personal&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pron2&quot;</span>       <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;personal&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;pron3&quot;</span>       <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;personal&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;indef&quot;</span>       <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;indefinite&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;interrog&quot;</span>    <span class="p">:</span> <span class="p">(</span><span class="s2">&quot;pron_type&quot;</span><span class="p">,</span> <span class="s2">&quot;interrogative&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+    <span class="n">SECOND_TENSE_MAP</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;aor2&quot;</span><span class="p">:</span>       <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aor2_pass&quot;</span><span class="p">:</span>  <span class="s2">&quot;AP&quot;</span><span class="p">,</span>
+        <span class="c1"># so far no other 2nd-s seen, if seen, they can be added here</span>
+        <span class="c1"># I put in an A/AP, so that if other 2nds are found, it is easier to distinguise</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">inspect</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_back</span>
+        <span class="c1">#print(f&quot;[parse_word_block] called with: {frame.f_locals}&quot;) #provides huge (full) amount of details</span>
+
+    <span class="c1"># Tailor the output to language</span>
+    <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;greek&#39;</span><span class="p">,</span><span class="s1">&#39;latin&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[parse_word_block] Unknown language format </span><span class="si">{</span><span class="n">language</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+        <span class="s2">&quot;Choose from {&#39;greek&#39;, &#39;latin&#39;}.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s1">&#39;greek&#39;</span><span class="p">:</span>
+        <span class="n">bc_ind</span><span class="o">=</span><span class="s1">&#39;_bc&#39;</span>
+        <span class="n">uc_itm</span><span class="o">=</span><span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>   <span class="c1"># can only be latin</span>
+        <span class="n">bc_ind</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="n">uc_itm</span><span class="o">=</span><span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+        <span class="c1"># Only process lines that begin with a colon (labels)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+            
+        <span class="c1"># Extract label (e.g., &#39;raw&#39;, &#39;lem&#39;, etc.) and fields after the label</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ================================ Label :raw ================================</span>
+<span class="sd">        This item always contains data which reproduces typicaly the token as suplied in betacode.</span>
+
+<span class="sd">        The raw form of the word, as it was inputted. This may include ellipsis (indicated with &#39;).</span>
+<span class="sd">        Crane provides as example ἐπέμπετ᾽, which could stand for ἐπέμπετε (&quot;you [pl] were sending&quot;)</span>
+<span class="sd">        or ἐπέμπετο (&quot;s/he was being sent&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;raw&#39;</span><span class="p">:</span>
+            <span class="c1"># Start a new parse: &#39;raw&#39; gives the base word in beta code</span>
+            <span class="n">raw_beta</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span>
+                 <span class="n">current</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;raw_bc&#39;</span><span class="p">:</span> <span class="n">raw_beta</span><span class="p">}</span>
+                 <span class="n">current</span><span class="p">[</span><span class="s2">&quot;raw_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">raw_beta</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">current</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="n">raw_beta</span><span class="p">}</span>
+            <span class="n">parses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Skip analysis lines until a &#39;raw&#39; label initializes a parse</span>
+            <span class="k">continue</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :workw ==============================</span>
+<span class="sd">            This item always contains data which represents the working token after basic normalisation.</span>
+<span class="sd">            In many instances, the raw and work word are identical</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;workw&#39;</span><span class="p">:</span>
+            <span class="c1"># Record the word form in context and its Unicode conversion</span>
+            <span class="n">workw_token</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;workw</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">workw_token</span>
+            <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;workw_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">workw_token</span><span class="p">)</span>
+<span class="w">        </span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :lem ================================</span>
+<span class="sd">            This item always contains data which represents the lemma associated to the rest of the grammatical  </span>
+<span class="sd">            data in the analytic block.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;lem&quot;</span><span class="p">:</span>
+            <span class="c1"># Full lemma entry which may include items like homonym number and &#39;-pl&#39; suffix</span>
+            <span class="n">lemma_field</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;lem_full</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lemma_field</span>
+            <span class="c1"># if debug is set also print the lemma in betacode, unicode and the TF addapations</span>
+            <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;lem_full_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">lemma_field</span><span class="p">,</span><span class="n">debug</span><span class="p">)</span>
+
+            <span class="c1"># Check for and remove a &#39;-pl&#39; suffix</span>
+            <span class="k">if</span> <span class="n">lemma_field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-pl&#39;</span><span class="p">):</span>
+                <span class="n">current</span><span class="p">[</span><span class="s2">&quot;lem_pl_suff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+                <span class="n">lemma_field</span> <span class="o">=</span> <span class="n">lemma_field</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># remove the &#39;-pl&#39;</span>
+            
+            <span class="c1"># Try to split lemma into base and homonym number (e.g. &quot;logos2&quot; → base: &quot;logos&quot;, homonym: 2)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(.*?)(\d+)$&quot;</span><span class="p">,</span> <span class="n">lemma_field</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;lem_base</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Everything before the digits</span>
+                <span class="n">current</span><span class="p">[</span><span class="s2">&quot;lem_homonym&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>    <span class="c1"># The digits (homonym number)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;lem_base</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lemma_field</span>
+                
+            <span class="c1"># Convert the stripped lemma-field as base to Betacode and Unicode Greek</span>
+            <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;lem_base_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="s2">&quot;lem_base_bc&quot;</span><span class="p">])</span>
+<span class="w">            </span>
+<span class="w">        </span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :prvb ================================</span>
+<span class="sd">            This item is filled with details about attached preposition (e.g., ἐν- or meta-) when applicable.</span>
+<span class="sd">            Furthermore it may contain details about dialect and morphological flags (related to the prepositon???)</span>
+<span class="sd">            It can contain zero, one or two prepositions. Eg. διακατηλέγχετο (&#39;diakathle/gxeto&#39;; Acts 18:28) has 2: dia/,kata/.</span>
+<span class="sd">            &quot;&quot;&quot;</span> 
+
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;prvb&quot;</span><span class="p">:</span>
+            <span class="c1"># beta code and Unicode conversion</span>
+            <span class="n">prvb_segment</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">prvb_segment</span><span class="p">:</span>
+                <span class="c1"># Split on commas, strip whitespace, drop any empties</span>
+                <span class="n">preverbs</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s*,\s*&#39;</span><span class="p">,</span> <span class="n">prvb_segment</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+                <span class="c1"># Store the betacode **list**</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;prvb</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">preverbs</span>
+                <span class="c1"># Convert each to Unicode (and normalize the circumflex)</span>
+                <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;prvb_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">preverbs</span>
+                <span class="p">]</span>
+
+            <span class="c1"># This part may be required to be expanded!</span>
+            <span class="c1"># There is info available like &quot;:prvb a)na/			apocope poetic	&quot;</span>
+            <span class="c1"># or &quot;:prvb a)na/			root_preverb	&quot; or</span>
+            <span class="c1"># :prvb a)po/,a)na/			apocope poetic unasp_preverb	</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :aug1 ================================</span>
+<span class="sd">            This item is filled with details about augment / reduplication, dialect, and morph-flags</span>
+<span class="sd">            when applicable</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;aug1&quot;</span><span class="p">:</span>
+
+            <span class="c1"># beta code and Unicode conversion</span>
+            <span class="n">aug1_segment</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">aug1_segment</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;aug1</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aug1_segment</span>
+                <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;aug1_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">aug1_segment</span><span class="p">)</span>
+        
+            <span class="c1"># Maybe we need to expand this!</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :stem ================================</span>
+<span class="sd">            This section provides the determined stem,</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;stem&quot;</span><span class="p">:</span>
+            <span class="c1"># Stem analysis: beta code and Unicode conversion</span>
+            <span class="n">stem_segment</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">stem_segment</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;stem</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stem_segment</span>
+                <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;stem_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">stem_segment</span><span class="p">)</span>
+
+            <span class="c1"># Grammatical tokens in second field: gender, number, case, or extra morph flags</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">tok</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;masc&quot;</span><span class="p">,</span> <span class="s2">&quot;fem&quot;</span><span class="p">,</span> <span class="s2">&quot;neut&quot;</span><span class="p">}:</span>
+                        <span class="n">current</span><span class="p">[</span><span class="s2">&quot;stem_gender&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOK_MAP</span><span class="p">[</span><span class="n">tok</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># TOK_MAP = key, val</span>
+                    <span class="k">elif</span> <span class="n">tok</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;sg&quot;</span><span class="p">,</span> <span class="s2">&quot;pl&quot;</span><span class="p">,</span> <span class="s2">&quot;dual&quot;</span><span class="p">}:</span>
+                        <span class="n">current</span><span class="p">[</span><span class="s2">&quot;stem_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOK_MAP</span><span class="p">[</span><span class="n">tok</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">tok</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="s2">&quot;acc&quot;</span><span class="p">,</span> <span class="s2">&quot;gen&quot;</span><span class="p">,</span> <span class="s2">&quot;dat&quot;</span><span class="p">,</span> <span class="s2">&quot;abl&quot;</span><span class="p">,</span> <span class="s2">&quot;voc&quot;</span><span class="p">}:</span>
+                        <span class="n">current</span><span class="p">[</span><span class="s2">&quot;stem_case&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOK_MAP</span><span class="p">[</span><span class="n">tok</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;stem_tok&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+            <span class="c1"># Additional dialect markers (3rd field) and flags (4th field)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;dialects&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;stem_flags&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+            <span class="c1"># Stem codes list (5th field, comma-separated)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;stem_codes&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+<span class="w">        </span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :suff ================================</span>
+<span class="sd">            Note: for all words in the Greek New Testament, this line contained no data.</span>
+<span class="sd">            Hence the code is not looking for any other information on this line.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;suff&quot;</span><span class="p">:</span>
+
+            <span class="c1"># suff analysis: beta code and Unicode conversion</span>
+            <span class="n">suff_segment</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">suff_segment</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;suff</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">suff_segment</span>
+                <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;suff_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">suff_segment</span><span class="p">)</span>
+<span class="w">                </span>
+
+<span class="w">   </span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ================================ Label :end ================================</span>
+<span class="sd">            This line is of particular interest as it contains most of the morphological data.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+                
+        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span>
+            <span class="c1"># Ending segment and its Unicode conversion</span>
+            <span class="k">if</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">end_seg</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">current</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;end</span><span class="si">{</span><span class="n">bc_ind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_seg</span>
+                <span class="k">if</span> <span class="n">uc_itm</span><span class="p">:</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;end_uc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">betacode_to_polytonic</span><span class="p">(</span><span class="n">end_seg</span><span class="p">)</span>
+                
+            <span class="c1"># Tense, mood, voice, person, number, gender, case, degree, etc., from second field</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            
+                 <span class="c1"># Iterate over morphological tokens in the end field</span>
+                <span class="k">if</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                        <span class="n">tl</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># Normalize token for consistent matching</span>
+                        
+                        <span class="c1"># 1) Direct match in TOK_MAP: assign feature value</span>
+                        <span class="k">if</span> <span class="n">tl</span> <span class="ow">in</span> <span class="n">TOK_MAP</span><span class="p">:</span>
+                            <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">TOK_MAP</span><span class="p">[</span><span class="n">tl</span><span class="p">]</span>
+                            
+                            <span class="c1"># Special handling for keys that may have multiple values, like case/gender</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">}:</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
+                                    <span class="c1"># If already a list, append new value</span>
+                                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                                        <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="c1"># Convert existing scalar to list with new value</span>
+                                        <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">val</span><span class="p">]</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># First occurrence: assign as scalar</span>
+                                    <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># Regular case: assign directly</span>
+                                <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                    
+                        <span class="c1"># 2) Handle compound gender/case values (e.g., &quot;masc/fem&quot;, &quot;nom/voc&quot;)</span>
+                        <span class="k">elif</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">tl</span><span class="p">:</span>
+                            <span class="n">parts</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="c1"># Try to map all parts using TOK_MAP</span>
+                                <span class="n">key_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">TOK_MAP</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">]</span>
+                                <span class="c1"># Ensure all mapped keys are the same (either all gender or all case)</span>
+                                <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">key_vals</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">key</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                                    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">key_vals</span><span class="p">]</span>
+                                    <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                   <span class="c1"># Mixed keys are not valid; keep as unmatched</span>
+                                    <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;other_end_tokens&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                                <span class="c1"># One or more parts were unrecognized</span>
+                                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;other_end_tokens&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+                    
+                        <span class="c1"># 3) If the token is a person indicator (1st, 2nd, or 3rd)</span>
+                        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[123](?:st|nd|rd)&quot;</span><span class="p">,</span> <span class="n">tl</span><span class="p">):</span>
+                            <span class="n">current</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tl</span>
+
+                        <span class="c1"># 4) Anything else goes into a generic catch-all bucket</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;other_end_tokens&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+
+            <span class="c1"># Collect any trailing dialects and morphological flags/codes</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>    
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;dialects&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;end_flags&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;end_codes&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+                <span class="c1"># populate pronoun type if applicable</span>
+                <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">PRON_MAP</span><span class="p">:</span> 
+                       <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">PRON_MAP</span><span class="p">[</span><span class="n">code</span><span class="p">]</span>
+                       <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+            <span class="c1"># lookup the first matching sec_tense value (if any)</span>
+            <span class="n">sec_val</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">SECOND_TENSE_MAP</span><span class="p">[</span><span class="n">code</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_codes&quot;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">SECOND_TENSE_MAP</span><span class="p">),</span>
+                <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="c1"># only set the key if we found something</span>
+            <span class="k">if</span> <span class="n">sec_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">current</span><span class="p">[</span><span class="s2">&quot;sec_tense&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec_val</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    ============================== post processing ====================================</span>
+<span class="sd">    A first level op post processing and interpretation of the data is done in this section</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+
+    <span class="c1"># final processing</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parses</span><span class="p">:</span>
+        <span class="c1"># Remove duplicate entries for each parse, preserving insertion order</span>
+        
+       
+        <span class="c1"># Deduplicate dialect entries</span>
+        <span class="k">if</span> <span class="s1">&#39;dialects&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="s1">&#39;dialects&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;dialects&#39;</span><span class="p">]))</span>
+
+        <span class="c1"># Handle ordinal markers like &#39;1st&#39;,&#39;2nd&#39;,&#39;3rd&#39; by setting person and removing them from other_end_tokens</span>
+        <span class="n">other_tokens</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;other_end_tokens&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">new_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">other_tokens</span><span class="p">:</span>
+            <span class="n">m_ord</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([123])(?:st|nd|rd|th)$&#39;</span><span class="p">,</span> <span class="n">tok</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">m_ord</span><span class="p">:</span>
+                <span class="c1"># Assign person if not already set</span>
+                <span class="k">if</span> <span class="s1">&#39;person&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">p</span><span class="p">[</span><span class="s1">&#39;person&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOK_MAP</span><span class="p">[</span><span class="n">m_ord</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># TOK_MAP = key, val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>         
+        <span class="c1"># Update other_end_tokens with the filtered list</span>
+        <span class="k">if</span> <span class="n">new_tokens</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="s1">&#39;other_end_tokens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_tokens</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;other_end_tokens&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">raw_beta</span><span class="p">,</span> <span class="n">parses</span></div>
+
+
+    <span class="c1"># End of function parse_word_block().</span>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.init_compare_tags &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">morphkit.init_compare_tags</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/morphkit.init_compare_tags.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="morphkit-init-compare-tags">
+<h1>morphkit.init_compare_tags<a class="headerlink" href="#morphkit-init-compare-tags" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.init_compare_tags">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">init_compare_tags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morphkit/init_compare_tags.html#init_compare_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.init_compare_tags" title="Link to this definition"></a></dt>
+<dd><p>Factory that initializes and returns a fully-configured <a class="reference internal" href="morphkit.compare_tags.html#morphkit.compare_tags" title="morphkit.compare_tags"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_tags()</span></code></a> function.</p>
+<p>This function sets up:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Feature weights for each grammatical category.</p></li>
+<li><p>Similarity functions for <cite>Part of Speech</cite>, <cite>number</cite>, <cite>tense</cite>, <cite>voice</cite>, <cite>mood</cite>,
+<cite>gender</cite>, <cite>case</cite>, <cite>person</cite>, and <cite>suffix</cite> using predefined matrices and an optional substring fallback for suffixes.</p></li>
+<li><p>The compare function should be symmetric, so sim(X,Y)=sim(Y,X))</p></li>
+</ul>
+</div></blockquote>
+<p>The returned function will:</p>
+<blockquote>
+<div><blockquote>
+<div><ol class="arabic simple">
+<li><p>Decode each tag with <a class="reference internal" href="morphkit.decode_tag.html#morphkit.decode_tag" title="morphkit.decode_tag"><code class="xref py py-func docutils literal notranslate"><span class="pre">decode_tag()</span></code></a>.</p></li>
+<li><p>Compute per-feature similarities.</p></li>
+<li><p>Weight and sum them (as defined in this function).</p></li>
+<li><p>Normalize to the range [0.0, 1.0], inclusive.</p></li>
+</ol>
+</div></blockquote>
+<p>The calculated figures for similairity are intended to express <em>similairity in syntactic function</em>.</p>
+</div></blockquote>
+<p>For example the function of a verb with <cite>mood=indicative</cite> in a sentence is completly different than when the verb has <cite>mood=participle</cite> or <cite>infinitive</cite>. The latter may perform functionaly noun-like. Hence the <cite>compare_tags</cite> function   will assign a higher value for similairity for them when calculating the similairity with a noun.</p>
+<section id="args">
+<h2>Args:<a class="headerlink" href="#args" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">None<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Callable[[str, str, bool], dict]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the function <a class="reference internal" href="morphkit.compare_tags.html#morphkit.compare_tags" title="morphkit.compare_tags"><code class="xref py py-func docutils literal notranslate"><span class="pre">morphkit.compare_tags()</span></code></a>:</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">compare_tags</span><span class="p">(</span>
+    <span class="n">tag1</span> <span class="p">(</span><span class="nb">str</span><span class="p">),</span>     <span class="c1"># the gold standard</span>
+    <span class="n">tag2</span> <span class="p">(</span><span class="nb">str</span><span class="p">),</span>     <span class="c1"># the tag to compare with the gold standard</span>
+    <span class="n">debug</span> <span class="p">(</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+    <span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="s1">&#39;overall_similarity&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">float</span><span class="p">]]]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<p>In this example we use the <em>generated</em> <a class="reference internal" href="morphkit.compare_tags.html#morphkit.compare_tags" title="morphkit.compare_tags"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_tags()</span></code></a> function:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">morphkit</span><span class="o">.</span><span class="n">compare_tags</span><span class="p">(</span><span class="s2">&quot;N-NSN-ATT&quot;</span><span class="p">,</span> <span class="s2">&quot;N-ASM-ATT&quot;</span><span class="p">)</span>
+<span class="p">{</span><span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="s1">&#39;N-ASM-ATT&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;overall_similarity&#39;</span><span class="p">:</span> <span class="mf">0.8883720930232557</span><span class="p">,</span>
+ <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Part of Speech&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;tag1&#39;</span><span class="p">:</span> <span class="s1">&#39;Noun&#39;</span><span class="p">,</span>
+ <span class="o">...</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

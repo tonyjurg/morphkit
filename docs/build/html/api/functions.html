@@ -1,0 +1,781 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MorphKit Functions &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_pos.html">morphkit.analyse_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_morph_tag.html">morphkit.analyse_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_word_with_morpheus.html">morphkit.analyse_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MorphKit Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="morphkit-functions">
+<h1>MorphKit Functions<a class="headerlink" href="#morphkit-functions" title="Link to this heading"></a></h1>
+<p>This page documents the core functions available in the <cite>morphkit</cite> package.</p>
+<section id="analyse-morph-tag">
+<h2>Analyse morph tag<a class="headerlink" href="#analyse-morph-tag" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.analyse_morph_tag">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">analyse_morph_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/analyse_morph_tag.html#analyse_morph_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.analyse_morph_tag" title="Link to this definition"></a></dt>
+<dd><p>Compute the Sandborg–Petersen morphological tag for a single Morpheus analyses block.</p>
+<section id="args">
+<h3>Args:<a class="headerlink" href="#args" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">parse (dict)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Morphological parse with keys like ‘pos’, ‘tense’,
+‘voice’, ‘mood’, ‘case’, ‘number’, ‘gender’, etc.</p>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">str<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The SP morphological tag or ‘UNK’ if unrecognized.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="steps">
+<h3>Steps:<a class="headerlink" href="#steps" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Determine the POS prefix (e.g. ‘N-’, ‘V-’, ‘A-’, ‘ADV’, etc.).</p></li>
+<li><p>Return immediately for indeclinable POS (adverbs, particles, etc.).</p></li>
+<li><p>For verbs, build the tag as ‘V-&lt;Tense&gt;&lt;Voice&gt;&lt;Mood&gt;’ plus a suffix
+for person &amp; number (finite), infinitive (no suffix), or participle
+(case–number–gender).</p></li>
+<li><p>For nouns, adjectives, and articles, append uppercase initials of
+case, number, and gender; adjectives may get ‘-C’/’-S’ for degree.</p></li>
+<li><p>For pronouns, combine person, case, number, and gender.</p></li>
+<li><p>If nothing matches, return ‘UNK’.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="example">
+<h3>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_endpoint</span> <span class="o">=</span> <span class="s2">&quot;10.10.0.10:1315&quot;</span>
+<span class="n">blocs</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="s1">&#39;sune/rxomai&#39;</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+    <span class="n">parse</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">parse_word_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">analysis</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">analyse_morph_tag</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+
+<span class="c1"># dictionairy has now entry &#39;morph&#39; added:</span>
+<span class="p">{</span><span class="s1">&#39;analyses&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;end_bc&#39;</span><span class="p">:</span> <span class="s1">&#39;omai&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;end_codes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;w_stem&#39;</span><span class="p">],</span>
+               <span class="o">...</span>
+               <span class="s1">&#39;mood&#39;</span><span class="p">:</span> <span class="s1">&#39;indicative&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;morph&#39;</span><span class="p">:</span> <span class="s1">&#39;V-PEI-1S&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="s1">&#39;singular&#39;</span><span class="p">,</span>
+               <span class="o">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="general-notes">
+<h3>General notes:<a class="headerlink" href="#general-notes" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>The documentation for the SP morphology is available via:
+<a class="reference external" href="https://github.com/biblicalhumanities/Nestle1904/blob/master/morph/parsing.txt">https://github.com/biblicalhumanities/Nestle1904/blob/master/morph/parsing.txt</a></p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="analyse-pos">
+<h2>Analyse POS<a class="headerlink" href="#analyse-pos" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.analyse_pos">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">analyse_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/analyse_pos.html#analyse_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.analyse_pos" title="Link to this definition"></a></dt>
+<dd><p>analyse a single Morpheus parse record and determine its part of speech.</p>
+<section id="id1">
+<h3>Args:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">parse (dict)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A parse dictionary with the following structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span>
+     <span class="s1">&#39;raw_uc&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;stam_codes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+     <span class="o">...</span>
+     <span class="s1">&#39;morph_flags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+     <span class="s1">&#39;tense&#39;</span><span class="p">:</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
+     <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">str<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The determined <cite>Part of Speech</cite> label (e.g. <cite>‘noun’</cite>, <cite>‘verb’</cite>, <cite>‘adverb’</cite>, …),
+or <cite>‘unknown’</cite> if no rule applies.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>Steps:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>The analysis consist of the following major steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Verbs (presence of ‘tense’ or ‘mood’ keys).</p>
+<blockquote>
+<div><p><strong>Note:</strong> one could argue for two dedicated POS classes, for participle and infinitive,
+c.f Wallace GGBB p.613 &amp; p.588. This was NOT done in order to stay in line with the
+current N1904-TF classification used by feature <cite>sp</cite>. The differentation between
+participle, infinitive and ‘other’ verb types is done in module ‘init_compare_tags’.</p>
+</div></blockquote>
+</li>
+<li><p>Specific morph codes and flags → mapped POS (e.g. ‘conj’ → conjunction).</p></li>
+<li><p>Indeclinable forms (‘indeclform’ flag):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Neuter-singular nom/acc → adverb.</p></li>
+<li><p>Numeral indecl → numeral.</p></li>
+<li><p>Proper noun indecl if gender/number present → proper noun.</p></li>
+<li><p>Otherwise → other indeclinable noun.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Proclitic or enclitic forms → particle.</p></li>
+<li><p>Anything with case or gender → noun.</p></li>
+</ol>
+<ol class="arabic simple" start="7">
+<li><p>If other_end_token == adverbial → adverb.</p></li>
+<li><p>Fallback → unknown.</p></li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>Example:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parse</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;raw_uc&#39;</span><span class="p">:</span><span class="s1">&#39;λέγω&#39;</span><span class="p">,</span><span class="s1">&#39;tense&#39;</span><span class="p">:</span><span class="s1">&#39;present&#39;</span><span class="p">,</span><span class="s1">&#39;mood&#39;</span><span class="p">:</span><span class="s1">&#39;indicative&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+<span class="n">morphkit</span><span class="o">.</span><span class="n">analyse_pos</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
+<span class="s1">&#39;verb&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="analyse-word-with-morpheus">
+<h2>Analyse word with Morpheus<a class="headerlink" href="#analyse-word-with-morpheus" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.analyse_word_with_morpheus">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">analyse_word_with_morpheus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_morph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/analyse_word_with_morpheus.html#analyse_word_with_morpheus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.analyse_word_with_morpheus" title="Link to this definition"></a></dt>
+<dd><p>Query the Morpheus morphological analyser for a Greek word in Betacode and parse its analyses.</p>
+<section id="id5">
+<h3>Args:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">word_beta (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The input word in beta-code format to look up.
+Backslashes in the input need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘a)nh/r'.</p>
+</dd>
+<dt class="field-even">api_endpoint (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>IP adress &amp; port of the  Morpheus API endpoint (e.g., 192.168.0.5:1315).</p>
+</dd>
+<dt class="field-odd">language (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>greek</cite>. The other option is ‘latin’.
+If set to ‘latin’ no POS and morph field will be added.</p>
+</dd>
+<dt class="field-even">add_pos (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>True</cite>. If set to <cite>False</cite> no POS field will be added to the parse.</p>
+</dd>
+<dt class="field-odd">add_morph (bool)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>True</cite>. If set to <cite>False</cite> no morph field will be added to the parse.</p>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3>Returns:<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">Dict[str, Any]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary with the following structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;word&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>            <span class="c1"># Normalized Betacode key returned by Morpheus</span>
+    <span class="s1">&#39;raw_uni&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>         <span class="c1"># Unicode Greek of raw format (not returned when &#39;language=latin&#39;)</span>
+    <span class="s1">&#39;blocks&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>          <span class="c1"># Number of blocks parsed</span>
+    <span class="s1">&#39;analyses&#39;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="c1"># Parsed analyses from each block</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id7">
+<h3>Steps:<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Fetch raw Morpheus output using function <a class="reference internal" href="#morphkit.get_word_blocks" title="morphkit.get_word_blocks"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_word_blocks()</span></code></a>.</p></li>
+<li><p>Split the response into analysis blocks at each ‘:raw’ marker using function <a class="reference internal" href="#morphkit.split_into_raw_blocks" title="morphkit.split_into_raw_blocks"><code class="xref py py-func docutils literal notranslate"><span class="pre">split_into_raw_blocks()</span></code></a>.</p></li>
+<li><p>For each block, call <a class="reference internal" href="morphkit.parse_word_block.html#morphkit.parse_word_block" title="morphkit.parse_word_block"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_word_block()</span></code></a> to create a parse dictionairy.</p></li>
+<li><p>Add Part of Speech tag to the parse dictionairy by calling <a class="reference internal" href="#morphkit.analyse_pos" title="morphkit.analyse_pos"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyse_pos()</span></code></a>.</p></li>
+<li><p>Add the SP morph-tag to the parse dictionairy by calling <a class="reference internal" href="#morphkit.analyse_morph_tag" title="morphkit.analyse_morph_tag"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyse_morph_tag()</span></code></a>.</p></li>
+<li><p>Return a structured result.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">ValueError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the language parameter is invalid (only ‘greek’ and ‘latin’ are allowed).</p>
+</dd>
+<dt class="field-even">ValueError<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the api_endpoint parameter is malformed (format should be ‘host(IP or name):port’).</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Example:<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_endpoint</span><span class="o">=</span><span class="s2">&quot;192.168.0.5:1315&quot;</span>
+<span class="n">result</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">analyse_word_with_morpheus</span><span class="p">(</span><span class="s1">&#39;au(/th&#39;</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="flow-diagram">
+<h3>Flow diagram:<a class="headerlink" href="#flow-diagram" title="Link to this heading"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+------------------------------+
+| analyse_word_with_morpheus() |
++--------------+---------------+
+               |
+               v
++-----------------------+   HTTP request  +--------------------+
+|  1. get word blocks   +&lt;---------------&gt;+  Morpheus endpoint |
++--------------+--------+  HTTP response  +--------------------+
+               |
+               v
++--------------+----------------+
+| 2. Split into blocks          |
++-------------------------------+
+               |
+               v
++--------------+----------------+
+| 3. for each block:            |
+|     +----------------------+  |
+|     | analyse_pos          |  |
+|     | analyse_morph        |  |
+|     +----------------------+  |
++--------------+----------------+
+               |
+               v
++--------------+----------------+
+| 4. Return combined analyses   |
++-------------------------------+
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="annotate-and-sort-analyses">
+<h2>Annotate and sort analyses<a class="headerlink" href="#annotate-and-sort-analyses" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.annotate_and_sort_analyses">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">annotate_and_sort_analyses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_analysis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_morph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_lemma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lem_base_bc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lem_full_bc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">morph_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'morph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'morph_similarity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_case</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/annotate_and_sort_analyses.html#annotate_and_sort_analyses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.annotate_and_sort_analyses" title="Link to this definition"></a></dt>
+<dd><p>Annotate and sort analyses in a morphkit-compatible structure, grouping by base lemma
+and appending homonym suffixes extracted from lem_full_bc minus lem_base_bc.</p>
+<section id="id9">
+<h3>Args:<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">full_analysis (Dict[str, Any])<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dict with an ‘analyses’ list of blocks (dicts).</p>
+</dd>
+<dt class="field-even">reference_morph (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The reference morph tag to compare against each block.</p>
+</dd>
+<dt class="field-odd">reference_lemma (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Betacode lemma (base form, without suffix) to prioritize.</p>
+</dd>
+<dt class="field-even">base_key (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>‘lem_base_bc’</cite>. Key under which the base lemma is stored in each block.</p>
+</dd>
+<dt class="field-odd">full_key (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>‘lem_full_bc’</cite>. Key under which the full lemma is stored in each block.</p>
+</dd>
+<dt class="field-even">morph_key (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>‘morph’</cite>. Key under which the raw morph string is stored.</p>
+</dd>
+<dt class="field-odd">sim_key (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>‘morph_similarity’</cite>. Key under which to store the similarity string.</p>
+</dd>
+<dt class="field-even">lower_case (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>True</cite>. If set to <cite>True</cite>, convert lemmas to lowercase before comparison.</p>
+</dd>
+<dt class="field-odd">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite>, the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id10">
+<h3>Returns:<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Dict[str, Any]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new full_analysis dictionairy with annotated and sorted analyses, and with lem_base_bc modified to include homonym suffix when applicable.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id11">
+<h3>Steps:<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Deep-copy the input to avoid mutating the original data.</p></li>
+<li><p>For each analysis block:</p>
+<ol class="loweralpha simple">
+<li><p>Compute the homonym suffix as the portion of lem_full_bc after lem_base_bc.</p></li>
+<li><p>If non-empty, append “_(SUFFIX)” to lem_base_bc.</p></li>
+<li><p>Compute similarity percentages for each tag against reference_morph.</p></li>
+<li><p>Store sim_key as a slash-separated string of percentages.</p></li>
+<li><p>Store ‘_max_’ + sim_key as the integer max similarity for this block.</p></li>
+</ol>
+</li>
+<li><p>Group blocks by their finalized lem_base_bc (with suffix).</p></li>
+<li><p>Identify which group key should be first:</p>
+<ul class="simple">
+<li><p>If reference_lemma matches any finalized base lemma exactly, that group is first.</p></li>
+<li><p>Else if normalize(reference_lemma) matches normalize(base lemma), that group is first.</p></li>
+</ul>
+</li>
+<li><p>Compute for each group:</p>
+<ul class="simple">
+<li><p>group_max: the highest block-level max similarity within that group.</p></li>
+</ul>
+</li>
+<li><p>Sort groups so that:</p>
+<ul class="simple">
+<li><p>The chosen reference group (if any) comes first.</p></li>
+<li><p>Remaining groups follow in descending order of group_max.</p></li>
+</ul>
+</li>
+<li><p>Within each group, sort its blocks by descending block-level max similarity.</p></li>
+<li><p>Flatten groups back into a single list.</p></li>
+<li><p>Remove temporary helper keys and return the new full_analysis dict.</p></li>
+</ol>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="compare-tags">
+<h2>Compare tags<a class="headerlink" href="#compare-tags" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.compare_tags">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">compare_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#morphkit.compare_tags" title="Link to this definition"></a></dt>
+<dd><p>Compare two morphological parsing tags by decoding them into features
+and computing a weighted similarity score.</p>
+<p>This function is generated by <a class="reference internal" href="morphkit.init_compare_tags.html#morphkit.init_compare_tags" title="morphkit.init_compare_tags"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_compare_tags()</span></code></a> and performs the following actions:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Uses <cite>decodeTag</cite> to turn each tag (e.g. “V-PAI-3S”) into a dict of
+grammatical features.</p></li>
+<li><p>For each feature (Part of Speech, Tense, Case, etc.), looks up the
+similarity via prebuilt similarity functions.</p></li>
+<li><p>Multiplies each similarity by its weight, sums and normalizes to
+the range [0.0,1.0].</p></li>
+<li><p>Returns both the overall score and a breakdown per feature.</p></li>
+</ol>
+</div></blockquote>
+<section id="id12">
+<h3>Args:<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">tag1 (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The “gold standard” tag you expect (e.g. from a reference corpus).</p>
+</dd>
+<dt class="field-even">tag2 (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The tag you want to evaluate against the “gold standard”.</p>
+</dd>
+<dt class="field-odd">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>False</cite>. If <cite>True</cite>, print each feature’s known vs. generated value,
+the raw similarity score, and the feature’s weight.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id13">
+<h3>Returns:<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">dict<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionairy with the following structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;tag&quot;</span> <span class="p">(</span><span class="nb">str</span><span class="p">),</span>                   <span class="c1"># echo of `generated_tag`.</span>
+<span class="s2">&quot;overall_similarity&quot;</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>   <span class="c1"># weighted, normalized [0.0–1.0].</span>
+<span class="s2">&quot;details&quot;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span>               <span class="c1"># for each feature name, a sub-dict with:</span>
+    <span class="s2">&quot;tag1&quot;</span> <span class="p">(</span><span class="nb">str</span><span class="p">)</span>               <span class="c1"># the decoded known feature.</span>
+    <span class="s2">&quot;tag2&quot;</span> <span class="p">(</span><span class="nb">str</span><span class="p">)</span>               <span class="c1"># the decoded generated feature.</span>
+    <span class="s2">&quot;similarity&quot;</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>       <span class="c1"># the raw sim score (0.0–1.0).</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id14">
+<h3>Example:<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">morphkit</span><span class="o">.</span><span class="n">compare_tags</span><span class="p">(</span><span class="s2">&quot;N-NSM&quot;</span><span class="p">,</span> <span class="s2">&quot;N-DSM&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;overall_similarity&quot;</span><span class="p">])</span>
+<span class="mf">0.875</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;details&quot;</span><span class="p">][</span><span class="s2">&quot;Case&quot;</span><span class="p">])</span>
+<span class="p">{</span><span class="s2">&quot;tag1&quot;</span><span class="p">:</span> <span class="s2">&quot;Nominative&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="p">:</span> <span class="s2">&quot;Dative&quot;</span><span class="p">,</span> <span class="s2">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id15">
+<h3>Flow diagram:<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>       +----------------------------+
+       | decode_tag(tag1)           |
+       | decode_tag(tag2)           |
+       +-------------+--------------+
+                     |
+                     v
++------------------------------------------+
+|   Adjust POS if Mood = Participle/Inf    |
++--------------------+---------------------+
+                     |
+                     v
++------------------------------------------+
+| for each feature in weights:             |
+|   - get tag1/2 values                    |
+|   - sim = sim_funcs[feature](tag1, tag2) |
+|   - accumulate score × weight            |
+|   - store details                        |
++--------------------+---------------------+
+                     |
+                     v
++------------------------------------------+
+|     Normalize: total_score / weight      |
++--------------------+---------------------+
+                     |
+                     v
++------------------------------------------+
+| Return: dict with tag1, tag2, similarity |
+|          and per-feature details         |
++------------------------------------------+
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="decode-morph-tag">
+<h2>Decode morph tag<a class="headerlink" href="#decode-morph-tag" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.decode_tag">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">decode_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/decode_tag.html#decode_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.decode_tag" title="Link to this definition"></a></dt>
+<dd><p>Decode a morphological tag into a set of human-readable features.</p>
+<p>This function takes a morphological tag (e.g. “V-PAI-3S”) and returns
+a dictionary of interpreted grammatical properties, such as <cite>Part of Speech</cite>,
+<cite>case</cite>, <cite>number</cite>, <cite>gender</cite>, <cite>tense</cite>, <cite>voice</cite>, <cite>mood</cite>, <cite>person</cite>, and any <cite>suffix</cite> details.</p>
+<section id="id16">
+<h3>Args:<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">tag_input (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The raw morphological tag string. Usually includes prefixes
+like “N-”, “V-”, “A-”, etc., followed by coded letters/numbers.</p>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id17">
+<h3>Returns:<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">Dict[str, Any]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A mapping from feature names to their full descriptions.</p>
+<dl class="simple">
+<dt>Possible keys include:</dt><dd><ul class="simple">
+<li><p>“Part of Speech”</p></li>
+<li><p>“Case”, “Number”, “Gender”</p></li>
+<li><p>“Tense”, “Voice”, “Mood”</p></li>
+<li><p>“Verb Extra” or “Suffix”</p></li>
+<li><p>“Warning”, warning related to feature elements</p></li>
+<li><p>“Error” (e.g., if input is empty)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>If the part of speech can not be determined, it returns <cite>{“Part of Speech”: “Unknown or Unsupported”}</cite>.</p>
+<p>If <cite>tag_input</cite> is empty or whitespace, it returns <cite>{“Error”: “Please enter a parsing tag.”}</cite>.</p>
+</div></blockquote>
+</section>
+<section id="id18">
+<h3>Example:<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">morphkit</span><span class="o">.</span><span class="n">decode_tag</span><span class="p">(</span><span class="s2">&quot;N-NSM&quot;</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="s2">&quot;Part of Speech&quot;</span><span class="p">:</span> <span class="s2">&quot;Noun&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Case&quot;</span><span class="p">:</span> <span class="s2">&quot;Nominative&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Number&quot;</span><span class="p">:</span> <span class="s2">&quot;Singular&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Gender&quot;</span><span class="p">:</span> <span class="s2">&quot;Masculine&quot;</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="note">
+<h3>Note:<a class="headerlink" href="#note" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>This function is an addapted version of the tool available at <a class="reference external" href="https://github.com/tonyjurg/Sandborg-Petersen-decoder">https://github.com/tonyjurg/Sandborg-Petersen-decoder</a>.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="split-into-raw-blocks">
+<h2>Split into raw blocks<a class="headerlink" href="#split-into-raw-blocks" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.split_into_raw_blocks">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">split_into_raw_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/split_into_raw_blocks.html#split_into_raw_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.split_into_raw_blocks" title="Link to this definition"></a></dt>
+<dd><p>Split the input text into blocks at each ‘:raw’ header using multiline regex.</p>
+<section id="id19">
+<h3>Args:<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">text (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The input text to be split.</p>
+</dd>
+<dt class="field-even">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id20">
+<h3>Returns:<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">List[List[str]]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of raw blocks, where each block is a list of lines.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id21">
+<h3>Example:<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">raw_text</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="s2">&quot;tou&quot;</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">)</span>
+<span class="n">blocks</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">split_into_raw_blocks</span><span class="p">(</span><span class="n">raw_text</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+    <span class="c1"># Process each individual block</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+<section id="get-word-blocks">
+<h2>Get word blocks<a class="headerlink" href="#get-word-blocks" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="morphkit.get_word_blocks">
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">get_word_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/get_word_blocks.html#get_word_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.get_word_blocks" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.</p>
+<section id="id22">
+<h3>Args:<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">word_beta (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The input word in beta-code format to look up.
+Backslashes in the input string need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘a)nh/r'</p>
+</dd>
+<dt class="field-even">api_endpoint (str)<span class="colon">:</span></dt>
+<dd class="field-even"><p>IP adress &amp; port of the  Morpheus API endpoint (e.g., ‘192.168.0.5:1315’).</p>
+</dd>
+<dt class="field-odd">language (str)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>greek</cite>. Sets the language of the word to analyse. It can be set to <cite>greek</cite> or <cite>latin</cite>.</p>
+</dd>
+<dt class="field-even">output {str}<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to <cite>full</cite>. Output format of the Analytic block. Either <cite>full</cite> for the internal database format, or <cite>compact</cite> for a brief output.</p>
+</dd>
+<dt class="field-odd">debug (bool)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite>, prints the constructed URL and response size.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id23">
+<h3>Returns:<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">str<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The plain text response containing the word blocks for the requested beta-code form.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id24">
+<h3>Raises:<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">ValueError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The language parameter is invalid (only ‘greek’ and ‘latin’ are allowed).</p>
+</dd>
+<dt class="field-even">ValueError<span class="colon">:</span></dt>
+<dd class="field-even"><p>The api_endpoint parameter is malformed (format should be ‘host(IP or name):port’).</p>
+</dd>
+<dt class="field-odd">requests.HTTPError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTTP request failed (non-2xx status code).</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id25">
+<h3>Example:<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_endpoint</span> <span class="o">=</span> <span class="s2">&quot;10.10.0.10:1315&quot;</span>
+<span class="n">blocs</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="s1">&#39;sune/rxomai&#39;</span><span class="p">,</span> <span class="n">api_endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

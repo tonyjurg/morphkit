@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5b1af1b9"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            morphkit
+          </a>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="#document-install">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-usage">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.analyze_pos">morphkit.analyze_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.analyze_morph_tag">morphkit.analyze_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.analyze_word_with_morpheus">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.annotate_and_sort_analyses">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.compare_tags">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.decode_tag">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.get_word_blocks">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.init_compare_tags">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.parse_word_block">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#document-api/autogen/morphkit.split_into_raw_blocks">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Morphkit Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <img alt="Morphkit logo" src="_static/logo.png" />
+<section id="home">
+<h1>Home<a class="headerlink" href="#home" title="Link to this heading"></a></h1>
+<p>Welcome to the documentation for Morphkit, a Python toolkit for processing the output of the Morpheus Morphological analyzer.</p>
+<p>This package was created as part of a research project to create a <a class="reference external" href="https://tonyjurg.github.io/N1904addons/">Text-Fabric dataset</a> containing the Morpheus analytical data for each word of the <a class="reference external" href="https://centerblc.github.io/N1904/">Nestle1904</a> Greek New Testament. A number of functions are specificly related to this use case.</p>
+</section>
+<section id="features">
+<h1>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p>Lightweight and modular morphological toolkit.</p></li>
+<li><p>Compatible with Morpheus environments.</p></li>
+<li><p>Designed for use with Greek New Testament texts (SP tags).</p></li>
+<li><p>Basic support for Latin.</p></li>
+</ul>
+</section>
+<section id="using-this-package">
+<h1>Using this package<a class="headerlink" href="#using-this-package" title="Link to this heading"></a></h1>
+<dl class="simple">
+<dt><a class="reference internal" href="#document-install"><span class="doc">Installation</span></a></dt><dd><p>How to install this package in your Python environments</p>
+</dd>
+<dt><a class="reference internal" href="#document-usage"><span class="doc">Usage</span></a></dt><dd><p>How to use this package</p>
+</dd>
+</dl>
+</section>
+<section id="github">
+<h1>GitHub<a class="headerlink" href="#github" title="Link to this heading"></a></h1>
+<p>You can find the project’s source code on <a class="reference external" href="https://github.com/tonyjurg/morphkit">GitHub</a> and report issues or suggestions at the <a class="reference external" href="https://github.com/tonyjurg/morphkit/issues">issue tracker</a>.</p>
+<div class="toctree-wrapper compound">
+<span id="document-install"></span><section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Since this not a ‘normal package’ (yet), you need to import it by adding the relative path to the location where the <strong>directory</strong> /morphkit can be found to the path-search (using <cite>sys.path.insert</cite>). After this, your notebook will be able to load morphkit.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../../morphkit&quot;</span><span class="p">)</span>    <span class="c1"># relative to notebook dir</span>
+<span class="kn">import</span> <span class="nn">morphkit</span>
+</pre></div>
+</div>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h3>
+<p>You also need to have install the <a class="reference external" href="https://github.com/tonyjurg/morphkit/blob/main/morphkit/requirements.txt">dependencies</a>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pypi.org/project/beta-code-py/">beta-code-py</a> (for Beta Code ↔ Unicode conversion)</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/requests/">requests</a> (for API calls using HTTP to Morpheus)</p></li>
+</ul>
+</section>
+<section id="morpheus">
+<h3>Morpheus<a class="headerlink" href="#morpheus" title="Link to this heading"></a></h3>
+<p>Since the purpose of this package it to interface with an Morpheus API endpoint, you need access to such a service. A Morpheus API endpoint can be set up locally, e.g., via the <a class="reference external" href="https://hub.docker.com/r/perseidsproject/morpheus-api">perseidsproject/morpheus-api Docker image</a>.</p>
+</section>
+</section>
+<span id="document-usage"></span><section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>Some example use cases.</p>
+<section id="obtain-morpheus-analytic-blocks-for-a-greek-word">
+<h3>Obtain Morpheus Analytic blocks for a Greek word<a class="headerlink" href="#obtain-morpheus-analytic-blocks-for-a-greek-word" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert unicode greek to betacode</span>
+<span class="kn">import</span> <span class="nn">beta_code</span>
+<span class="n">bc_word</span><span class="o">=</span><span class="n">beta_code</span><span class="o">.</span><span class="n">greek_to_beta_code</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;του&#39;</span><span class="p">)</span>
+<span class="n">api_endpoint</span><span class="o">=</span><span class="s2">&quot;10.0.1.156:1315&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="n">bc_word</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This will output three Morpheus Analytic blocks (one shown):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>:raw tou
+
+:workw tou=
+:lem o(
+:prvb
+:aug1
+:stem tou=                   indeclform
+:suff
+:end          masc/neut gen sg               indeclform      article
+</pre></div>
+</div>
+</section>
+<section id="get-the-compact-analysis-results">
+<h3>Get the compact analysis results<a class="headerlink" href="#get-the-compact-analysis-results" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="n">bc_word</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;compact&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This prints (for the same word as the previous example) the compact notation:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tou
+&lt;NL&gt;N tou=,o(  masc/neut gen sg              indeclform      article&lt;/NL&gt;&lt;NL&gt;N tou=,ti/s  gen sg     attic   indeclform      indecl&lt;/NL&gt;&lt;NL&gt;N tis  gen sg    attic   enclitic indeclform     indef&lt;/NL&gt;
+</pre></div>
+</div>
+</section>
+<section id="perform-a-full-analysis">
+<h3>Perform a full analysis<a class="headerlink" href="#perform-a-full-analysis" title="Link to this heading"></a></h3>
+<p>The following will analyze a word and produce a full dictionary of Morpheus data augmented with Part of Speech and morph tag information.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">analyze_word_with_morpheus</span><span class="p">(</span><span class="s2">&quot;mo/non&quot;</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This provides a Python dictionary like below (truncated):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&#39;raw_bc&#39;: &#39;mo/non&#39;,
+ &#39;raw_uc&#39;: &#39;μόνον&#39;,
+ &#39;blocks&#39;: 2,
+ &#39;analyses&#39;: [{&#39;raw_bc&#39;: &#39;mo/non&#39;,
+   &#39;raw_uc&#39;: &#39;μόνον&#39;,
+   &#39;workw_bc&#39;: &#39;mo/non&#39;,
+   &#39;workw_uc&#39;: &#39;μόνον&#39;,
+   &#39;lem_full_bc&#39;: &#39;mo/nos&#39;,
+   &#39;lem_full_uc&#39;: &#39;μόνος&#39;,
+   &#39;lem_base_bc&#39;: &#39;mo/nos&#39;,
+   &#39;lem_base_uc&#39;: &#39;μόνος&#39;,
+   &#39;stem_bc&#39;: &#39;mon&#39;,
+   &#39;stem_uc&#39;: &#39;μον&#39;,
+   &#39;stem_codes&#39;: [&#39;os_h_on&#39;],
+   &#39;end_bc&#39;: &#39;on&#39;,
+   &#39;end_uc&#39;: &#39;ον&#39;,
+   &#39;gender&#39;: &#39;masc&#39;,
+   &#39;case&#39;: &#39;acc&#39;,
+   &#39;number&#39;: &#39;sg&#39;,
+   &#39;end_codes&#39;: [&#39;os_h_on&#39;],
+   &#39;pos&#39;: &#39;noun&#39;,
+   &#39;morph&#39;: &#39;N-ASM&#39;},
+  {&#39;raw_bc&#39;: &#39;mo/non&#39;,
+   &#39;raw_uc&#39;: &#39;μόνον&#39;,
+   &#39;workw_bc&#39;: &#39;mo/non&#39;,
+ ...
+</pre></div>
+</div>
+</section>
+<section id="limited-latin-support">
+<h3>Limited Latin support<a class="headerlink" href="#limited-latin-support" title="Link to this heading"></a></h3>
+<p>Latin words can be analyzed and the results stored in a Python dictionary:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pprint</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="n">raw_text</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="s2">&quot;dico&quot;</span><span class="p">,</span><span class="n">api_endpoint</span><span class="p">,</span><span class="n">language</span><span class="o">=</span><span class="s2">&quot;latin&quot;</span><span class="p">)</span>
+<span class="n">blocks</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">split_into_raw_blocks</span><span class="p">(</span><span class="n">raw_text</span><span class="p">)</span>
+<span class="n">all_parses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+   <span class="n">raw_beta</span><span class="p">,</span> <span class="n">parses</span> <span class="o">=</span> <span class="n">morphkit</span><span class="o">.</span><span class="n">parse_word_block</span><span class="p">(</span><span class="n">block</span><span class="p">,</span><span class="s2">&quot;latin&quot;</span><span class="p">)</span>
+   <span class="n">all_parses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parses</span><span class="p">)</span>
+   <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">parses</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This procudes a dictiorary like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> [{&#39;end&#39;: &#39;o_&#39;,
+  &#39;end_codes&#39;: [&#39;conj1&#39;],
+  &#39;lem_base&#39;: &#39;dico#&#39;,
+  &#39;lem_full&#39;: &#39;dico#1&#39;,
+  &#39;lem_homonym&#39;: 1,
+  &#39;mood&#39;: &#39;indicative&#39;,
+  &#39;number&#39;: &#39;sg&#39;,
+  &#39;person&#39;: &#39;1&#39;,
+  &#39;raw&#39;: &#39;dico&#39;,
+  &#39;stem&#39;: &#39;dic&#39;,
+  &#39;stem_codes&#39;: [&#39;conj1&#39;, &#39;are_vb&#39;],
+  &#39;tense&#39;: &#39;present&#39;,
+  &#39;voice&#39;: &#39;active&#39;,
+  &#39;workw&#39;: &#39;dico_&#39;}]
+[{&#39;end&#39;: &#39;o_&#39;,
+  &#39;end_codes&#39;: [&#39;conj3&#39;],
+  &#39;lem_base&#39;: &#39;dico#&#39;,
+</pre></div>
+</div>
+<p>To see these examples in action, you can download <a class="reference external" href="https://github.com/tonyjurg/morphkit/blob/main/notebooks/Morphkit_usage_examples.ipynb">this Jupyter Notebook</a>.</p>
+</section>
+</section>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="summary-of-functions">
+<h1>Summary of functions<a class="headerlink" href="#summary-of-functions" title="Link to this heading"></a></h1>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#document-api/morphkit.analyze_pos#morphkit.analyze_pos" title="morphkit.analyze_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.analyze_pos</span></code></a></p></td>
+<td><p>Analyze a single Morpheus parse record and determine its part of speech.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#document-api/morphkit.analyze_morph_tag#morphkit.analyze_morph_tag" title="morphkit.analyze_morph_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.analyze_morph_tag</span></code></a></p></td>
+<td><p>Compute the Sandborg–Petersen morphological tag for a single Morpheus analyses block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#document-api/functions#morphkit.analyze_word_with_morpheus" title="morphkit.analyze_word_with_morpheus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.analyze_word_with_morpheus</span></code></a></p></td>
+<td><p>Query the Morpheus morphological analyzer for a Greek word in Betacode and parse its analyses.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#document-api/functions#morphkit.annotate_and_sort_analyses" title="morphkit.annotate_and_sort_analyses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.annotate_and_sort_analyses</span></code></a></p></td>
+<td><p>Annotate and sort analyses in a morphkit-compatible structure, grouping by base lemma and appending homonym suffixes extracted from lem_full_bc minus lem_base_bc.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#document-api/functions#morphkit.compare_tags" title="morphkit.compare_tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.compare_tags</span></code></a></p></td>
+<td><p>Compare two morphological parsing tags by decoding them into features and computing a weighted similarity score.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#document-api/functions#morphkit.decode_tag" title="morphkit.decode_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.decode_tag</span></code></a></p></td>
+<td><p>Decode a morphological tag into a set of human-readable features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#document-api/functions#morphkit.get_word_blocks" title="morphkit.get_word_blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.get_word_blocks</span></code></a></p></td>
+<td><p>Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#document-api/morphkit.init_compare_tags#morphkit.init_compare_tags" title="morphkit.init_compare_tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.init_compare_tags</span></code></a></p></td>
+<td><p>Factory that initializes and returns a fully-configured <a class="reference internal" href="#document-api/functions#morphkit.compare_tags" title="morphkit.compare_tags"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_tags()</span></code></a> function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#document-api/morphkit.parse_word_block#morphkit.parse_word_block" title="morphkit.parse_word_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.parse_word_block</span></code></a></p></td>
+<td><p>Parse a single Morpheus output block of Beta-code lines into structured morphological data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#document-api/functions#morphkit.split_into_raw_blocks" title="morphkit.split_into_raw_blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphkit.split_into_raw_blocks</span></code></a></p></td>
+<td><p>Split the input text into blocks at each ':raw' header using multiline regex.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

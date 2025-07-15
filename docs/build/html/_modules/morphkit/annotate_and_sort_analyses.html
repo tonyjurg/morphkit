@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>morphkit.annotate_and_sort_analyses &mdash; Morphkit Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            morphkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Content</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.get_word_blocks.html">morphkit.get_word_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.init_compare_tags.html">morphkit.init_compare_tags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.parse_word_block.html">morphkit.parse_word_block</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.split_into_raw_blocks.html">morphkit.split_into_raw_blocks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">morphkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">morphkit.annotate_and_sort_analyses</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for morphkit.annotate_and_sort_analyses</h1><div class="highlight"><pre>
+<span></span><span class="c1"># morphkit/init_compare_tags.py</span>
+<span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
+<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">morphkit</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<div class="viewcode-block" id="annotate_and_sort_analyses">
+<a class="viewcode-back" href="../../api/morphkit.annotate_and_sort_analyses.html#morphkit.annotate_and_sort_analyses">[docs]</a>
+<span class="k">def</span> <span class="nf">annotate_and_sort_analyses</span><span class="p">(</span>
+    <span class="n">full_analysis</span>    <span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">reference_morph</span>  <span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">reference_lemma</span>  <span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">base_key</span>         <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;lem_base_bc&#39;</span><span class="p">,</span>
+    <span class="n">full_key</span>         <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;lem_full_bc&#39;</span><span class="p">,</span>
+    <span class="n">morph_key</span>        <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;morph&#39;</span><span class="p">,</span>
+    <span class="n">sim_key</span>          <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;morph_similarity&#39;</span><span class="p">,</span>
+    <span class="n">lower_case</span>       <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">debug</span>            <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate and sort analyses in a morphkit-compatible structure, grouping by base lemma</span>
+<span class="sd">    and appending homonym suffixes extracted from lem_full_bc minus lem_base_bc.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">    -----</span>
+
+<span class="sd">        :full_analysis (Dict[str, Any]): A dict with an &#39;analyses&#39; list of blocks (dicts).</span>
+
+<span class="sd">        :reference_morph (str): The reference morph tag to compare against each block.</span>
+
+<span class="sd">        :reference_lemma (str): The Betacode lemma (base form, without suffix) to prioritize.</span>
+
+<span class="sd">        :base_key (str): Optional argument. Defaults to `&#39;lem_base_bc&#39;`. Key under which the base lemma is stored in each block.</span>
+
+<span class="sd">        :full_key (str): Optional argument. Defaults to `&#39;lem_full_bc&#39;`. Key under which the full lemma is stored in each block.</span>
+
+<span class="sd">        :morph_key (str): Optional argument. Defaults to `&#39;morph&#39;`. Key under which the raw morph string is stored.</span>
+
+<span class="sd">        :sim_key (str): Optional argument. Defaults to `&#39;morph_similarity&#39;`. Key under which to store the similarity string.</span>
+
+<span class="sd">        :lower_case (bool): Optional argument. Defaults to `True`. If set to `True`, convert lemmas to lowercase before comparison.  </span>
+
+<span class="sd">        :debug (bool):  Optional argument. Defaults to `False`. If set to `True`, the function print some debug information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        :Dict[str, Any]: A new full_analysis dictionairy with annotated and sorted analyses, and with lem_base_bc modified to include homonym suffix when applicable.</span>
+
+<span class="sd">    Steps:</span>
+<span class="sd">    ------</span>
+
+<span class="sd">      1. Deep-copy the input to avoid mutating the original data.</span>
+
+<span class="sd">      2. For each analysis block:</span>
+
+<span class="sd">         a. Compute the homonym suffix as the portion of lem_full_bc after lem_base_bc.</span>
+<span class="sd">         b. If non-empty, append &quot;_(SUFFIX)&quot; to lem_base_bc.</span>
+<span class="sd">         c. Compute similarity percentages for each tag against reference_morph.</span>
+<span class="sd">         d. Store sim_key as a slash-separated string of percentages.</span>
+<span class="sd">         e. Store &#39;_max_&#39; + sim_key as the integer max similarity for this block.</span>
+
+<span class="sd">      3. Group blocks by their finalized lem_base_bc (with suffix).</span>
+
+<span class="sd">      4. Identify which group key should be first:</span>
+
+<span class="sd">         - If reference_lemma matches any finalized base lemma exactly, that group is first.</span>
+<span class="sd">         - Else if normalize(reference_lemma) matches normalize(base lemma), that group is first.</span>
+
+<span class="sd">      5. Compute for each group:</span>
+
+<span class="sd">         - group_max: the highest block-level max similarity within that group.</span>
+
+<span class="sd">      6. Sort groups so that:</span>
+
+<span class="sd">         - The chosen reference group (if any) comes first.</span>
+<span class="sd">         - Remaining groups follow in descending order of group_max.</span>
+
+<span class="sd">      7. Within each group, sort its blocks by descending block-level max similarity.</span>
+
+<span class="sd">      8. Flatten groups back into a single list.</span>
+
+<span class="sd">      9. Remove temporary helper keys and return the new full_analysis dict.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">normalize_lemma</span><span class="p">(</span><span class="n">bc</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lower_case</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a version of the Betacode lemma with all hyphens removed.</span>
+<span class="sd">        E.g. &#39;kata/-a)lala/w&#39; -&gt; &#39;kataa)lala/w&#39;. Ignores any &quot;_(SUFFIX)&quot; suffix.</span>
+<span class="sd">        If &#39;lower_case&#39;==True, also make the full lemma lowercase.</span>
+<span class="sd">        If bc is None or empty, return &#39;&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">lower_case</span><span class="p">:</span>
+           <span class="n">bc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1"># Remove suffix if present</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_(&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">base</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c1"># 1) Deep copy to avoid mutating caller data</span>
+    <span class="n">fa</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">full_analysis</span><span class="p">)</span>
+    <span class="n">analyses</span> <span class="o">=</span> <span class="n">fa</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;analyses&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="c1"># 2) For each block, determine homonym suffix and append to lem_base_bc</span>
+    <span class="k">for</span> <span class="n">blk</span> <span class="ow">in</span> <span class="n">analyses</span><span class="p">:</span>
+        <span class="n">base_bc</span> <span class="o">=</span> <span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_key</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">full_bc</span> <span class="o">=</span> <span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_key</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># Extract leftover after base_bc</span>
+        <span class="k">if</span> <span class="n">full_bc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">base_bc</span><span class="p">):</span>
+            <span class="n">leftover</span> <span class="o">=</span> <span class="n">full_bc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">base_bc</span><span class="p">):]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">leftover</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">leftover</span> <span class="o">=</span> <span class="n">leftover</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">leftover</span><span class="p">:</span>
+            <span class="c1"># Append “_(leftover)” unless already present</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_(</span><span class="si">{</span><span class="n">leftover</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">base_bc</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
+                <span class="n">blk</span><span class="p">[</span><span class="n">base_key</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_bc</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># 3) Annotate each block with similarity string and block-level max</span>
+    <span class="k">for</span> <span class="n">blk</span> <span class="ow">in</span> <span class="n">analyses</span><span class="p">:</span>
+        <span class="n">raw_morph_str</span> <span class="o">=</span> <span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">morph_key</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">raw_morph_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="p">]</span>
+        <span class="n">percents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">reference_morph</span><span class="p">:</span>
+                <span class="n">percent</span> <span class="o">=</span> <span class="mi">100</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sim</span> <span class="o">=</span> <span class="n">morphkit</span><span class="o">.</span><span class="n">compare_tags</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">reference_morph</span><span class="p">)</span>
+                <span class="n">overall</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;overall_similarity&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">overall</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+            <span class="n">percents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">percent</span><span class="p">)</span>
+
+        <span class="n">blk</span><span class="p">[</span><span class="n">sim_key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">percents</span><span class="p">)</span> <span class="k">if</span> <span class="n">percents</span> <span class="k">else</span> <span class="s1">&#39;0&#39;</span>
+        <span class="n">blk</span><span class="p">[</span><span class="s1">&#39;_max_&#39;</span> <span class="o">+</span> <span class="n">sim_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">percents</span><span class="p">)</span> <span class="k">if</span> <span class="n">percents</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># 4) Group blocks by their (possibly suffixed) lem_base_bc</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">blk</span> <span class="ow">in</span> <span class="n">analyses</span><span class="p">:</span>
+        <span class="n">lemma_base</span> <span class="o">=</span> <span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_key</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">groups</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">lemma_base</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blk</span><span class="p">)</span>
+
+    <span class="c1"># 5) Identify which group key to place first</span>
+    <span class="n">norm_ref_base</span> <span class="o">=</span> <span class="n">normalize_lemma</span><span class="p">(</span><span class="n">reference_lemma</span><span class="p">,</span> <span class="n">lower_case</span><span class="p">)</span>
+    <span class="n">ref_group_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># 5a) First try exact match on possibly suffixed base lemma</span>
+    <span class="k">if</span> <span class="n">reference_lemma</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">ref_group_key</span> <span class="o">=</span> <span class="n">reference_lemma</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># 5b) If not found, look for normalized match among group keys</span>
+        <span class="k">for</span> <span class="n">group_key</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">normalize_lemma</span><span class="p">(</span><span class="n">group_key</span><span class="p">,</span> <span class="n">lower_case</span><span class="p">)</span> <span class="o">==</span> <span class="n">norm_ref_base</span><span class="p">:</span>
+                <span class="n">ref_group_key</span> <span class="o">=</span> <span class="n">group_key</span>
+                <span class="k">break</span>
+
+    <span class="c1"># 6) Compute group_max for each group</span>
+    <span class="n">group_max_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">gkey</span><span class="p">,</span> <span class="n">blks</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">max_in_group</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_max_&#39;</span> <span class="o">+</span> <span class="n">sim_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">blk</span> <span class="ow">in</span> <span class="n">blks</span><span class="p">)</span>
+        <span class="n">group_max_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gkey</span><span class="p">,</span> <span class="n">max_in_group</span><span class="p">))</span>
+
+    <span class="c1"># 7) Sort groups so that:</span>
+    <span class="c1">#    - ref_group_key first (if it exists)</span>
+    <span class="c1">#    - then remaining groups by descending group_max</span>
+    <span class="n">sorted_group_keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">ref_group_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sorted_group_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ref_group_key</span><span class="p">)</span>
+
+    <span class="n">other_groups</span> <span class="o">=</span> <span class="p">[(</span><span class="n">g</span><span class="p">,</span> <span class="n">gm</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gm</span><span class="p">)</span> <span class="ow">in</span> <span class="n">group_max_list</span> <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="n">ref_group_key</span><span class="p">]</span>
+    <span class="n">other_groups</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">sorted_group_keys</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">g</span> <span class="k">for</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gm</span><span class="p">)</span> <span class="ow">in</span> <span class="n">other_groups</span><span class="p">])</span>
+
+    <span class="c1"># 8) Within each group, sort blocks by descending block-level max similarity</span>
+    <span class="n">final_sorted_blocks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">gkey</span> <span class="ow">in</span> <span class="n">sorted_group_keys</span><span class="p">:</span>
+        <span class="n">blks</span> <span class="o">=</span> <span class="n">groups</span><span class="p">[</span><span class="n">gkey</span><span class="p">]</span>
+        <span class="n">blks</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">blk</span><span class="p">:</span> <span class="n">blk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_max_&#39;</span> <span class="o">+</span> <span class="n">sim_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">final_sorted_blocks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">blks</span><span class="p">)</span>
+
+    <span class="c1"># 9) Replace fa[&#39;analyses&#39;] with the flattened, sorted list</span>
+    <span class="n">fa</span><span class="p">[</span><span class="s1">&#39;analyses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_sorted_blocks</span>
+
+    <span class="c1"># 10) Remove temporary helper keys before returning</span>
+    <span class="k">for</span> <span class="n">blk</span> <span class="ow">in</span> <span class="n">fa</span><span class="p">[</span><span class="s1">&#39;analyses&#39;</span><span class="p">]:</span>
+        <span class="n">blk</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_max_&#39;</span> <span class="o">+</span> <span class="n">sim_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fa</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tony Jurg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
