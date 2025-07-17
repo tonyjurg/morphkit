@@ -6,6 +6,6 @@ authors:
   orcid: "https://orcid.org/0000-0002-0343-1346"
 title: "Morphkit: A Python Toolkit for Morphological Analysis using Morpheus"
 version: 1.0.0
-doi: https://doi.org/10.5281/zenodo.15920832
+doi: doi.org/10.5281/zenodo.15920832
 date-released: 2025-07-15
 url: "https://github.com/tonyjurg/morphkit"
