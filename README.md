@@ -22,6 +22,33 @@ sys.path.insert(0, "..")    # the relative path for the morphkit directory to yo
 import morphkit
 ```
 
+## Configuration
+
+Morphkit supports configurable HTTP timeouts and retry behavior for Morpheus API requests.
+
+**Default timeout:** 30 seconds
+
+**Per-request timeout:**
+```Python
+response = morphkit.get_word_blocks("tou=", "localhost:1315", timeout=10)
+```
+
+**Global configuration:**
+```Python
+from morphkit.config import config
+
+config.timeout = 45
+config.retry_attempts = 3
+config.retry_delay = 2.0
+```
+
+**Environment variables:**
+```bash
+export MORPHKIT_TIMEOUT=60
+export MORPHKIT_RETRY_ATTEMPTS=2
+export MORPHKIT_RETRY_DELAY=1.5
+```
+
 ## Tools used
 
 The standard set of tools ([Python documentation](https://www.python.org/doc/), tech sites like [stackoverflow](https://stackoverflow.com/), and Python syntax checkers like [Pythonium](https://pythonium.net/linter)) were used to create this package. Furthermore, for the creation of a subset of features, also the [Anaconda Assistant](https://www.anaconda.com/capability/anaconda-assistant) (using [OpenAI](https://openai.com/) as backend) and [GitHub Copilot](https://github.com/features/copilot) in Visual Studio were used to debug and/or optimize parts of the code.
@@ -29,4 +56,3 @@ The standard set of tools ([Python documentation](https://www.python.org/doc/), 
 ## License
 
 The morphkit package is released under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://github.com/tonyjurg/morphkit/blob/main/LICENSE.md).
-

@@ -14,7 +14,7 @@ This library package for morphological analysis consist of:
   - parse_word_block
   - analyse_word_with_morpheus
   - get_word_blocks
-  - split_in_raw_blocks
+  - split_into_raw_blocks
 
 All of these names will be usable as:
 
@@ -35,7 +35,12 @@ __all__ = [
     "decode_tag",
     "parse_word_block",
     "analyse_word_with_morpheus",
-    "split_in_raw_blocks"
+    "get_word_blocks",
+    "split_into_raw_blocks",
+    "config",
+    "MorpheusAPIError",
+    "MorpheusTimeoutError",
+    "MorpheusConnectionError",
 ]
 
 
@@ -47,9 +52,15 @@ from .analyse_morph_tag           import analyse_morph_tag
 from .decode_tag                  import decode_tag
 from .parse_word_block            import parse_word_block
 from .analyse_word_with_morpheus  import analyse_word_with_morpheus
-from .get_word_blocks             import get_word_blocks
+from .get_word_blocks             import (
+    get_word_blocks,
+    MorpheusAPIError,
+    MorpheusTimeoutError,
+    MorpheusConnectionError,
+)
 from .annotate_and_sort_analyses  import annotate_and_sort_analyses
 from .split_into_raw_blocks       import split_into_raw_blocks
+from .config                      import config
 
 # 2) Initialize compare_tags right now
 from .init_compare_tags import init_compare_tags
@@ -64,6 +75,12 @@ __all__ = [
     "decode_tag",
     "parse_word_block",
     "analyse_word_with_morpheus",
+    "get_word_blocks",
+    "split_into_raw_blocks",
+    "config",
+    "MorpheusAPIError",
+    "MorpheusTimeoutError",
+    "MorpheusConnectionError",
 ]
 
 # This is in here for now. It should be removed once this becomes a real package
