@@ -1,7 +1,7 @@
 # morphkit/decode_tag.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 # import required packages
 import re
@@ -322,8 +322,8 @@ def decode_tag(tag_input:str, debug: bool=False) -> Dict[str, Any]:
                 output["Gender"] = genderMap.get(feat[2], "Unknown")
             else:
                 output["Error"] = f"Incomplete feature code"
-                if debug==True:
-                    print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey} ({mood})")
+                if debug:
+                    print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey})")
 
         # Indicative/Subjunctive/Optative/Imperative → Person/Number
         elif moodKey in ['I','S','O','M']:
@@ -332,8 +332,8 @@ def decode_tag(tag_input:str, debug: bool=False) -> Dict[str, Any]:
                 output["Number"] = numberMap.get(feat[1], "Unknown")
             else:
                 output["Error"] = f"Incorrect feature code"
-                if debug==True:
-                    print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey} ({mood})")
+                if debug:
+                    print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey})")
 
         # Infinitive -> according to definition, there should be no more info. 
         # However, in practice it may also contain a suffix/verb extra element (e.g. V-RAN-ATT at Luke 24:23)

@@ -8,3 +8,4 @@
 *.ipynb_checkpoints
 /validation/.ipynb_checkpoints
 /notebooks/.ipynb_checkpoints
+/.vs

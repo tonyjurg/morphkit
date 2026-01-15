@@ -1,7 +1,7 @@
 # morphkit/init_compare_tags.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 from typing import Callable, Dict, Any, List, Tuple
 
@@ -700,7 +700,7 @@ def init_compare_tags():
         """
 
         # If debugging is enabled, print the raw input values for the tags to compare
-        if debug==True:
+        if debug:
             print(f"[compare_tags] First tag: {tag1};  second tag: {tag2}")
 
         # Decode each tag string into a dictionary of grammatical features

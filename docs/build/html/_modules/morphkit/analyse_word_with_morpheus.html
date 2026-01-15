@@ -88,11 +88,11 @@
   <h1>Source code for morphkit.analyse_word_with_morpheus</h1><div class="highlight"><pre>
 <span></span><span class="c1"># morphkit/analyse_word_with_morpheus.py</span>
 <span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
-<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="c1"># Copyright (c) 2026 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.1&quot;</span>
 
 <span class="c1"># Import required packages</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">urllib.parse</span>
 <span class="kn">import</span> <span class="nn">beta_code</span>
@@ -108,14 +108,17 @@
 <span class="kn">from</span> <span class="nn">.split_into_raw_blocks</span> <span class="kn">import</span> <span class="n">split_into_raw_blocks</span>
 
 <div class="viewcode-block" id="analyse_word_with_morpheus">
-<a class="viewcode-back" href="../../api/autogen/morphkit.analyse_word_with_morpheus.html#morphkit.analyse_word_with_morpheus">[docs]</a>
+<a class="viewcode-back" href="../../api/functions.html#morphkit.analyse_word_with_morpheus">[docs]</a>
 <span class="k">def</span> <span class="nf">analyse_word_with_morpheus</span><span class="p">(</span>
     <span class="n">word_beta</span><span class="p">:</span>    <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">language</span><span class="p">:</span>     <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;greek&#39;</span><span class="p">,</span>
     <span class="n">add_pos</span><span class="p">:</span>      <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">add_morph</span><span class="p">:</span>    <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">debug</span><span class="p">:</span>        <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">debug</span><span class="p">:</span>        <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="p">:</span>      <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry_attempts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry_delay</span><span class="p">:</span>  <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -137,6 +140,9 @@
 <span class="sd">        :add_morph (bool):    Optional argument. Defaults to `True`. If set to `False` no morph field will be added to the parse.</span>
 
 <span class="sd">        :debug (bool):        Optional argument. Defaults to `False`. If set to `True` the function print some debug information.</span>
+<span class="sd">        :timeout (float|None): Optional argument. Defaults to config.timeout. Timeout in seconds for the request.</span>
+<span class="sd">        :retry_attempts (int): Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.</span>
+<span class="sd">        :retry_delay (float): Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">    --------</span>
@@ -215,21 +221,30 @@
 
     <span class="c1"># A very basic check that `endpoint` contains a &#39;:&#39; and that the part after it is all digits.</span>
     <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">api_endpoint</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;. Missing &#39;:&#39; separator.&quot;</span>
-        <span class="s2">&quot;Format should be &#39;host(IP or name):port&#39;&quot;</span><span class="p">)</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;. Missing &#39;:&#39; separator. Format should be &#39;host(IP or name):port&#39;&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
     <span class="n">host</span><span class="p">,</span> <span class="n">port_str</span> <span class="o">=</span> <span class="n">api_endpoint</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">port_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;: port &#39;</span><span class="si">{</span><span class="n">port_str</span><span class="si">}</span><span class="s2">&#39; is not numeric.&quot;</span>
-        <span class="s2">&quot;Format should be &#39;host(IP or name):port&#39;&quot;</span><span class="p">)</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;: port &#39;</span><span class="si">{</span><span class="n">port_str</span><span class="si">}</span><span class="s2">&#39; is not numeric.&quot;</span>
+        <span class="s2">&quot;Format should be &#39;host(IP or name):port&#39;&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="c1"># Tailor to the language</span>
     <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;greek&#39;</span><span class="p">,</span><span class="s1">&#39;latin&#39;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Unknown language format </span><span class="si">{</span><span class="n">language</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Unknown language format </span><span class="si">{</span><span class="n">language</span><span class="si">!r}</span><span class="s2">. &quot;</span>
         <span class="s2">&quot;Choose from {&#39;greek&#39;, &#39;latin&#39;}.&quot;</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s1">&#39;latin&#39;</span><span class="p">:</span>
         <span class="n">add_pos</span><span class="o">=</span><span class="kc">False</span>
         <span class="n">add_morph</span><span class="o">=</span><span class="kc">False</span>
@@ -239,8 +254,20 @@
     
     <span class="c1"># 1. Fetch raw Morpheus output</span>
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[analyse_word_with_morpheus] Calling function get_word_blocks(</span><span class="si">{</span><span class="n">word_beta</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">language</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">debug</span><span class="si">=}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">text</span><span class="o">=</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="n">word_beta</span><span class="p">,</span> <span class="n">api_endpoint</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;[analyse_word_with_morpheus] Calling function get_word_blocks(&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">word_beta</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">language</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">debug</span><span class="si">=}</span><span class="s2">,&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timeout</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">retry_attempts</span><span class="si">=}</span><span class="s2">,</span><span class="si">{</span><span class="n">retry_delay</span><span class="si">=}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+    <span class="n">text</span><span class="o">=</span><span class="n">get_word_blocks</span><span class="p">(</span>
+        <span class="n">word_beta</span><span class="p">,</span>
+        <span class="n">api_endpoint</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+        <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="n">retry_attempts</span><span class="o">=</span><span class="n">retry_attempts</span><span class="p">,</span>
+        <span class="n">retry_delay</span><span class="o">=</span><span class="n">retry_delay</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># 2. Split into blocks at each &#39;:raw&#39; header </span>
     <span class="n">blocks</span> <span class="o">=</span> <span class="n">split_into_raw_blocks</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>

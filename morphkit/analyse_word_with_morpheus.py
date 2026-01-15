@@ -1,10 +1,10 @@
 # morphkit/analyse_word_with_morpheus.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 # Import required packages
-from typing import Callable, Dict, Any, List, Tuple
+from typing import Callable, Dict, Any, List, Optional, Tuple
 import re
 import urllib.parse
 import beta_code
@@ -25,7 +25,10 @@ def analyse_word_with_morpheus(
     language:     str='greek',
     add_pos:      bool = True,
     add_morph:    bool = True,
-    debug:        bool = False
+    debug:        bool = False,
+    timeout:      Optional[float] = None,
+    retry_attempts: Optional[int] = None,
+    retry_delay:  Optional[float] = None,
 ) -> Dict[str, Any]:
 
     """
@@ -47,6 +50,9 @@ def analyse_word_with_morpheus(
         :add_morph (bool):    Optional argument. Defaults to `True`. If set to `False` no morph field will be added to the parse.
 
         :debug (bool):        Optional argument. Defaults to `False`. If set to `True` the function print some debug information.
+        :timeout (float|None): Optional argument. Defaults to config.timeout. Timeout in seconds for the request.
+        :retry_attempts (int): Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.
+        :retry_delay (float): Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.
 
     Returns:
     --------
@@ -125,21 +131,30 @@ def analyse_word_with_morpheus(
 
     # A very basic check that `endpoint` contains a ':' and that the part after it is all digits.
     if ":" not in api_endpoint:
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}'. Missing ':' separator."
-        "Format should be 'host(IP or name):port'")
+        message=f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}'. Missing ':' separator. Format should be 'host(IP or name):port'"
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
+
     host, port_str = api_endpoint.split(":", 1)
     if not port_str.isdigit():
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}': port '{port_str}' is not numeric."
-        "Format should be 'host(IP or name):port'")
+        message=f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}': port '{port_str}' is not numeric."
+        "Format should be 'host(IP or name):port'"
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
 
     # Tailor to the language
     if language not in ('greek','latin'):
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Unknown language format {language!r}. "
+        message=f"[analyse_word_with_morpheus] Unknown language format {language!r}. "
         "Choose from {'greek', 'latin'}."
-        )
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
+
     if language == 'latin':
         add_pos=False
         add_morph=False
@@ -149,8 +164,20 @@ def analyse_word_with_morpheus(
     
     # 1. Fetch raw Morpheus output
     if debug:
-        print(f"[analyse_word_with_morpheus] Calling function get_word_blocks({word_beta=},{api_endpoint=},{language=},{debug=})")
-    text=get_word_blocks(word_beta, api_endpoint, language=language, debug=debug)
+        print(
+            "[analyse_word_with_morpheus] Calling function get_word_blocks("
+            f"{word_beta=},{api_endpoint=},{language=},{debug=},"
+            f"{timeout=},{retry_attempts=},{retry_delay=})"
+        )
+    text=get_word_blocks(
+        word_beta,
+        api_endpoint,
+        language=language,
+        debug=debug,
+        timeout=timeout,
+        retry_attempts=retry_attempts,
+        retry_delay=retry_delay,
+    )
 
     # 2. Split into blocks at each ':raw' header 
     blocks = split_into_raw_blocks(text,debug=debug)

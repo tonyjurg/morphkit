@@ -49,9 +49,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_pos.html">morphkit.analyze_pos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_morph_tag.html">morphkit.analyze_morph_tag</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyze_word_with_morpheus.html">morphkit.analyze_word_with_morpheus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_pos.html">morphkit.analyse_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_morph_tag.html">morphkit.analyse_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_word_with_morpheus.html">morphkit.analyse_word_with_morpheus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
@@ -88,8 +88,8 @@
   <h1>Source code for morphkit.decode_tag</h1><div class="highlight"><pre>
 <span></span><span class="c1"># morphkit/decode_tag.py</span>
 <span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
-<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="c1"># Copyright (c) 2026 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.1&quot;</span>
 
 <span class="c1"># import required packages</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -412,8 +412,8 @@
                 <span class="n">output</span><span class="p">[</span><span class="s2">&quot;Gender&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genderMap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">output</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Incomplete feature code&quot;</span>
-                <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[decode_tag] ERROR: Incorrect feature code (‘</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s2">’) for mood </span><span class="si">{</span><span class="n">moodKey</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">mood</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[decode_tag] ERROR: Incorrect feature code (‘</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s2">’) for mood </span><span class="si">{</span><span class="n">moodKey</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
         <span class="c1"># Indicative/Subjunctive/Optative/Imperative → Person/Number</span>
         <span class="k">elif</span> <span class="n">moodKey</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;S&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">]:</span>
@@ -422,8 +422,8 @@
                 <span class="n">output</span><span class="p">[</span><span class="s2">&quot;Number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">numberMap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">output</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Incorrect feature code&quot;</span>
-                <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[decode_tag] ERROR: Incorrect feature code (‘</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s2">’) for mood </span><span class="si">{</span><span class="n">moodKey</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">mood</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[decode_tag] ERROR: Incorrect feature code (‘</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s2">’) for mood </span><span class="si">{</span><span class="n">moodKey</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
         <span class="c1"># Infinitive -&gt; according to definition, there should be no more info. </span>
         <span class="c1"># However, in practice it may also contain a suffix/verb extra element (e.g. V-RAN-ATT at Luke 24:23)</span>
