@@ -1,7 +1,7 @@
 # morphkit/get_word_blocks.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 # import required packages
 from typing import Callable, Dict, Any, List, Optional, Tuple, Union
@@ -34,8 +34,8 @@ def get_word_blocks(
     output            : str = "full",            # Output format: "full" (default) or "compact"
     debug             : bool = False,
     timeout           : Optional[Number] = None,
-    retry_attempts    : Optional[int] = None,
-    retry_delay       : Optional[float] = None,
+    retry_attempts    : Optional[int]    = None,
+    retry_delay       : Optional[float]  = None,
 )-> str:
 
     """Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.
@@ -73,7 +73,9 @@ def get_word_blocks(
         :ValueError: The api_endpoint parameter is malformed (format should be 'host(IP or name):port').
 
         :requests.HTTPError: HTTP request failed (non-2xx status code).
+
         :MorpheusTimeoutError: Request timed out after all retries.
+
         :MorpheusConnectionError: Connection failed after all retries.
 
     Example:

@@ -1,7 +1,7 @@
 # morphkit/__init__.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 morphkit_doc = """
 This __init__.py file serves as the entry point for the 'morphkit' package, defining its public API and initialization logic.

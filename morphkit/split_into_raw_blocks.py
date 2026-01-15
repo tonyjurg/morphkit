@@ -1,7 +1,7 @@
 # morphkit/decode_tag.py
 # SPDX-License-Identifier: CC-BY-4.0
-# Copyright (c) 2025 Tony Jurg
-__version__ = "0.0.1"
+# Copyright (c) 2026 Tony Jurg
+__version__ = "1.0.1"
 
 # import required packages
 import re
