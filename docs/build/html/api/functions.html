@@ -258,7 +258,7 @@ participle, infinitive and ‘other’ verb types is done in module ‘init_comp
 <h2>Analyse word with Morpheus<a class="headerlink" href="#analyse-word-with-morpheus" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="morphkit.analyse_word_with_morpheus">
-<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">analyse_word_with_morpheus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_morph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/analyse_word_with_morpheus.html#analyse_word_with_morpheus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.analyse_word_with_morpheus" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">analyse_word_with_morpheus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_morph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/morphkit/analyse_word_with_morpheus.html#analyse_word_with_morpheus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.analyse_word_with_morpheus" title="Link to this definition"></a></dt>
 <dd><p>Query the Morpheus morphological analyser for a Greek word in Betacode and parse its analyses.</p>
 <section id="id5">
 <h3>Args:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
@@ -283,6 +283,15 @@ If set to ‘latin’ no POS and morph field will be added.</p>
 </dd>
 <dt class="field-even">debug (bool)<span class="colon">:</span></dt>
 <dd class="field-even"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite> the function print some debug information.</p>
+</dd>
+<dt class="field-odd">timeout (float|None)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to config.timeout. Timeout in seconds for the request.</p>
+</dd>
+<dt class="field-even">retry_attempts (int)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.</p>
+</dd>
+<dt class="field-odd">retry_delay (float)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -309,7 +318,7 @@ If set to ‘latin’ no POS and morph field will be added.</p>
 <h3>Steps:<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <blockquote>
 <div><ol class="arabic simple">
-<li><p>Fetch raw Morpheus output using function <a class="reference internal" href="#morphkit.get_word_blocks" title="morphkit.get_word_blocks"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_word_blocks()</span></code></a>.</p></li>
+<li><p>Fetch raw Morpheus output using function <a class="reference internal" href="morphkit.get_word_blocks.html#morphkit.get_word_blocks" title="morphkit.get_word_blocks"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_word_blocks()</span></code></a>.</p></li>
 <li><p>Split the response into analysis blocks at each ‘:raw’ marker using function <a class="reference internal" href="#morphkit.split_into_raw_blocks" title="morphkit.split_into_raw_blocks"><code class="xref py py-func docutils literal notranslate"><span class="pre">split_into_raw_blocks()</span></code></a>.</p></li>
 <li><p>For each block, call <a class="reference internal" href="morphkit.parse_word_block.html#morphkit.parse_word_block" title="morphkit.parse_word_block"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_word_block()</span></code></a> to create a parse dictionairy.</p></li>
 <li><p>Add Part of Speech tag to the parse dictionairy by calling <a class="reference internal" href="#morphkit.analyse_pos" title="morphkit.analyse_pos"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyse_pos()</span></code></a>.</p></li>
@@ -685,7 +694,7 @@ like “N-”, “V-”, “A-”, etc., followed by coded letters/numbers.</p>
 <h2>Get word blocks<a class="headerlink" href="#get-word-blocks" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="morphkit.get_word_blocks">
-<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">get_word_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/get_word_blocks.html#get_word_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.get_word_blocks" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">get_word_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/get_word_blocks.html#get_word_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.get_word_blocks" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.</p>
 <section id="id22">
 <h3>Args:<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
@@ -707,6 +716,15 @@ Backslashes in the input string need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘
 <dt class="field-odd">debug (bool)<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite>, prints the constructed URL and response size.</p>
 </dd>
+<dt class="field-even">timeout (int|float|None)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to config.timeout. Timeout in seconds for the request.</p>
+</dd>
+<dt class="field-odd">retry_attempts (int)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.</p>
+</dd>
+<dt class="field-even">retry_delay (float)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.</p>
+</dd>
 </dl>
 </div></blockquote>
 </section>
@@ -720,24 +738,39 @@ Backslashes in the input string need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘
 </dl>
 </div></blockquote>
 </section>
-<section id="id24">
-<h3>Raises:<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<section id="raises-when-debug-is-set-to-true">
+<h3>Raises (when debug is set to True):<a class="headerlink" href="#raises-when-debug-is-set-to-true" title="Link to this heading"></a></h3>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">ValueError<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The language parameter is invalid (only ‘greek’ and ‘latin’ are allowed).</p>
+<dd class="field-odd"><p>The language parameter is invalid.</p>
 </dd>
 <dt class="field-even">ValueError<span class="colon">:</span></dt>
-<dd class="field-even"><p>The api_endpoint parameter is malformed (format should be ‘host(IP or name):port’).</p>
+<dd class="field-even"><p>The api_endpoint parameter is malformed.</p>
+</dd>
+<dt class="field-odd">ValueError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Invalid timeout and/or retry parameters.</p>
+</dd>
+<dt class="field-even">ValueError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Unknown output format.</p>
 </dd>
 <dt class="field-odd">requests.HTTPError<span class="colon">:</span></dt>
 <dd class="field-odd"><p>HTTP request failed (non-2xx status code).</p>
 </dd>
+<dt class="field-even">MorpheusTimeoutError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Request timed out after all retries.</p>
+</dd>
+<dt class="field-odd">MorpheusConnectionError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Connection failed after all retries.</p>
+</dd>
+<dt class="field-even">MorpheusAPIError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Error in API request.</p>
+</dd>
 </dl>
 </div></blockquote>
 </section>
-<section id="id25">
-<h3>Example:<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<section id="id24">
+<h3>Example:<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_endpoint</span> <span class="o">=</span> <span class="s2">&quot;10.10.0.10:1315&quot;</span>
 <span class="n">blocs</span><span class="o">=</span><span class="n">morphkit</span><span class="o">.</span><span class="n">get_word_blocks</span><span class="p">(</span><span class="s1">&#39;sune/rxomai&#39;</span><span class="p">,</span> <span class="n">api_endpoint</span><span class="p">)</span>

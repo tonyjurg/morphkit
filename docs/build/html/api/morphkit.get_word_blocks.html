@@ -50,6 +50,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_pos.html">morphkit.analyse_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_morph_tag.html">morphkit.analyse_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.analyse_word_with_morpheus.html">morphkit.analyse_word_with_morpheus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
@@ -87,7 +90,7 @@
 <h1>morphkit.get_word_blocks<a class="headerlink" href="#morphkit-get-word-blocks" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="morphkit.get_word_blocks">
-<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">get_word_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/get_word_blocks.html#get_word_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.get_word_blocks" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">morphkit.</span></span><span class="sig-name descname"><span class="pre">get_word_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'greek'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/morphkit/get_word_blocks.html#get_word_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#morphkit.get_word_blocks" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.</p>
 <section id="args">
 <h2>Args:<a class="headerlink" href="#args" title="Link to this heading"></a></h2>
@@ -109,6 +112,15 @@ Backslashes in the input string need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘
 <dt class="field-odd">debug (bool)<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional argument. Defaults to <cite>False</cite>. If set to <cite>True</cite>, prints the constructed URL and response size.</p>
 </dd>
+<dt class="field-even">timeout (int|float|None)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to config.timeout. Timeout in seconds for the request.</p>
+</dd>
+<dt class="field-odd">retry_attempts (int)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.</p>
+</dd>
+<dt class="field-even">retry_delay (float)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.</p>
+</dd>
 </dl>
 </div></blockquote>
 </section>
@@ -122,18 +134,33 @@ Backslashes in the input string need to be escaped: e.g., ‘a)nh/r’ -&gt; ‘
 </dl>
 </div></blockquote>
 </section>
-<section id="raises">
-<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
+<section id="raises-when-debug-is-set-to-true">
+<h2>Raises (when debug is set to True):<a class="headerlink" href="#raises-when-debug-is-set-to-true" title="Link to this heading"></a></h2>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">ValueError<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The language parameter is invalid (only ‘greek’ and ‘latin’ are allowed).</p>
+<dd class="field-odd"><p>The language parameter is invalid.</p>
 </dd>
 <dt class="field-even">ValueError<span class="colon">:</span></dt>
-<dd class="field-even"><p>The api_endpoint parameter is malformed (format should be ‘host(IP or name):port’).</p>
+<dd class="field-even"><p>The api_endpoint parameter is malformed.</p>
+</dd>
+<dt class="field-odd">ValueError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Invalid timeout and/or retry parameters.</p>
+</dd>
+<dt class="field-even">ValueError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Unknown output format.</p>
 </dd>
 <dt class="field-odd">requests.HTTPError<span class="colon">:</span></dt>
 <dd class="field-odd"><p>HTTP request failed (non-2xx status code).</p>
+</dd>
+<dt class="field-even">MorpheusTimeoutError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Request timed out after all retries.</p>
+</dd>
+<dt class="field-odd">MorpheusConnectionError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Connection failed after all retries.</p>
+</dd>
+<dt class="field-even">MorpheusAPIError<span class="colon">:</span></dt>
+<dd class="field-even"><p>Error in API request.</p>
 </dd>
 </dl>
 </div></blockquote>

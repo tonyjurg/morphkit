@@ -49,6 +49,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_pos.html">morphkit.analyse_pos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_morph_tag.html">morphkit.analyse_morph_tag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.analyse_word_with_morpheus.html">morphkit.analyse_word_with_morpheus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.annotate_and_sort_analyses.html">morphkit.annotate_and_sort_analyses</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.compare_tags.html">morphkit.compare_tags</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/autogen/morphkit.decode_tag.html">morphkit.decode_tag</a></li>
@@ -85,15 +88,32 @@
   <h1>Source code for morphkit.get_word_blocks</h1><div class="highlight"><pre>
 <span></span><span class="c1"># morphkit/get_word_blocks.py</span>
 <span class="c1"># SPDX-License-Identifier: CC-BY-4.0</span>
-<span class="c1"># Copyright (c) 2025 Tony Jurg</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="c1"># Copyright (c) 2026 Tony Jurg</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.1&quot;</span>
 
 <span class="c1"># import required packages</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">import</span> <span class="nn">beta_code</span>
 <span class="kn">import</span> <span class="nn">urllib.parse</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">MorpheusAPIError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base exception for Morpheus API errors.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">MorpheusTimeoutError</span><span class="p">(</span><span class="n">MorpheusAPIError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a request to Morpheus API times out.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">MorpheusConnectionError</span><span class="p">(</span><span class="n">MorpheusAPIError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when connection to Morpheus API fails.&quot;&quot;&quot;</span>
+
 
 <div class="viewcode-block" id="get_word_blocks">
 <a class="viewcode-back" href="../../api/morphkit.get_word_blocks.html#morphkit.get_word_blocks">[docs]</a>
@@ -102,7 +122,10 @@
     <span class="n">api_endpoint</span>      <span class="p">:</span> <span class="nb">str</span><span class="p">,</span>                     <span class="c1"># IP adress &amp; port of Morpheus API endpoint</span>
     <span class="n">language</span>          <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;greek&quot;</span><span class="p">,</span>           <span class="c1"># Language: &#39;greek&#39; (default) or &#39;latin&#39; </span>
     <span class="n">output</span>            <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span>            <span class="c1"># Output format: &quot;full&quot; (default) or &quot;compact&quot;</span>
-    <span class="n">debug</span>             <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">debug</span>             <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">timeout</span>           <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry_attempts</span>    <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>    <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry_delay</span>       <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span><span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve the raw word blocks data for a given beta-code word from a Morpheus endpoint.</span>
@@ -119,21 +142,37 @@
 <span class="sd">        </span>
 <span class="sd">        :output {str}:      Optional argument. Defaults to `full`. Output format of the Analytic block. Either `full` for the internal database format, or `compact` for a brief output.</span>
 
-<span class="sd">        :debug (bool):      Optional argument. Defaults to `False`. If set to `True`, prints the constructed URL and response size. </span>
+<span class="sd">        :debug (bool):      Optional argument. Defaults to `False`. If set to `True`, prints the constructed URL and response size.</span>
+
+<span class="sd">        :timeout (int|float|None): Optional argument. Defaults to config.timeout. Timeout in seconds for the request.</span>
+
+<span class="sd">        :retry_attempts (int): Optional argument. Defaults to config.retry_attempts. Number of retries on timeout/connection errors.</span>
+
+<span class="sd">        :retry_delay (float): Optional argument. Defaults to config.retry_delay. Delay between retries in seconds.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">    --------</span>
 
 <span class="sd">        :str: The plain text response containing the word blocks for the requested beta-code form.</span>
 
-<span class="sd">    Raises:</span>
-<span class="sd">    -------</span>
+<span class="sd">    Raises (when debug is set to True):</span>
+<span class="sd">    -----------------------------------</span>
 
-<span class="sd">        :ValueError: The language parameter is invalid (only &#39;greek&#39; and &#39;latin&#39; are allowed).</span>
+<span class="sd">        :ValueError: The language parameter is invalid.</span>
 
-<span class="sd">        :ValueError: The api_endpoint parameter is malformed (format should be &#39;host(IP or name):port&#39;).</span>
+<span class="sd">        :ValueError: The api_endpoint parameter is malformed.</span>
+
+<span class="sd">        :ValueError: Invalid timeout and/or retry parameters.</span>
+
+<span class="sd">        :ValueError: Unknown output format.</span>
 
 <span class="sd">        :requests.HTTPError: HTTP request failed (non-2xx status code).</span>
+
+<span class="sd">        :MorpheusTimeoutError: Request timed out after all retries.</span>
+
+<span class="sd">        :MorpheusConnectionError: Connection failed after all retries.</span>
+
+<span class="sd">        :MorpheusAPIError: Error in API request.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">    --------</span>
@@ -148,14 +187,20 @@
 
     <span class="c1"># A very basic check that `endpoint` contains a &#39;:&#39; and that the part after it is all digits.</span>
     <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">api_endpoint</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;. Missing &#39;:&#39; separator.&quot;</span>
-        <span class="s2">&quot;Format should be &#39;host(IP or name):port&#39;&quot;</span><span class="p">)</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;. Missing &#39;:&#39; separator. Format should be &#39;host(IP or name):port&#39;&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        
     <span class="n">host</span><span class="p">,</span> <span class="n">port_str</span> <span class="o">=</span> <span class="n">api_endpoint</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">port_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;: port &#39;</span><span class="si">{</span><span class="n">port_str</span><span class="si">}</span><span class="s2">&#39; is not numeric.&quot;</span>
-        <span class="s2">&quot;Format should be &#39;host(IP or name):port&#39;&quot;</span><span class="p">)</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Invalid api_endpoint &#39;</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">&#39;: port &#39;</span><span class="si">{</span><span class="n">port_str</span><span class="si">}</span><span class="s2">&#39; is not numeric. Format should be &#39;host(IP or name):port&#39;&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        
 
     <span class="c1"># Define the mapping from value of argumet &#39;language&#39; to actual API path</span>
     <span class="n">lang_args_list</span> <span class="o">=</span> <span class="p">{</span>
@@ -166,13 +211,40 @@
     <span class="k">if</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">lang_args_list</span><span class="p">:</span>
         <span class="n">api_path</span><span class="o">=</span><span class="n">lang_args_list</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Unknown language format </span><span class="si">{</span><span class="n">language</span><span class="si">!r}</span><span class="s2">. &quot;</span>
-        <span class="s2">&quot;Choose from {&#39;greek&#39;, &#39;latin&#39;}.&quot;</span>
-        <span class="p">)</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Unknown language format </span><span class="si">{</span><span class="n">language</span><span class="si">!r}</span><span class="s2">. Choose from </span><span class="si">{</span><span class="s1">&#39;greek&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;latin&#39;</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span>
 
-    <span class="c1"># Start timer</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">timeout</span> <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">timeout</span>
+    <span class="n">retry_attempts</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">retry_attempts</span> <span class="k">if</span> <span class="n">retry_attempts</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">retry_attempts</span>
+    <span class="n">retry_delay</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">retry_delay</span> <span class="k">if</span> <span class="n">retry_delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">retry_delay</span>
+
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">timeout</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;[get_word_blocks] Timeout must be positive or None.&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+    <span class="k">if</span> <span class="n">retry_attempts</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;[get_word_blocks] Retry_attempts must be non-negative.&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span>
+    
+    <span class="k">if</span> <span class="n">retry_delay</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;[get_word_blocks] Retry_delay must be non-negative.&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span>
 
     <span class="c1"># Define the mapping from value of argumet &#39;output&#39; to actual API arguments</span>
     <span class="n">api_args_list</span> <span class="o">=</span> <span class="p">{</span>
@@ -183,46 +255,91 @@
     <span class="k">if</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">api_args_list</span><span class="p">:</span>
         <span class="n">api_args</span><span class="o">=</span><span class="n">api_args_list</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Unknown output format </span><span class="si">{</span><span class="n">output</span><span class="si">!r}</span><span class="s2">. &quot;</span>
-        <span class="s2">&quot;Choose from {&#39;full&#39;, &#39;compact&#39;}.&quot;</span>
-<span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown output format: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">exit</span><span class="p">()</span>
+        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Unknown output format </span><span class="si">{</span><span class="n">output</span><span class="si">!r}</span><span class="s2">. Choose from </span><span class="si">{</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;compact&#39;</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span>
 
     <span class="c1"># 1. Encode the Betacode word for safe URL inclusion</span>
     <span class="n">encoded</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">word_beta</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="n">url</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}{</span><span class="n">api_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">encoded</span><span class="si">}{</span><span class="n">api_args</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Sending GET request: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># 2. Perform the HTTP GET request</span>
-    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="n">last_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retry_attempts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Start timer</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># 2. Perform the HTTP GET request</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
 
-    <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-        <span class="c1"># Status and timing</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Received status code: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
-        <span class="c1"># Request headers</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Request headers: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="c1"># Response headers</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response headers: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="c1"># Status and timing</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Received status code: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+                <span class="c1"># Request headers</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Request headers: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># Response headers</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response headers: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># 3. Check for HTTP errors</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] HTTP error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> (status code: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="c1"># 3. Check for HTTP errors</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] HTTP error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> (status code: </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
-    <span class="n">text</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span>
 
-    <span class="k">if</span> <span class="n">debug</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-        <span class="c1"># Show the first 100 characters (or whole thing if smaller)</span>
-        <span class="n">snippet</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response snippet (max 100 bytes):</span><span class="se">\n</span><span class="si">{</span><span class="n">snippet</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="c1"># Show the first 100 characters (or whole thing if smaller)</span>
+                <span class="n">snippet</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Response snippet (max 100 bytes):</span><span class="se">\n</span><span class="si">{</span><span class="n">snippet</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">text</span></div>
+            <span class="k">return</span> <span class="n">text</span>
+
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">last_error</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="n">retry_attempts</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Timeout; retry </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">retry_attempts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">retry_delay</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">retry_delay</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Request timed out after </span><span class="si">{</span><span class="n">timeout</span><span class="si">}</span><span class="s2"> seconds (attempts: </span><span class="si">{</span><span class="n">retry_attempts</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">MorpheusTimeoutError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">last_error</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="n">retry_attempts</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Connection error; retry </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">retry_attempts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">retry_delay</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">retry_delay</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Failed to connect to Morpheus API at </span><span class="si">{</span><span class="n">api_endpoint</span><span class="si">}</span><span class="s2">.&quot;</span> 
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">MorpheusConnectionError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[get_word_blocks] Unexpected request error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">MorpheusAPIError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MorpheusAPIError</span><span class="p">(</span><span class="s2">&quot;Request failed after retries.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">last_error</span></div>
 
 </pre></div>
 
