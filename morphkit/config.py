@@ -1,10 +1,9 @@
 # morphkit/config.py
 # SPDX-License-Identifier: CC-BY-4.0
 # Copyright (c) 2026 Tony Jurg
-__version__ = "1.0.1"
 """Configuration management for Morphkit."""
-
 from __future__ import annotations
+__version__ = "1.0.1"
 
 import os
 from typing import Optional, Union
