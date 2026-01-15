@@ -131,21 +131,30 @@ def analyse_word_with_morpheus(
 
     # A very basic check that `endpoint` contains a ':' and that the part after it is all digits.
     if ":" not in api_endpoint:
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}'. Missing ':' separator."
-        "Format should be 'host(IP or name):port'")
+        message=f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}'. Missing ':' separator. Format should be 'host(IP or name):port'"
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
+
     host, port_str = api_endpoint.split(":", 1)
     if not port_str.isdigit():
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}': port '{port_str}' is not numeric."
-        "Format should be 'host(IP or name):port'")
+        message=f"[analyse_word_with_morpheus] Invalid api_endpoint '{api_endpoint}': port '{port_str}' is not numeric."
+        "Format should be 'host(IP or name):port'"
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
 
     # Tailor to the language
     if language not in ('greek','latin'):
-        raise ValueError(
-        f"[analyse_word_with_morpheus] Unknown language format {language!r}. "
+        message=f"[analyse_word_with_morpheus] Unknown language format {language!r}. "
         "Choose from {'greek', 'latin'}."
-        )
+        if debug:
+            raise ValueError(message)
+        else:
+            print(message)
+
     if language == 'latin':
         add_pos=False
         add_morph=False

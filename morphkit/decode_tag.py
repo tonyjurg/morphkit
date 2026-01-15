@@ -322,7 +322,7 @@ def decode_tag(tag_input:str, debug: bool=False) -> Dict[str, Any]:
                 output["Gender"] = genderMap.get(feat[2], "Unknown")
             else:
                 output["Error"] = f"Incomplete feature code"
-                if debug==True:
+                if debug:
                     print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey})")
 
         # Indicative/Subjunctive/Optative/Imperative → Person/Number
@@ -332,7 +332,7 @@ def decode_tag(tag_input:str, debug: bool=False) -> Dict[str, Any]:
                 output["Number"] = numberMap.get(feat[1], "Unknown")
             else:
                 output["Error"] = f"Incorrect feature code"
-                if debug==True:
+                if debug:
                     print(f"[decode_tag] ERROR: Incorrect feature code (‘{feat}’) for mood {moodKey})")
 
         # Infinitive -> according to definition, there should be no more info. 

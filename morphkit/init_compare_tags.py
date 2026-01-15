@@ -700,7 +700,7 @@ def init_compare_tags():
         """
 
         # If debugging is enabled, print the raw input values for the tags to compare
-        if debug==True:
+        if debug:
             print(f"[compare_tags] First tag: {tag1};  second tag: {tag2}")
 
         # Decode each tag string into a dictionary of grammatical features
