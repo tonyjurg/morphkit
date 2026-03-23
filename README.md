@@ -6,20 +6,26 @@ Morphkit is a Python toolkit for Greek morphological analysis and tag similarity
 
 ## Documentation
 
-For documentation see [tonyjurg.github.io/morphkit](https://tonyjurg.github.io/morphkit/).
+The documentation site is versioned. The stable release docs live at [tonyjurg.github.io/morphkit/stable](https://tonyjurg.github.io/morphkit/stable/), and the site includes a version selector for switching between `stable`, `dev`, and tagged releases.
 
 ## Package
 
 For the actual code see [/morphkit](https://github.com/tonyjurg/morphkit/tree/main/morphkit).
 
-## Loading
+## Installation
 
-Since it is not a 'real' package (i.e., installable with `pip`), you need to load it locally. For example in a Jupyter Notebook:
+The current software baseline is frozen as release `1.0.0`, and Morphkit can now be built as a standard Python package.
 
-```Python
-import sys
-sys.path.insert(0, "..")    # the relative path for the morphkit directory to your notebook dir
-import morphkit
+Install the baseline release with:
+
+```bash
+pip install morphkit==1.0.0
+```
+
+For local development from this repository:
+
+```bash
+pip install -e .
 ```
 
 ## Configuration

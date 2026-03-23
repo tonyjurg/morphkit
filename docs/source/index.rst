@@ -1,5 +1,5 @@
 
-.. image:: _static/logo.png
+.. image:: ../images/morphkit.png
    :alt: Morphkit logo
 
 Home
@@ -9,6 +9,8 @@ Home
 .. _n1904: https://centerblc.github.io/N1904/
 
 Welcome to the documentation for Morphkit, a Python toolkit for processing the output of the Morpheus Morphological analyser. 
+
+You are currently reading the ``|docs_label|`` documentation for Morphkit ``|release_version|``. Use the version selector in the sidebar to switch between the stable release, development docs, and older tagged versions.
 
 This package was created as part of a research project to create a `Text-Fabric dataset <tf_>`_ containing the Morpheus analytical data for each word of the `Nestle1904 <n1904_>`_ Greek New Testament. A number of functions are specificly related to this use case.
 
@@ -48,6 +50,7 @@ You can find the project's source code on `GitHub <github-repo_>`_ and report is
 
    install
    usage
+   releases
 
    
 .. toctree::

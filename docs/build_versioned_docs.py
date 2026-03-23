@@ -1,0 +1,176 @@
+"""Build versioned Morphkit documentation for GitHub Pages."""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SEMVER_RE = re.compile(r"^v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
+
+
+@dataclass(frozen=True)
+class ReleaseRef:
+    ref: str
+    version: str
+    slug: str
+
+    @property
+    def sort_key(self) -> tuple[int, int, int]:
+        major, minor, patch = self.version.split(".")
+        return int(major), int(minor), int(patch)
+
+
+def run(command: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None) -> str:
+    completed = subprocess.run(
+        command,
+        cwd=str(cwd) if cwd else None,
+        env=env,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return completed.stdout.strip()
+
+
+def normalize_release_tag(tag: str) -> ReleaseRef | None:
+    match = SEMVER_RE.fullmatch(tag)
+    if not match:
+        return None
+
+    major = int(match.group("major"))
+    minor = int(match.group("minor"))
+    patch = int(match.group("patch") or 0)
+    version = f"{major}.{minor}.{patch}"
+    return ReleaseRef(ref=tag, version=version, slug=f"v{version}")
+
+
+def discover_release_refs() -> list[ReleaseRef]:
+    refs_by_slug: dict[str, ReleaseRef] = {}
+    tags = run(["git", "tag", "--list", "v*"], cwd=REPO_ROOT).splitlines()
+
+    for tag in tags:
+        release_ref = normalize_release_tag(tag.strip())
+        if release_ref is None:
+            continue
+        refs_by_slug[release_ref.slug] = release_ref
+
+    return sorted(refs_by_slug.values(), key=lambda item: item.sort_key)
+
+
+def build_docs(source_root: Path, output_dir: Path, label: str) -> None:
+    env = os.environ.copy()
+    env["MORPHKIT_DOCS_LABEL"] = label
+    with tempfile.TemporaryDirectory(prefix=f"morphkit-docs-{label}-") as build_dir:
+        temp_output_dir = Path(build_dir) / "html"
+        doctree_dir = Path(build_dir) / "doctrees"
+        run(
+            [
+                sys.executable,
+                "-m",
+                "sphinx",
+                "-b",
+                "html",
+                "-d",
+                str(doctree_dir),
+                str(source_root / "docs" / "source"),
+                str(temp_output_dir),
+            ],
+            cwd=source_root,
+            env=env,
+        )
+        if output_dir.exists():
+            shutil.rmtree(output_dir)
+        shutil.copytree(temp_output_dir, output_dir)
+
+
+def build_ref(ref: str, slug: str, output_root: Path, worktree_root: Path) -> None:
+    worktree_path = worktree_root / slug
+    run(["git", "worktree", "add", "--detach", str(worktree_path), ref], cwd=REPO_ROOT)
+    try:
+        build_docs(worktree_path, output_root / slug, slug)
+    finally:
+        run(["git", "worktree", "remove", "--force", str(worktree_path)], cwd=REPO_ROOT)
+
+
+def write_redirect(output_root: Path, target_slug: str) -> None:
+    redirect = f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url=./{target_slug}/">
+    <title>Morphkit Documentation</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href="./{target_slug}/">the Morphkit documentation</a>.</p>
+  </body>
+</html>
+"""
+    (output_root / "index.html").write_text(redirect, encoding="utf-8")
+
+
+def write_versions_manifest(output_root: Path, entries: Iterable[dict[str, str]]) -> None:
+    manifest_text = json.dumps({"versions": list(entries)}, indent=2) + "\n"
+    (output_root / "versions.json").write_text(manifest_text, encoding="utf-8")
+
+    for entry in entries:
+        static_manifest = output_root / entry["slug"] / "_static" / "versions.json"
+        static_manifest.parent.mkdir(parents=True, exist_ok=True)
+        static_manifest.write_text(manifest_text, encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        default=str(REPO_ROOT / "docs" / "_site"),
+        help="Directory where the versioned site should be written.",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    output_root = Path(args.output).resolve()
+
+    if output_root.exists():
+        shutil.rmtree(output_root)
+    output_root.mkdir(parents=True, exist_ok=True)
+
+    releases = discover_release_refs()
+
+    with tempfile.TemporaryDirectory(prefix="morphkit-docs-") as temp_dir:
+        worktree_root = Path(temp_dir)
+
+        build_docs(REPO_ROOT, output_root / "dev", "dev")
+        build_docs(REPO_ROOT, output_root / "stable", "stable")
+        for release in releases:
+            build_ref(release.ref, release.slug, output_root, worktree_root)
+
+    versions: list[dict[str, str]] = [{"slug": "dev", "title": "Development", "url": "../../dev/"}]
+
+    if releases:
+        latest_release = releases[-1]
+        versions.insert(0, {"slug": "stable", "title": f"Stable ({latest_release.version})", "url": "../../stable/"})
+        for release in reversed(releases):
+            versions.append({"slug": release.slug, "title": release.slug, "url": f"../../{release.slug}/"})
+        write_redirect(output_root, "stable")
+    else:
+        versions.insert(0, {"slug": "stable", "title": "Stable (current baseline)", "url": "../../stable/"})
+        write_redirect(output_root, "stable")
+
+    write_versions_manifest(output_root, versions)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

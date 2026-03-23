@@ -1,18 +1,32 @@
 Installation
 ============
 
-Since this not a 'normal package' (yet), you need to import it by adding the relative path to the location where the **directory** /morphkit can be found to the path-search (using `sys.path.insert`). After this, your notebook will be able to load morphkit. 
+Morphkit is packaged as a standard Python project. The current baseline release is ``|release_version|``.
 
-.. code-block:: python
+Released Version
+----------------
 
-   import sys
-   sys.path.insert(0, "../../morphkit")    # relative to notebook dir
-   import morphkit
+Install the released package with:
+
+.. code-block:: bash
+
+   pip install morphkit==|release_version|
+
+This is the recommended installation method for notebooks, scripts, and reproducible research environments.
+
+Development Checkout
+--------------------
+
+If you are working from a git checkout and want the repository version instead of the published release, install the project in editable mode:
+
+.. code-block:: bash
+
+   pip install -e .
 
 Dependencies
 ------------
 
-You also need to have install the `dependencies <https://github.com/tonyjurg/morphkit/blob/main/morphkit/requirements.txt>`_:
+The package metadata installs the runtime dependencies automatically. The core dependencies are:
 
 - `beta-code-py <https://pypi.org/project/beta-code-py/>`_ (for Beta Code ↔ Unicode conversion)
 - `requests <https://pypi.org/project/requests/>`_ (for API calls using HTTP to Morpheus)

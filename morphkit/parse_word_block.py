@@ -1,7 +1,7 @@
 # morphkit/parse_word_block
 # SPDX-License-Identifier: CC-BY-4.0
 # Copyright (c) 2026 Tony Jurg
-__version__ = "1.0.1"
+from ._version import __version__
 
 # import required packages
 from typing import Callable, Dict, Any, List, Tuple
@@ -121,9 +121,9 @@ def parse_word_block(block: List[str], language: str = 'greek', debug: bool = Fa
     General notes:
     --------------
 
-    .. _bol:https://learner.bible/.
+    .. _bol: https://learner.bible/
 
-        - The entries with unicode representation of the betacode are using precomposed character (with oxia) in order to match its presentation in the N1904-TF dataset which is using the same scheme as the `Bible Online Learner`_bol. 
+        - The entries with unicode representation of the betacode are using precomposed character (with oxia) in order to match its presentation in the N1904-TF dataset which is using the same scheme as the `Bible Online Learner <https://learner.bible/>`_. 
 
         - Details on decoding the Morpheus output can be found at           https://github.com/tonyjurg/Create_morpheus_TF_dataset/blob/main/Decoding_Morpheus_output/decode_output.md
         

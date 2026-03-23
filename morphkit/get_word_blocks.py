@@ -1,7 +1,7 @@
 # morphkit/get_word_blocks.py
 # SPDX-License-Identifier: CC-BY-4.0
 # Copyright (c) 2026 Tony Jurg
-__version__ = "1.0.1"
+from ._version import __version__
 
 # import required packages
 from typing import Callable, Dict, Any, List, Optional, Tuple, Union
