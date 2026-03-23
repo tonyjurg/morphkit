@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "morphkit"
+dynamic = ["version"]
+description = "Python toolkit for Greek morphological analysis and tag similarity comparison."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "CC-BY-4.0"
+authors = [
+  {name = "Tony Jurg"},
+]
+keywords = ["greek", "morphology", "linguistics", "morpheus", "classics"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Text Processing :: Linguistic",
+]
+dependencies = [
+  "beta-code>=1.1.1",
+  "requests>=2.31.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/tonyjurg/morphkit"
+Documentation = "https://tonyjurg.github.io/morphkit/stable/"
+Repository = "https://github.com/tonyjurg/morphkit"
+Issues = "https://github.com/tonyjurg/morphkit/issues"
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2.2",
+  "twine>=5.1.1",
+]
+docs = [
+  "Sphinx>=7.4,<9",
+  "sphinx-rtd-theme>=2.0,<4",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "morphkit._version.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["morphkit*"]
+
+[tool.setuptools.package-data]
+morphkit = ["*.json"]

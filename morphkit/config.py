@@ -3,7 +3,8 @@
 # Copyright (c) 2026 Tony Jurg
 """Configuration management for Morphkit."""
 from __future__ import annotations
-__version__ = "1.0.1"
+
+from ._version import __version__
 
 import os
 from typing import Optional, Union

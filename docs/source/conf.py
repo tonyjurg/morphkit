@@ -1,67 +1,75 @@
-# conf.py
+from __future__ import annotations
 
-# Project information
-project   = "morphkit"
-author    = "Tony Jurg"
-master_doc = "index" 
-html_title = "Morphkit Documentation"
-copyright = "2025, Tony Jurg"
-
-# Release information
-release = '1.0.0'
-
-# Theme and layout
-html_theme = 'sphinx_rtd_theme'
-html_theme_options = {
-    "collapse_navigation": False,   # keep the whole tree expanded everywhere
-    "navigation_depth": -1,         # unlimited depth
-    "sticky_navigation": True,      # sidebar scrolls with the page
-    'includehidden': True,
-    'titles_only': False
-}
-
-# Logo
-html_logo = '_static/logo.png'
+import os
+import sys
+from pathlib import Path
 
 
-# Autosummary and autodoc
-autodoc_default_options = {
-    'member-order': 'bysource',
-    'special-members': True,
-    'undoc-members': True
-}
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 
-# extentions
+version_ns: dict[str, str] = {}
+exec((ROOT / "morphkit" / "_version.py").read_text(encoding="utf-8"), version_ns)
+
+project = "morphkit"
+author = "Tony Jurg"
+copyright = "2026, Tony Jurg"
+master_doc = "index"
+version = version_ns["__version__"]
+release = version
+html_title = f"Morphkit {release} Documentation"
+
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    'docxbuilder'
 ]
 
-# Napoleon settings
+templates_path = ["_templates"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "api/functions.rst",
+    "api/modules.rst",
+    "api/morphkit.rst",
+    "api/morphkit.analyze_morph_tag.rst",
+    "api/morphkit.analyze_pos.rst",
+    "api/morphkit.analyze_word_with_morpheus.rst",
+    "api/morphkit.annotate_and_sort_analyses.rst",
+    "api/morphkit.compare_tags.rst",
+    "api/morphkit.decode_tag.rst",
+    "api/morphkit.get_word_blocks.rst",
+    "api/morphkit.init_compare_tags.rst",
+    "api/morphkit.parse_word_block.rst",
+    "api/autogen/morphkit.analyze_morph_tag.rst",
+    "api/autogen/morphkit.analyze_pos.rst",
+    "api/autogen/morphkit.analyze_word_with_morpheus.rst",
+]
+autosummary_generate = True
 napoleon_use_param = True
 
-
 autodoc_default_options = {
-    'typehints': True,
+    "member-order": "bysource",
+    "undoc-members": True,
 }
 
-#linkcode_resolve = lambda domain, info: {
-#    'python': ('https://github.com/tonyjurg/morphkit/blob/main/%s#L%s#L%s',
-#               'https://github.com/tonyjurg/morphkit/blob/main/%s#L%s#L%s'),
-#}[domain](info)
-
-# import path so autodoc can find morphkit
-import sys, pathlib
-sys.path.insert(0, r"C:\Users\tonyj\OneDrive\Documents\GitHub\morphkit")
-
-# prevent Sphinx from trying to import modules that aren't actually being used
-def setup(app):
-    app.config['autosummary_imported_members'] = False
-
+html_theme = "sphinx_rtd_theme"
 html_theme_options = {
-    "sidebar_title": "Morphkit Documentation",
-    "description": "Analyze Greek morphology with Morpheus",
+    "collapse_navigation": False,
+    "navigation_depth": 4,
+    "sticky_navigation": True,
+    "includehidden": True,
+    "titles_only": False,
 }
+html_logo = "../images/morphkit.png"
+html_static_path = ["_static"]
+html_css_files = ["version-selector.css"]
+html_js_files = ["version-selector.js"]
+
+doc_version_label = os.environ.get("MORPHKIT_DOCS_LABEL", f"v{release}")
+rst_epilog = f"""
+.. |release_version| replace:: {release}
+.. |docs_label| replace:: {doc_version_label}
+"""
