@@ -67,6 +67,13 @@ def discover_release_refs() -> list[ReleaseRef]:
     return sorted(refs_by_slug.values(), key=lambda item: item.sort_key)
 
 
+def discover_current_release() -> ReleaseRef:
+    version_ns: dict[str, str] = {}
+    exec((REPO_ROOT / "morphkit" / "_version.py").read_text(encoding="utf-8"), version_ns)
+    version = version_ns["__version__"]
+    return ReleaseRef(ref="HEAD", version=version, slug=f"v{version}")
+
+
 def build_docs(source_root: Path, output_dir: Path, label: str) -> None:
     env = os.environ.copy()
     env["MORPHKIT_DOCS_LABEL"] = label
@@ -93,11 +100,11 @@ def build_docs(source_root: Path, output_dir: Path, label: str) -> None:
         shutil.copytree(temp_output_dir, output_dir)
 
 
-def build_ref(ref: str, slug: str, output_root: Path, worktree_root: Path) -> None:
-    worktree_path = worktree_root / slug
+def build_ref(ref: str, slug: str, output_root: Path, worktree_root: Path, *, label: str | None = None) -> None:
+    worktree_path = worktree_root / f"{slug}-{label or slug}"
     run(["git", "worktree", "add", "--detach", str(worktree_path), ref], cwd=REPO_ROOT)
     try:
-        build_docs(worktree_path, output_root / slug, slug)
+        build_docs(worktree_path, output_root / slug, label or slug)
     finally:
         run(["git", "worktree", "remove", "--force", str(worktree_path)], cwd=REPO_ROOT)
 
@@ -147,14 +154,20 @@ def main() -> int:
     output_root.mkdir(parents=True, exist_ok=True)
 
     releases = discover_release_refs()
+    current_release = discover_current_release()
 
     with tempfile.TemporaryDirectory(prefix="morphkit-docs-") as temp_dir:
         worktree_root = Path(temp_dir)
 
         build_docs(REPO_ROOT, output_root / "dev", "dev")
-        build_docs(REPO_ROOT, output_root / "stable", "stable")
-        for release in releases:
-            build_ref(release.ref, release.slug, output_root, worktree_root)
+        if releases:
+            latest_release = releases[-1]
+            build_ref(latest_release.ref, "stable", output_root, worktree_root, label="stable")
+            for release in releases:
+                build_ref(release.ref, release.slug, output_root, worktree_root)
+        else:
+            build_docs(REPO_ROOT, output_root / "stable", "stable")
+            build_docs(REPO_ROOT, output_root / current_release.slug, current_release.slug)
 
     versions: list[dict[str, str]] = [{"slug": "dev", "title": "Development", "url": "../../dev/"}]
 
@@ -166,6 +179,7 @@ def main() -> int:
         write_redirect(output_root, "stable")
     else:
         versions.insert(0, {"slug": "stable", "title": "Stable (current baseline)", "url": "../../stable/"})
+        versions.append({"slug": current_release.slug, "title": current_release.slug, "url": f"../../{current_release.slug}/"})
         write_redirect(output_root, "stable")
 
     write_versions_manifest(output_root, versions)
