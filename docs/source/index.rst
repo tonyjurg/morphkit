@@ -30,6 +30,9 @@ Using this package
 
 :doc:`usage`
    How to use this package
+
+:doc:`architecture`
+   How the 1.0.0 Morphkit package is structured internally
    
 
 GitHub
@@ -50,6 +53,7 @@ You can find the project's source code on `GitHub <github-repo_>`_ and report is
 
    install
    usage
+   architecture
    releases
 
    
