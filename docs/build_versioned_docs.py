@@ -97,6 +97,8 @@ def sync_docs_infra(source_root: Path) -> None:
     target_docs_source = source_root / "docs" / "source"
 
     shutil.copy2(current_docs_source / "conf.py", target_docs_source / "conf.py")
+    for docs_page in ("index.rst", "architecture.rst"):
+        shutil.copy2(current_docs_source / docs_page, target_docs_source / docs_page)
 
     target_templates = target_docs_source / "_templates"
     if target_templates.exists():
