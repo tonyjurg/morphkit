@@ -1,0 +1,19 @@
+{%- if 'singlehtml' not in builder %}
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="{{ pathto('search') }}" method="get">
+    <input type="text" name="q" placeholder="{{ _('Search docs') }}" aria-label="{{ _('Search docs') }}" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+{%- endif %}
+{% if docs_versions %}
+<div class="morphkit-version-selector">
+  <label for="morphkit-version-select">Version</label>
+  <select id="morphkit-version-select" data-current-slug="{{ docs_current_label }}">
+    {% for version_entry in docs_versions %}
+    <option value="{{ version_entry.slug }}"{% if version_entry.slug == docs_current_label %} selected{% endif %}>{{ version_entry.title }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endif %}

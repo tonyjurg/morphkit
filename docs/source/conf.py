@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import sys
 from pathlib import Path
@@ -27,6 +28,13 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
+html_sidebars = {
+    "**": [
+        "searchbox.html",
+        "version-selector.html",
+        "globaltoc.html",
+    ]
+}
 exclude_patterns = [
     "_build",
     "Thumbs.db",
@@ -69,6 +77,11 @@ html_css_files = ["version-selector.css"]
 html_js_files = ["version-selector.js"]
 
 doc_version_label = os.environ.get("MORPHKIT_DOCS_LABEL", f"v{release}")
+docs_versions = json.loads(os.environ.get("MORPHKIT_DOCS_VERSIONS", "[]"))
+html_context = {
+    "docs_versions": docs_versions,
+    "docs_current_label": doc_version_label,
+}
 rst_epilog = f"""
 .. |release_version| replace:: {release}
 .. |docs_label| replace:: {doc_version_label}

@@ -74,9 +74,46 @@ def discover_current_release() -> ReleaseRef:
     return ReleaseRef(ref="HEAD", version=version, slug=f"v{version}")
 
 
-def build_docs(source_root: Path, output_dir: Path, label: str) -> None:
+def build_versions_entries(releases: list[ReleaseRef], current_release: ReleaseRef) -> list[dict[str, str]]:
+    versions: list[dict[str, str]] = [{"slug": "dev", "title": "Development"}]
+
+    if releases:
+        latest_release = releases[-1]
+        versions.insert(0, {"slug": "stable", "title": f"Stable ({latest_release.version})"})
+        for release in reversed(releases):
+            versions.append({"slug": release.slug, "title": release.slug})
+    else:
+        versions.insert(0, {"slug": "stable", "title": "Stable (current baseline)"})
+        versions.append({"slug": current_release.slug, "title": current_release.slug})
+
+    return versions
+
+
+def sync_docs_infra(source_root: Path) -> None:
+    if source_root == REPO_ROOT:
+        return
+
+    current_docs_source = REPO_ROOT / "docs" / "source"
+    target_docs_source = source_root / "docs" / "source"
+
+    shutil.copy2(current_docs_source / "conf.py", target_docs_source / "conf.py")
+
+    target_templates = target_docs_source / "_templates"
+    if target_templates.exists():
+        shutil.rmtree(target_templates)
+    shutil.copytree(current_docs_source / "_templates", target_templates)
+
+    target_static = target_docs_source / "_static"
+    target_static.mkdir(parents=True, exist_ok=True)
+    for asset_name in ("version-selector.css", "version-selector.js"):
+        shutil.copy2(current_docs_source / "_static" / asset_name, target_static / asset_name)
+
+
+def build_docs(source_root: Path, output_dir: Path, label: str, versions: list[dict[str, str]]) -> None:
+    sync_docs_infra(source_root)
     env = os.environ.copy()
     env["MORPHKIT_DOCS_LABEL"] = label
+    env["MORPHKIT_DOCS_VERSIONS"] = json.dumps(versions)
     with tempfile.TemporaryDirectory(prefix=f"morphkit-docs-{label}-") as build_dir:
         temp_output_dir = Path(build_dir) / "html"
         doctree_dir = Path(build_dir) / "doctrees"
@@ -100,13 +137,29 @@ def build_docs(source_root: Path, output_dir: Path, label: str) -> None:
         shutil.copytree(temp_output_dir, output_dir)
 
 
-def build_ref(ref: str, slug: str, output_root: Path, worktree_root: Path, *, label: str | None = None) -> None:
+def build_ref(
+    ref: str,
+    slug: str,
+    output_root: Path,
+    worktree_root: Path,
+    versions: list[dict[str, str]],
+    *,
+    label: str | None = None,
+) -> None:
     worktree_path = worktree_root / f"{slug}-{label or slug}"
     run(["git", "worktree", "add", "--detach", str(worktree_path), ref], cwd=REPO_ROOT)
     try:
-        build_docs(worktree_path, output_root / slug, label or slug)
+        build_docs(worktree_path, output_root / slug, label or slug, versions)
     finally:
-        run(["git", "worktree", "remove", "--force", str(worktree_path)], cwd=REPO_ROOT)
+        try:
+            run(["git", "reset", "--hard"], cwd=worktree_path)
+            run(["git", "clean", "-fd"], cwd=worktree_path)
+        except subprocess.CalledProcessError:
+            pass
+        try:
+            run(["git", "worktree", "remove", "--force", str(worktree_path)], cwd=REPO_ROOT)
+        except subprocess.CalledProcessError:
+            run(["git", "worktree", "prune"], cwd=REPO_ROOT)
 
 
 def write_redirect(output_root: Path, target_slug: str) -> None:
@@ -126,10 +179,16 @@ def write_redirect(output_root: Path, target_slug: str) -> None:
 
 
 def write_versions_manifest(output_root: Path, entries: Iterable[dict[str, str]]) -> None:
-    manifest_text = json.dumps({"versions": list(entries)}, indent=2) + "\n"
+    versions = []
+    for entry in entries:
+        version_entry = dict(entry)
+        version_entry["url"] = f"../../{entry['slug']}/"
+        versions.append(version_entry)
+
+    manifest_text = json.dumps({"versions": versions}, indent=2) + "\n"
     (output_root / "versions.json").write_text(manifest_text, encoding="utf-8")
 
-    for entry in entries:
+    for entry in versions:
         static_manifest = output_root / entry["slug"] / "_static" / "versions.json"
         static_manifest.parent.mkdir(parents=True, exist_ok=True)
         static_manifest.write_text(manifest_text, encoding="utf-8")
@@ -155,32 +214,22 @@ def main() -> int:
 
     releases = discover_release_refs()
     current_release = discover_current_release()
+    versions = build_versions_entries(releases, current_release)
 
     with tempfile.TemporaryDirectory(prefix="morphkit-docs-") as temp_dir:
         worktree_root = Path(temp_dir)
 
-        build_docs(REPO_ROOT, output_root / "dev", "dev")
+        build_docs(REPO_ROOT, output_root / "dev", "dev", versions)
         if releases:
             latest_release = releases[-1]
-            build_ref(latest_release.ref, "stable", output_root, worktree_root, label="stable")
+            build_ref(latest_release.ref, "stable", output_root, worktree_root, versions, label="stable")
             for release in releases:
-                build_ref(release.ref, release.slug, output_root, worktree_root)
+                build_ref(release.ref, release.slug, output_root, worktree_root, versions)
         else:
-            build_docs(REPO_ROOT, output_root / "stable", "stable")
-            build_docs(REPO_ROOT, output_root / current_release.slug, current_release.slug)
+            build_docs(REPO_ROOT, output_root / "stable", "stable", versions)
+            build_docs(REPO_ROOT, output_root / current_release.slug, current_release.slug, versions)
 
-    versions: list[dict[str, str]] = [{"slug": "dev", "title": "Development", "url": "../../dev/"}]
-
-    if releases:
-        latest_release = releases[-1]
-        versions.insert(0, {"slug": "stable", "title": f"Stable ({latest_release.version})", "url": "../../stable/"})
-        for release in reversed(releases):
-            versions.append({"slug": release.slug, "title": release.slug, "url": f"../../{release.slug}/"})
-        write_redirect(output_root, "stable")
-    else:
-        versions.insert(0, {"slug": "stable", "title": "Stable (current baseline)", "url": "../../stable/"})
-        versions.append({"slug": current_release.slug, "title": current_release.slug, "url": f"../../{current_release.slug}/"})
-        write_redirect(output_root, "stable")
+    write_redirect(output_root, "stable")
 
     write_versions_manifest(output_root, versions)
     return 0
