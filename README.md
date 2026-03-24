@@ -4,6 +4,8 @@
 
 Morphkit is a Python toolkit for Greek morphological analysis and tag similarity comparison. It uses the [`betacode`](https://github.com/perseids-tools/beta-code-py) library, the API of Morpheus (e.g., running in a [Docker virtualisation environment](https://hub.docker.com/r/perseidsproject/morpheus-api)) and a porting of the [Sandborg-Petersen morphological decoder](https://github.com/tonyjurg/Sandborg-Petersen-decoder).
 
+In `v1.0.0`, Morphkit should be understood first as a research tool. It acts as a semantic translation layer between two incompatible morphological systems: Morpheus output on the one hand, and the SP / `N1904-TF` conventions used in the Nestle1904 Text-Fabric workflow on the other. The initial release is therefore tightly bound to that project environment and should not be read as a claim that Morphkit is a general-purpose standalone morphology package.
+
 ## Documentation
 
 The documentation site is versioned. The stable release docs live at [tonyjurg.github.io/morphkit/stable](https://tonyjurg.github.io/morphkit/stable/), and the site includes a version selector for switching between `stable`, `dev`, and tagged releases.
@@ -14,19 +16,23 @@ For the actual code see [/morphkit](https://github.com/tonyjurg/morphkit/tree/ma
 
 ## Installation
 
-The current software baseline is frozen as release `1.0.0`, and Morphkit can now be built as a standard Python package.
+The `1.0.0` release is packaged as-is for internal and research use. The `pip` installation exists primarily so collaborators can recreate the exact software snapshot used in notebooks, scripts, and data processing runs.
 
-Install the baseline release with:
+Install the reproducible release snapshot with:
 
 ```bash
 pip install morphkit==1.0.0
 ```
+
+This pinned installation is the recommended route when you need reproducibility inside the `N1904-TF` research environment. It does not make the project independent from Morpheus, nor does it remove the project-specific assumptions baked into the translation logic.
 
 For local development from this repository:
 
 ```bash
 pip install -e .
 ```
+
+Use the editable install when you are actively modifying the code for the same research workflow or adapting it for closely related internal experiments.
 
 ## Configuration
 

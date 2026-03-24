@@ -8,31 +8,33 @@ Home
 .. _tf: https://tonyjurg.github.io/N1904addons/
 .. _n1904: https://centerblc.github.io/N1904/
 
-Welcome to the documentation for Morphkit, a Python toolkit for processing the output of the Morpheus Morphological analyser. 
+Welcome to the documentation for Morphkit, a Python research tool for processing the output of the Morpheus Morphological analyser.
 
 You are currently reading the ``|docs_label|`` documentation for Morphkit ``|release_version|``. Use the version selector in the sidebar to switch between the stable release, development docs, and older tagged versions.
 
-This package was created as part of a research project to create a `Text-Fabric dataset <tf_>`_ containing the Morpheus analytical data for each word of the `Nestle1904 <n1904_>`_ Greek New Testament. A number of functions are specificly related to this use case.
+This package was created as part of a research project to create a `Text-Fabric dataset <tf_>`_ containing the Morpheus analytical data for each word of the `Nestle1904 <n1904_>`_ Greek New Testament. A number of functions are specifically related to this use case.
+
+In ``1.0.0``, Morphkit is best understood as a semantic translation layer between two incompatible morphological systems: the raw Morpheus analyses and the SP / ``N1904-TF`` tagging conventions used in that project. The initial release is therefore tightly bound to the ``N1904-TF`` environment. It is packaged and documented so the research workflow can be reproduced, not because it has already become a fully general standalone package.
 
 Features
 --------
 
-- Lightweight and modular morphological toolkit.
-- Compatible with Morpheus environments.
-- Designed for use with Greek New Testament texts (SP tags).
-- Basic support for Latin.
+- Research-oriented middleware around Morpheus output.
+- Translation of Morpheus analyses into SP / ``N1904-TF``-style tags.
+- Intended primarily for Nestle1904 Text-Fabric scripts, notebooks, and exports.
+- Basic support for Latin within the same architecture.
 
 Using this package
 ------------------
 
 :doc:`install`
-   How to install this package in your Python environments
+   How to install the reproducible research snapshot
 
 :doc:`usage`
-   How to use this package
+   How to use this tool in its intended research setting
 
 :doc:`architecture`
-   How the 1.0.0 Morphkit package is structured internally
+   How the ``1.0.0`` Morphkit translation layer is structured internally
    
 
 GitHub

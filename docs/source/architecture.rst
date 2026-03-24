@@ -3,6 +3,8 @@ Architecture
 
 This page documents the software architecture of Morphkit as released in ``1.0.0``. It combines the functional overview from the project description with implementation details from the code in this repository.
 
+For this initial release, the architecture should be read as the architecture of a packaged research snapshot. Morphkit is not presented here as a universal morphology platform, but as the project-specific translation layer that connects Morpheus analyses to the SP / ``N1904-TF`` conventions used in the Nestle1904 Text-Fabric workflow.
+
 .. _morpheus-api: https://github.com/perseidsproject/morpheus-api
 .. _morpheus-engine: https://github.com/perseids-tools/morpheus-perseids
 .. _beta-code: https://stephanus.tlg.uci.edu/encoding.php
@@ -18,6 +20,8 @@ Morphkit is a small Python middleware layer between:
 - Python research scripts or notebooks,
 - a deployed `Morpheus API <morpheus-api_>`_ service backed by the `Morpheus engine <morpheus-engine_>`_,
 - downstream consumers such as `Text-Fabric <text-fabric_>`_ export pipelines.
+
+In other words, ``1.0.0`` is a semantic translation layer between incompatible morphological systems, packaged so that the same logic can be reinstalled and reused reproducibly inside the research environment for which it was designed.
 
 At a high level, Morphkit takes a word form encoded in `Beta Code <beta-code_>`_, retrieves one or more analyses from Morpheus over HTTP, parses the raw text blocks into Python dictionaries, and augments those dictionaries with:
 
@@ -49,7 +53,7 @@ Morphkit does not embed Morpheus locally. Instead, it assumes that Morpheus is a
    | - optional similarity / ranking                               |
    +--------------------------------------------------------------+
 
-This design keeps the package lightweight and makes the analysis pipeline reproducible, because the same Morpheus service can be queried from scripts, notebooks, or batch jobs.
+This design keeps the package lightweight and makes the analysis pipeline reproducible, because the same Morpheus service can be queried from scripts, notebooks, or batch jobs. That reproducibility refers to the project workflow: it does not imply that Morphkit is already detached from the assumptions of the ``N1904-TF`` environment.
 
 End-to-End Flow
 ---------------
@@ -258,6 +262,7 @@ Design Characteristics
 The ``1.0.0`` architecture has a few defining characteristics:
 
 - ``Middleware-first``: Morphkit focuses on integration, normalization, and annotation; it is **not** an implemention of Morpheus.
+- ``Research-bound``: some of the translation rules are aligned with the ``N1904-TF`` use case rather than a truely universal morphology interchange standard.
 - ``Function-oriented``: the codebase is organized around small modules and explicit processing functions instead of a large class hierarchy.
 - ``Loss-minimizing parsing``: Morpheus fields are preserved as directly as possible.
 - ``Version-aware documentation``: the docs site publishes architecture information per software release.
@@ -265,4 +270,4 @@ The ``1.0.0`` architecture has a few defining characteristics:
 Versioning Note
 ---------------
 
-This page describes how Morphkit ``1.0.0`` works.
+This page describes how Morphkit ``1.0.0`` works as the packaged, reproducible research snapshot for that environment.

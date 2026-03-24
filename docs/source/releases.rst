@@ -10,7 +10,9 @@ Morphkit documentation is published per software version.
 Baseline Release
 ----------------
 
-The current software baseline is frozen as ``1.0.0``. This is the first version intended to be built and released as an installable package, with matching documentation and release notes.
+The current software baseline is frozen as ``1.0.0``. This tag marks the first reproducible package snapshot of the Morphkit research code, with matching documentation and release notes.
+
+It should not be read as the arrival of a fully independent general-purpose package. In this release, Morphkit remains an as-is internal-use research tool: a semantic translation layer between Morpheus output and the SP / ``N1904-TF`` conventions used in the Nestle1904 Text-Fabric workflow.
 
 Using Versioned Docs
 --------------------
@@ -25,4 +27,4 @@ Release Notes
 -------------
 
 ``1.0.0``
-   Baseline packaging and versioned documentation release for the current Morphkit software.
+   Baseline packaging and versioned documentation release for the current Morphkit research snapshot, published to support reproducibility within the ``N1904-TF`` environment.
