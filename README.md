@@ -1,4 +1,4 @@
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)  [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%96-success.svg)](https://tonyjurg.github.io/morphkit/) [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/) [![DOI](images/zenodo.15920833.svg)](https://doi.org/10.5281/zenodo.15920833) [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/tonyjurg/morphkit/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/tonyjurg/morphkit)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)  [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%96-success.svg)](https://tonyjurg.github.io/morphkit/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/tonyjurg/morphkit/blob/main/LICENSE.md) [![DOI](images/zenodo.15920833.svg)](https://doi.org/10.5281/zenodo.15920833) [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/tonyjurg/morphkit/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/tonyjurg/morphkit)
 
 <img src="docs/images/morphkit.png" width=250 height=250>
 
@@ -67,4 +67,10 @@ The standard set of tools ([Python documentation](https://www.python.org/doc/), 
 
 ## License
 
-The morphkit package is released under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://github.com/tonyjurg/morphkit/blob/main/LICENSE.md).
+Morphkit uses a split licensing model:
+
+- Source code in `morphkit/` is released under the [MIT License](https://github.com/tonyjurg/morphkit/blob/main/LICENSE.md).
+- Documentation, notebooks, and other non-code repository content remain under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://github.com/tonyjurg/morphkit/blob/main/LICENSE-docs.md), unless stated otherwise in a specific file.
+
+This keeps the software package under a standard OSI-approved software license while preserving CC BY attribution terms for research-oriented non-code materials.
+

@@ -35,6 +35,9 @@ Using this package
 
 :doc:`architecture`
    How the ``1.0.0`` Morphkit translation layer is structured internally
+
+:doc:`license`
+   How code and non-code materials in this repository are licensed
    
 
 GitHub
@@ -56,6 +59,7 @@ You can find the project's source code on `GitHub <github-repo_>`_ and report is
    install
    usage
    architecture
+   license
    releases
 
    

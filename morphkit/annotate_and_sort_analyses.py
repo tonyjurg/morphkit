@@ -1,5 +1,5 @@
 # morphkit/init_compare_tags.py
-# SPDX-License-Identifier: CC-BY-4.0
+# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Tony Jurg
 from ._version import __version__
 

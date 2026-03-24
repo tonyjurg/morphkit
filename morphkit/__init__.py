@@ -1,5 +1,5 @@
 # morphkit/__init__.py
-# SPDX-License-Identifier: CC-BY-4.0
+# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Tony Jurg
 """Public package interface for Morphkit."""
 
