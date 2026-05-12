@@ -1,0 +1,9 @@
+include README.md
+include LICENSE.md
+include LICENSE-docs.md
+include CITATION.cff
+recursive-include morphkit *.json
+exclude *.ipynb
+prune build
+prune dist
+prune *.egg-info

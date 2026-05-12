@@ -1,0 +1,19 @@
+{
+  "versions": [
+    {
+      "slug": "stable",
+      "title": "Stable (1.0.0)",
+      "url": "../../stable/"
+    },
+    {
+      "slug": "dev",
+      "title": "Development",
+      "url": "../../dev/"
+    },
+    {
+      "slug": "v1.0.0",
+      "title": "v1.0.0",
+      "url": "../../v1.0.0/"
+    }
+  ]
+}

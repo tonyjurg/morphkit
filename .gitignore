@@ -9,3 +9,15 @@
 /validation/.ipynb_checkpoints
 /notebooks/.ipynb_checkpoints
 /.vs
+/build
+/dist
+/docs/_site
+/docs/build
+/*.egg-info
+__pycache__/
+*.pyc
+/.coverage
+/.mypy_cache
+/.pytest_cache
+/.tox
+/.venv

@@ -3,6 +3,8 @@ Usage
 
 Some example use cases.
 
+These examples show Morphkit in its intended ``1.0.0`` setting. The release is tightly coupled to the ``N1904-TF`` research workflow, so the examples assume a reachable Morpheus endpoint and the Morpheus-to-SP translation conventions used there.
+
 Obtain Morpheus Analytic blocks for a Greek word
 ------------------------------------------------
 
