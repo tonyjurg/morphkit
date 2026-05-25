@@ -1,0 +1,183 @@
+{
+  "repo_notes": [
+    {
+      "content": ""
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "High-level introduction to morphkit: what it is, why it exists, its research context, and how the major subsystems relate. Links to child pages for installation and key concepts.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Getting Started: Installation & Configuration",
+      "purpose": "Step-by-step guide to installing morphkit (pinned release vs. editable checkout), setting up the Morpheus Docker endpoint, and configuring the MorphkitConfig object and environment variables.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Architecture Overview",
+      "purpose": "Describes the end-to-end data pipeline from Beta Code input through Morpheus HTTP request, block segmentation, parsing, POS/morph-tag annotation, and comparison/ranking. Introduces the five-stage pipeline and the middleware-first design philosophy.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Core API Reference",
+      "purpose": "Overview of the public Python API exported from morphkit/__init__.py, linking to child pages for each functional group. Covers the __all__ list and module organisation.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Morpheus HTTP Interface: get_word_blocks",
+      "purpose": "Detailed reference for get_word_blocks(): URL construction, language/output parameters, retry/timeout logic, error classes (MorpheusAPIError, MorpheusTimeoutError, MorpheusConnectionError), and the MorphkitConfig singleton.",
+      "parent": "Core API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Block Parsing Pipeline",
+      "purpose": "Covers the three parsing-stage functions: split_into_raw_blocks (regex-based :raw segmentation), parse_word_block (line-by-line field extraction, Beta Code → polytonic Unicode conversion via betacode_to_polytonic, OXIA_MAP), and analyse_word_with_morpheus (orchestrator that chains all stages).",
+      "parent": "Core API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "POS and Morphological Tag Generation",
+      "purpose": "Explains analyse_pos() (rule-based heuristic engine using stem_codes, end_codes, morph_flags) and analyse_morph_tag() (SP-tag composition for nouns, verbs, adjectives, pronouns, indeclinables, dialect suffixes). Covers the prefix_map, tense/voice/mood maps, and append_dialect_suffix.",
+      "parent": "Core API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Tag Decoding and Similarity Comparison",
+      "purpose": "Documents decode_tag() (reverse SP-tag → feature dict, posMap, caseMap, verbExtraMap, suffixMap), init_compare_tags() factory (weighted similarity matrices for POS, tense, voice, mood, case, number, gender, person, suffix), compare_tags() (returns overall_similarity score 0.0–1.0), and annotate_and_sort_analyses() (grouping by lemma, ranking by similarity).",
+      "parent": "Core API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Configuration & Runtime Behaviour",
+      "purpose": "Deep dive into MorphkitConfig: property validation, environment variable overrides (MORPHKIT_TIMEOUT, MORPHKIT_RETRY_ATTEMPTS, MORPHKIT_RETRY_DELAY), precedence hierarchy (function args > runtime config > env vars > defaults), and usage patterns in Jupyter notebooks vs. batch scripts.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Error Handling and Resilience",
+      "purpose": "Covers the retry loop in get_word_blocks, the three exception classes, timeout validation, and how the validation notebooks (test_timeout.ipynb, testcases.ipynb) exercise these paths.",
+      "parent": "Configuration & Runtime Behaviour",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Validation Notebooks",
+      "purpose": "Describes the three notebooks in the validation/ directory: test_timeout.ipynb (timeout/retry regression tests), testcases.ipynb (functional test cases), and package_inspection.ipynb (introspection of the installed package). Explains how to run them and what they verify.",
+      "parent": "Configuration & Runtime Behaviour",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Documentation System",
+      "purpose": "Overview of how morphkit's documentation is built and published, linking to child pages for the Sphinx configuration and the versioned multi-release site.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Sphinx Configuration and Templates",
+      "purpose": "Covers docs/source/conf.py (Sphinx settings, MORPHKIT_DOCS_LABEL / MORPHKIT_DOCS_VERSIONS env vars), the custom Jinja2 templates (layout.html, version-selector.html, searchbox.html), and the version-selector.js / CSS static assets.",
+      "parent": "Documentation System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Versioned Documentation Build Script",
+      "purpose": "Detailed walkthrough of docs/build_versioned_docs.py: ReleaseRef dataclass, discover_release_refs() (git tag + SemVer regex), build_docs() (sphinx-build wrapper), build_ref() (git worktree lifecycle), sync_docs_infra() (infrastructure sync), versions.json manifest, and the root redirect index.html.",
+      "parent": "Documentation System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "CI/CD and Release Pipeline",
+      "purpose": "Overview of the four GitHub Actions workflows and how they interact, linking to child pages for CI validation and the release/publish flow.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "CI Workflow: Build and Validation",
+      "purpose": "Explains ci.yml: compileall syntax check, python -m build artifact generation, Sphinx smoke-test, and the inline version-consistency check between morphkit/_version.py and pyproject.toml.",
+      "parent": "CI/CD and Release Pipeline",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Release and Publish Workflows",
+      "purpose": "Covers release.yml (tag-triggered build, softprops/action-gh-release, conditional PyPI dispatch, docs dispatch), publish.yml (PyPI upload), and docs.yml (GitHub Pages deployment via actions/deploy-pages). Also covers the static.yml fallback and Dependabot configuration.",
+      "parent": "CI/CD and Release Pipeline",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of all codebase-specific terms, abbreviations, and domain concepts that an onboarding engineer needs to know, with code pointers to the relevant files and functions.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}
