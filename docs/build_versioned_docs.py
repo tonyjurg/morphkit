@@ -6,15 +6,19 @@ import json
 import os
 import re
 import shutil
+import http.server
 import subprocess
 import sys
 import tempfile
+import threading
+import webbrowser
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+DOCS_TEMP_ROOT = REPO_ROOT / "docs" / "_tmp"
 SEMVER_RE = re.compile(r"^v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
 
 
@@ -116,7 +120,8 @@ def build_docs(source_root: Path, output_dir: Path, label: str, versions: list[d
     env = os.environ.copy()
     env["MORPHKIT_DOCS_LABEL"] = label
     env["MORPHKIT_DOCS_VERSIONS"] = json.dumps(versions)
-    with tempfile.TemporaryDirectory(prefix=f"morphkit-docs-{label}-") as build_dir:
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(source_root), env.get("PYTHONPATH", "")]))
+    with tempfile.TemporaryDirectory(prefix=f"morphkit-docs-{label}-", dir=DOCS_TEMP_ROOT) as build_dir:
         temp_output_dir = Path(build_dir) / "html"
         doctree_dir = Path(build_dir) / "doctrees"
         run(
@@ -164,20 +169,9 @@ def build_ref(
             run(["git", "worktree", "prune"], cwd=REPO_ROOT)
 
 
-def write_redirect(output_root: Path, target_slug: str) -> None:
-    redirect = f"""<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=./{target_slug}/">
-    <title>Morphkit Documentation</title>
-  </head>
-  <body>
-    <p>Redirecting to <a href="./{target_slug}/">the Morphkit documentation</a>.</p>
-  </body>
-</html>
-"""
-    (output_root / "index.html").write_text(redirect, encoding="utf-8")
+def write_project_site(output_root: Path) -> None:
+    """Copy the standalone project landing page to the Pages root."""
+    shutil.copytree(REPO_ROOT / "docs" / "site", output_root, dirs_exist_ok=True)
 
 
 def write_versions_manifest(output_root: Path, entries: Iterable[dict[str, str]]) -> None:
@@ -203,7 +197,31 @@ def parse_args() -> argparse.Namespace:
         default=str(REPO_ROOT / "docs" / "_site"),
         help="Directory where the versioned site should be written.",
     )
+    parser.add_argument("--preview", action="store_true", help="Serve the built site locally after building it.")
+    parser.add_argument("--host", default="127.0.0.1", help="Preview server host (default: 127.0.0.1).")
+    parser.add_argument("--port", type=int, default=8000, help="Preview server port (default: 8000).")
     return parser.parse_args()
+
+
+def preview_site(output_root: Path, host: str, port: int) -> None:
+    class PreviewHandler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=str(output_root), **kwargs)
+
+    try:
+        server = http.server.ThreadingHTTPServer((host, port), PreviewHandler)
+    except OSError as exc:
+        raise SystemExit(f"Could not start preview server at http://{host}:{port}: {exc}") from exc
+
+    url = f"http://{host}:{port}/"
+    print(f"Previewing {output_root} at {url}\nPress Ctrl+C to stop.")
+    threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopping preview server.")
+    finally:
+        server.server_close()
 
 
 def main() -> int:
@@ -218,7 +236,8 @@ def main() -> int:
     current_release = discover_current_release()
     versions = build_versions_entries(releases, current_release)
 
-    with tempfile.TemporaryDirectory(prefix="morphkit-docs-") as temp_dir:
+    DOCS_TEMP_ROOT.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="morphkit-docs-", dir=DOCS_TEMP_ROOT) as temp_dir:
         worktree_root = Path(temp_dir)
 
         build_docs(REPO_ROOT, output_root / "dev", "dev", versions)
@@ -231,9 +250,11 @@ def main() -> int:
             build_docs(REPO_ROOT, output_root / "stable", "stable", versions)
             build_docs(REPO_ROOT, output_root / current_release.slug, current_release.slug, versions)
 
-    write_redirect(output_root, "stable")
+    write_project_site(output_root)
 
     write_versions_manifest(output_root, versions)
+    if args.preview:
+        preview_site(output_root, args.host, args.port)
     return 0
 
 
